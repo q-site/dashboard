@@ -1,0 +1,9148 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#343833">
+<title>Persoonlijk Dashboard</title>
+
+<style>
+:root {
+    --white:#fff;
+    --olive:#566344;
+    --olive-dark:#414b34;
+    --anthracite:#343833;
+    --light:#f4f5f2;
+    --border:#dde0da;
+    --muted:#72776f;
+    --danger:#a33a32;
+    --danger-dark:#832e27;
+    --warning:#a87824;
+    --badge-bg:#eef0eb;
+    --badge-border:#d9ddd4;
+    --danger-hover-bg:#f1e9e8;
+    --warning-bg:#f3ead5;
+    --success:#3f7d4a;
+    --success-bg:#eaf1e9;
+    --error-bg:#f9e8e6;
+    --overdue-bg:#fffafa;
+    --overdue-badge-bg:#f1e1df;
+    --overdue-border:#d6aaa6;
+    --today-border:#d6c18f;
+    --login-backdrop:#343833;
+    --accent-text:#414b34;
+
+    color-scheme:light;
+}
+
+[data-theme="dark"] {
+    --white:#242822;
+    --olive:#7c9166;
+    --olive-dark:#93a97e;
+    --anthracite:#ecefe8;
+    --light:#191c17;
+    --border:#3a3f37;
+    --muted:#9aa093;
+    --danger:#c9645a;
+    --danger-dark:#b2564c;
+    --warning:#d9a94c;
+    --badge-bg:#333a2f;
+    --badge-border:#3a3f37;
+    --danger-hover-bg:#402f2c;
+    --warning-bg:#3c3222;
+    --success:#7fbf8a;
+    --success-bg:#243328;
+    --error-bg:#3a2723;
+    --overdue-bg:#241f1e;
+    --overdue-badge-bg:#3e2c29;
+    --overdue-border:#6b433e;
+    --today-border:#6b5636;
+    --login-backdrop:#14150f;
+    --accent-text:#b9c9a7;
+
+    color-scheme:dark;
+}
+
+* {
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body {
+    transition:background-color .2s, color .2s;
+    font-family:Inter,-apple-system,BlinkMacSystemFont,
+        "Segoe UI",Arial,sans-serif;
+    background:var(--light);
+    color:var(--anthracite);
+    min-height:100vh;
+}
+
+input,
+select,
+textarea {
+    background:var(--white);
+    color:var(--anthracite);
+    font-family:inherit;
+}
+
+input::placeholder,
+textarea::placeholder {
+    color:var(--muted);
+    opacity:1;
+}
+
+body,
+.topbar,
+.dashboard-card,
+.stat-card,
+.shortcuts-panel,
+.shortcut-item,
+.notes-sidebar,
+.note-editor,
+.content-panel,
+.login-box,
+.modal-box,
+.timer-panel,
+input,
+select,
+textarea,
+button {
+    transition:background-color .2s, color .2s, border-color .2s;
+}
+
+button,
+input,
+textarea {
+    font:inherit;
+}
+
+button {
+    cursor:pointer;
+}
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+#loginPage {
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+    background:var(--login-backdrop);
+    position:relative;
+}
+
+.login-theme-toggle {
+    position:absolute;
+    top:20px;
+    right:20px;
+}
+
+.login-box {
+    width:100%;
+    max-width:390px;
+    padding:42px;
+    background:var(--white);
+    border-radius:14px;
+    box-shadow:0 20px 60px rgba(0,0,0,.22);
+}
+
+.login-mark,
+.brand-mark {
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:var(--olive);
+    color:white;
+}
+
+.login-mark {
+    width:48px;
+    height:48px;
+    margin-bottom:28px;
+    border-radius:10px;
+}
+
+.login-mark svg {
+    width:24px;
+    height:24px;
+}
+
+.login-box h1 {
+    font-size:27px;
+    margin-bottom:8px;
+}
+
+.login-box p {
+    color:var(--muted);
+    line-height:1.5;
+    margin-bottom:28px;
+}
+
+.input-label {
+    display:block;
+    margin-bottom:8px;
+    font-size:13px;
+    font-weight:600;
+}
+
+.login-input {
+    width:100%;
+    height:50px;
+    padding:0 14px;
+    border:1px solid var(--border);
+    border-radius:8px;
+    outline:none;
+    margin-bottom:12px;
+}
+
+.login-input:focus {
+    border-color:var(--olive);
+    box-shadow:0 0 0 3px rgba(86,99,68,.12);
+}
+
+.login-button {
+    width:100%;
+    height:50px;
+    margin-top:4px;
+    border:none;
+    border-radius:8px;
+    background:var(--olive);
+    color:white;
+    font-weight:600;
+}
+
+.login-button:hover {
+    background:var(--olive-dark);
+}
+
+.login-button:disabled {
+    opacity:.6;
+    cursor:wait;
+}
+
+.login-error {
+    display:none;
+    margin-top:12px;
+    padding:10px;
+    border-radius:7px;
+    background:var(--error-bg);
+    color:var(--danger);
+    font-size:13px;
+    line-height:1.45;
+    text-align:center;
+}
+
+.login-success {
+    display:none;
+    margin-top:12px;
+    padding:10px;
+    border-radius:7px;
+    background:var(--success-bg);
+    color:var(--success);
+    font-size:13px;
+    line-height:1.45;
+    text-align:center;
+}
+
+.login-switch {
+    margin-top:20px;
+    text-align:center;
+    font-size:13px;
+    color:var(--muted);
+}
+
+.login-switch-button {
+    border:none;
+    background:transparent;
+    padding:0;
+    color:var(--accent-text);
+    font-weight:600;
+    font-size:13px;
+}
+
+.login-switch-button:hover {
+    text-decoration:underline;
+}
+
+/* =========================================================
+   WEBSITE
+========================================================= */
+
+#website {
+    display:none;
+    min-height:100vh;
+}
+
+.topbar {
+    height:68px;
+    padding:0 32px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    background:var(--white);
+    border-bottom:1px solid var(--border);
+}
+
+.brand {
+    display:flex;
+    align-items:center;
+    gap:11px;
+    font-size:16px;
+    font-weight:650;
+}
+
+.brand-mark {
+    width:30px;
+    height:30px;
+    border-radius:7px;
+}
+
+.brand-mark svg {
+    width:17px;
+    height:17px;
+}
+
+.logout-button {
+    height:36px;
+    padding:0 13px;
+    border:1px solid var(--border);
+    border-radius:7px;
+    background:var(--white);
+    font-size:13px;
+    font-weight:600;
+}
+
+.logout-button:hover {
+    background:var(--light);
+}
+
+.topbar-actions {
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.theme-toggle-button {
+    width:36px;
+    height:36px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border:1px solid var(--border);
+    border-radius:7px;
+    background:var(--white);
+    color:var(--muted);
+}
+
+.theme-toggle-button:hover {
+    background:var(--light);
+    color:var(--anthracite);
+}
+
+.theme-toggle-button svg {
+    width:17px;
+    height:17px;
+}
+
+main {
+    width:min(100% - 40px,1080px);
+    margin:auto;
+    padding:42px 0;
+}
+
+.page {
+    display:none;
+}
+
+.page.active {
+    display:block;
+}
+
+.page-header {
+    margin-bottom:28px;
+}
+
+.page-header h1 {
+    font-size:30px;
+    letter-spacing:-.7px;
+    margin-bottom:7px;
+}
+
+.page-header p {
+    color:var(--muted);
+    font-size:15px;
+}
+
+/* =========================================================
+   DASHBOARD
+========================================================= */
+
+.dashboard {
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:18px;
+}
+
+.dashboard-card {
+    padding:25px;
+    background:var(--white);
+    border:1px solid var(--border);
+    border-radius:12px;
+    transition:.2s;
+}
+
+.dashboard-card:hover {
+    transform:translateY(-2px);
+    border-color:rgba(86,99,68,.55);
+    box-shadow:0 8px 25px rgba(52,56,51,.07);
+}
+
+.card-icon {
+    width:43px;
+    height:43px;
+    margin-bottom:20px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:9px;
+    background:var(--badge-bg);
+    color:var(--olive);
+}
+
+.card-icon svg {
+    width:21px;
+    height:21px;
+}
+
+.dashboard-card h2 {
+    font-size:18px;
+    margin-bottom:7px;
+}
+
+.dashboard-card p {
+    color:var(--muted);
+    font-size:14px;
+    line-height:1.5;
+    margin-bottom:20px;
+}
+
+.card-button,
+.primary-button {
+    border:none;
+    border-radius:7px;
+    background:var(--olive);
+    color:white;
+    font-weight:600;
+}
+
+.card-button {
+    height:38px;
+    padding:0 13px;
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    font-size:13px;
+    text-decoration:none;
+}
+
+.card-button:hover,
+.primary-button:hover {
+    background:var(--olive-dark);
+}
+
+.card-button svg {
+    width:15px;
+    height:15px;
+}
+
+/* =========================================================
+   SNELLE STATISTIEKEN
+========================================================= */
+
+.stats-strip {
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:14px;
+    margin-bottom:22px;
+}
+
+.stat-card {
+    padding:19px 20px;
+    background:var(--white);
+    border:1px solid var(--border);
+    border-radius:12px;
+}
+
+.stat-top {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:12px;
+}
+
+.stat-icon {
+    width:32px;
+    height:32px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:8px;
+    background:var(--badge-bg);
+    color:var(--olive);
+}
+
+.stat-icon svg {
+    width:16px;
+    height:16px;
+}
+
+.stat-icon.stat-icon-warning {
+    background:var(--warning-bg);
+    color:var(--warning);
+}
+
+.stat-value {
+    font-size:26px;
+    font-weight:700;
+    letter-spacing:-.5px;
+    margin-bottom:3px;
+}
+
+.stat-label {
+    color:var(--muted);
+    font-size:13px;
+    line-height:1.4;
+}
+
+.stat-progress-track {
+    width:100%;
+    height:6px;
+    margin-top:12px;
+    border-radius:4px;
+    background:var(--light);
+    overflow:hidden;
+}
+
+.stat-progress-fill {
+    height:100%;
+    border-radius:4px;
+    background:var(--danger);
+    transition:width .3s;
+}
+
+.stat-progress-fill.reached {
+    background:var(--success);
+}
+
+/* =========================================================
+   SHORTCUTS
+========================================================= */
+
+.shortcuts-panel {
+    margin-top:18px;
+    padding:24px;
+    background:var(--white);
+    border:1px solid var(--border);
+    border-radius:12px;
+}
+
+.shortcuts-header {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:17px;
+}
+
+.shortcuts-header h2 {
+    font-size:18px;
+}
+
+.add-shortcut-button {
+    width:36px;
+    height:36px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border:none;
+    border-radius:7px;
+    background:var(--olive);
+    color:white;
+}
+
+.add-shortcut-button:hover {
+    background:var(--olive-dark);
+}
+
+.add-shortcut-button svg {
+    width:17px;
+    height:17px;
+}
+
+.shortcuts-list {
+    display:flex;
+    flex-wrap:wrap;
+    gap:9px;
+}
+
+.shortcut-item {
+    display:flex;
+    align-items:center;
+    gap:5px;
+    border:1px solid var(--border);
+    border-radius:8px;
+    background:var(--white);
+    overflow:hidden;
+}
+
+.shortcut-link {
+    min-height:42px;
+    padding:0 13px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    color:var(--anthracite);
+    text-decoration:none;
+    font-size:13px;
+    font-weight:600;
+}
+
+.shortcut-favicon {
+    width:16px;
+    height:16px;
+    flex-shrink:0;
+    border-radius:3px;
+}
+
+.shortcut-link:hover {
+    background:var(--light);
+}
+
+.delete-shortcut {
+    width:34px;
+    height:34px;
+    margin-right:4px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border:none;
+    border-radius:6px;
+    background:transparent;
+    color:var(--muted);
+}
+
+.delete-shortcut:hover {
+    background:var(--danger-hover-bg);
+    color:var(--danger);
+}
+
+.delete-shortcut svg {
+    width:15px;
+    height:15px;
+}
+
+.empty-shortcuts {
+    padding:20px;
+    border:1px dashed var(--border);
+    border-radius:8px;
+    color:var(--muted);
+    font-size:13px;
+    text-align:center;
+    width:100%;
+}
+
+/* =========================================================
+   BACK
+========================================================= */
+
+.back-button {
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    margin-bottom:22px;
+    padding:0;
+    border:none;
+    background:transparent;
+    color:var(--accent-text);
+    font-size:14px;
+    font-weight:600;
+}
+
+.back-button:hover {
+    text-decoration:underline;
+}
+
+.back-button svg {
+    width:16px;
+    height:16px;
+}
+
+/* =========================================================
+   NOTES
+========================================================= */
+
+.notes-layout {
+    display:grid;
+    grid-template-columns:280px 1fr;
+    gap:18px;
+}
+
+.notes-sidebar,
+.note-editor,
+.content-panel {
+    background:var(--white);
+    border:1px solid var(--border);
+    border-radius:12px;
+}
+
+.notes-sidebar {
+    padding:18px;
+}
+
+.notes-sidebar-header {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:15px;
+}
+
+.notes-sidebar-header h2 {
+    font-size:16px;
+}
+
+.new-note-button {
+    width:34px;
+    height:34px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border:none;
+    border-radius:7px;
+    background:var(--olive);
+    color:white;
+}
+
+.new-note-button:hover {
+    background:var(--olive-dark);
+}
+
+.new-note-button svg {
+    width:17px;
+    height:17px;
+}
+
+.notes-list {
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    max-height:500px;
+    overflow-y:auto;
+}
+
+.note-list-item {
+    width:100%;
+    padding:12px;
+    border:1px solid transparent;
+    border-radius:8px;
+    background:transparent;
+    text-align:left;
+    color:var(--anthracite);
+}
+
+.note-list-item:hover {
+    background:var(--light);
+}
+
+.note-list-item.active {
+    background:var(--badge-bg);
+    border-color:var(--badge-border);
+}
+
+.note-list-title {
+    display:block;
+    overflow:hidden;
+    font-size:14px;
+    font-weight:600;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+}
+
+.note-list-date {
+    display:block;
+    margin-top:4px;
+    color:var(--muted);
+    font-size:11px;
+}
+
+.empty-notes {
+    padding:25px 8px;
+    color:var(--muted);
+    font-size:13px;
+    text-align:center;
+    line-height:1.5;
+}
+
+.note-editor {
+    padding:24px;
+}
+
+.note-editor-top {
+    display:flex;
+    gap:10px;
+    margin-bottom:14px;
+}
+
+.note-title {
+    flex:1;
+    width:100%;
+    height:46px;
+    padding:0 13px;
+    border:1px solid var(--border);
+    border-radius:8px;
+    outline:none;
+    font-size:18px;
+    font-weight:600;
+}
+
+.note-title:focus,
+.note-content:focus,
+.todo-input:focus,
+.deadline-input:focus,
+.shortcut-input:focus {
+    border-color:var(--olive);
+    box-shadow:0 0 0 3px rgba(86,99,68,.10);
+}
+
+.delete-note-button {
+    width:46px;
+    height:46px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border:1px solid var(--border);
+    border-radius:8px;
+    background:var(--white);
+    color:var(--muted);
+}
+
+.delete-note-button:hover {
+    background:var(--danger-hover-bg);
+    color:var(--danger);
+}
+
+.delete-note-button svg {
+    width:18px;
+    height:18px;
+}
+
+.note-content {
+    width:100%;
+    min-height:390px;
+    padding:16px;
+    border:1px solid var(--border);
+    border-radius:8px;
+    outline:none;
+    resize:vertical;
+    line-height:1.6;
+    font-size:15px;
+}
+
+.note-editor-footer {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-top:14px;
+}
+
+.primary-button {
+    height:40px;
+    padding:0 16px;
+    font-size:13px;
+}
+
+.saved-message {
+    color:var(--accent-text);
+    font-size:13px;
+    font-weight:600;
+    opacity:0;
+    transition:opacity .2s;
+}
+
+.saved-message.show {
+    opacity:1;
+}
+
+/* =========================================================
+   TODO / DEADLINES
+========================================================= */
+
+.content-panel {
+    padding:26px;
+}
+
+.todo-input-row,
+.deadline-input-row {
+    display:grid;
+    grid-template-columns:1fr auto;
+    gap:10px;
+    margin-bottom:22px;
+}
+
+.todo-input,
+.deadline-input,
+.shortcut-input {
+    width:100%;
+    height:44px;
+    padding:0 13px;
+    border:1px solid var(--border);
+    border-radius:8px;
+    outline:none;
+}
+
+.todo-add,
+.deadline-add {
+    height:44px;
+    padding:0 17px;
+    border:none;
+    border-radius:8px;
+    background:var(--olive);
+    color:white;
+    font-weight:600;
+}
+
+.todo-add:hover,
+.deadline-add:hover {
+    background:var(--olive-dark);
+}
+
+.todo-list,
+.deadline-list {
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+}
+
+.todo-item,
+.deadline-item {
+    display:flex;
+    align-items:center;
+    gap:12px;
+    min-height:50px;
+    padding:9px 11px;
+    border:1px solid var(--border);
+    border-radius:8px;
+}
+
+.todo-check,
+.deadline-check {
+    width:19px;
+    height:19px;
+    accent-color:var(--olive);
+}
+
+.todo-text {
+    flex:1;
+    font-size:14px;
+    line-height:1.4;
+}
+
+.todo-item.completed .todo-text,
+.deadline-item.completed .deadline-title {
+    color:var(--muted);
+    text-decoration:line-through;
+}
+
+.delete-todo,
+.delete-deadline {
+    width:32px;
+    height:32px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border:none;
+    border-radius:6px;
+    background:transparent;
+    color:var(--muted);
+}
+
+.delete-todo:hover,
+.delete-deadline:hover {
+    background:var(--danger-hover-bg);
+    color:var(--danger);
+}
+
+.delete-todo svg,
+.delete-deadline svg {
+    width:16px;
+    height:16px;
+}
+
+.empty-todo,
+.empty-deadlines {
+    padding:30px;
+    border:1px dashed var(--border);
+    border-radius:8px;
+    color:var(--muted);
+    font-size:14px;
+    text-align:center;
+}
+
+.deadline-item {
+    align-items:flex-start;
+}
+
+.deadline-check {
+    margin-top:5px;
+}
+
+.deadline-main {
+    flex:1;
+    min-width:0;
+}
+
+.deadline-title {
+    font-size:14px;
+    font-weight:600;
+    line-height:1.4;
+}
+
+.deadline-description {
+    margin-top:3px;
+    color:var(--muted);
+    font-size:13px;
+    line-height:1.4;
+}
+
+.deadline-date {
+    display:inline-block;
+    margin-top:6px;
+    padding:4px 7px;
+    border-radius:5px;
+    background:var(--badge-bg);
+    color:var(--accent-text);
+    font-size:11px;
+    font-weight:600;
+}
+
+.deadline-item.overdue:not(.completed) {
+    border-color:var(--overdue-border);
+    background:var(--overdue-bg);
+}
+
+.deadline-item.overdue:not(.completed) .deadline-date {
+    background:var(--overdue-badge-bg);
+    color:var(--danger);
+}
+
+.deadline-item.today:not(.completed) {
+    border-color:var(--today-border);
+}
+
+.deadline-item.today:not(.completed) .deadline-date {
+    background:var(--warning-bg);
+    color:var(--warning);
+}
+
+/* =========================================================
+   HUISWERK
+========================================================= */
+
+.huiswerk-toolbar {
+    margin-bottom:18px;
+}
+
+.huiswerk-list {
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+}
+
+.huiswerk-item {
+    display:flex;
+    align-items:flex-start;
+    gap:12px;
+    padding:9px 11px;
+    border:1px solid var(--border);
+    border-radius:8px;
+}
+
+.huiswerk-check {
+    width:19px;
+    height:19px;
+    margin-top:5px;
+    accent-color:var(--olive);
+}
+
+.huiswerk-main {
+    flex:1;
+    min-width:0;
+}
+
+.huiswerk-subject {
+    display:inline-block;
+    padding:2px 8px;
+    margin-bottom:5px;
+    border-radius:5px;
+    background:var(--badge-bg);
+    color:var(--accent-text);
+    font-size:11px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:.3px;
+}
+
+.huiswerk-task {
+    font-size:14px;
+    font-weight:600;
+    line-height:1.4;
+}
+
+.huiswerk-item.completed .huiswerk-task {
+    color:var(--muted);
+    text-decoration:line-through;
+}
+
+.huiswerk-date {
+    display:inline-block;
+    margin-top:6px;
+    padding:4px 7px;
+    border-radius:5px;
+    background:var(--badge-bg);
+    color:var(--accent-text);
+    font-size:11px;
+    font-weight:600;
+}
+
+.huiswerk-item.overdue:not(.completed) {
+    border-color:var(--overdue-border);
+    background:var(--overdue-bg);
+}
+
+.huiswerk-item.overdue:not(.completed) .huiswerk-date {
+    background:var(--overdue-badge-bg);
+    color:var(--danger);
+}
+
+.huiswerk-item.today:not(.completed) {
+    border-color:var(--today-border);
+}
+
+.huiswerk-item.today:not(.completed) .huiswerk-date {
+    background:var(--warning-bg);
+    color:var(--warning);
+}
+
+.delete-huiswerk {
+    width:32px;
+    height:32px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border:none;
+    border-radius:6px;
+    background:transparent;
+    color:var(--muted);
+}
+
+.delete-huiswerk:hover {
+    background:var(--danger-hover-bg);
+    color:var(--danger);
+}
+
+.delete-huiswerk svg {
+    width:16px;
+    height:16px;
+}
+
+.empty-huiswerk {
+    padding:30px;
+    border:1px dashed var(--border);
+    border-radius:8px;
+    color:var(--muted);
+    font-size:14px;
+    text-align:center;
+}
+
+/* =========================================================
+   STUDIETIMER
+========================================================= */
+
+.timer-panel {
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:34px 26px;
+    margin-bottom:22px;
+    background:var(--white);
+    border:1px solid var(--border);
+    border-radius:12px;
+    text-align:center;
+}
+
+.timer-display {
+    font-size:52px;
+    font-weight:700;
+    font-variant-numeric:tabular-nums;
+    letter-spacing:-.5px;
+    margin-bottom:22px;
+}
+
+.timer-display.running {
+    color:var(--accent-text);
+}
+
+.timer-buttons {
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    justify-content:center;
+}
+
+.timer-start,
+.timer-stop {
+    height:46px;
+    padding:0 24px;
+    border:none;
+    border-radius:8px;
+    font-weight:600;
+    font-size:14px;
+}
+
+.timer-start {
+    background:var(--olive);
+    color:white;
+}
+
+.timer-start:hover {
+    background:var(--olive-dark);
+}
+
+.timer-stop {
+    background:var(--danger);
+    color:white;
+}
+
+.timer-stop:hover {
+    background:var(--danger-dark);
+}
+
+.timer-manual {
+    height:46px;
+    padding:0 20px;
+    border:1px solid var(--border);
+    border-radius:8px;
+    background:var(--white);
+    font-weight:600;
+    font-size:14px;
+}
+
+.timer-manual:hover {
+    background:var(--light);
+}
+
+.study-weeks-header {
+    margin-bottom:14px;
+}
+
+.study-weeks-header h2 {
+    font-size:18px;
+    margin-bottom:4px;
+}
+
+.study-weeks-header p {
+    color:var(--muted);
+    font-size:13px;
+}
+
+.study-week-list {
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+
+.study-week-card {
+    padding:16px 18px;
+    border:1px solid var(--border);
+    border-radius:10px;
+}
+
+.study-week-top {
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    margin-bottom:10px;
+    gap:10px;
+}
+
+.study-week-label {
+    font-size:13px;
+    font-weight:600;
+    color:var(--muted);
+}
+
+.study-week-total {
+    font-size:15px;
+    font-weight:700;
+}
+
+.study-progress-track {
+    width:100%;
+    height:10px;
+    border-radius:5px;
+    background:var(--light);
+    overflow:hidden;
+}
+
+.study-progress-fill {
+    height:100%;
+    border-radius:5px;
+    background:var(--danger);
+    transition:width .3s;
+}
+
+.study-progress-fill.reached {
+    background:var(--success);
+}
+
+.empty-study-weeks {
+    padding:30px;
+    border:1px dashed var(--border);
+    border-radius:8px;
+    color:var(--muted);
+    font-size:14px;
+    text-align:center;
+}
+
+/* =========================================================
+   CIJFERS
+========================================================= */
+
+.subject-input-row {
+    display:grid;
+    grid-template-columns:1fr auto;
+    gap:10px;
+    margin-bottom:22px;
+}
+
+.subject-input {
+    width:100%;
+    height:44px;
+    padding:0 13px;
+    border:1px solid var(--border);
+    border-radius:8px;
+    outline:none;
+}
+
+.subject-add {
+    height:44px;
+    padding:0 17px;
+    border:none;
+    border-radius:8px;
+    background:var(--olive);
+    color:white;
+    font-weight:600;
+}
+
+.subject-add:hover {
+    background:var(--olive-dark);
+}
+
+.subject-list {
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    margin-bottom:26px;
+}
+
+.subject-card {
+    padding:18px;
+    border:1px solid var(--border);
+    border-radius:10px;
+}
+
+.subject-header {
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:10px;
+}
+
+.subject-name {
+    font-size:16px;
+    font-weight:700;
+}
+
+.subject-average {
+    margin-top:3px;
+    color:var(--muted);
+    font-size:13px;
+}
+
+.delete-subject {
+    width:32px;
+    height:32px;
+    flex-shrink:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border:none;
+    border-radius:6px;
+    background:transparent;
+    color:var(--muted);
+}
+
+.delete-subject:hover {
+    background:var(--danger-hover-bg);
+    color:var(--danger);
+}
+
+.delete-subject svg {
+    width:16px;
+    height:16px;
+}
+
+.grade-list {
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin:14px 0;
+}
+
+.grade-chip {
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    padding:4px 4px 4px 12px;
+    border-radius:20px;
+    background:var(--badge-bg);
+    color:var(--accent-text);
+    font-size:13px;
+    font-weight:700;
+}
+
+.delete-grade {
+    width:20px;
+    height:20px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border:none;
+    border-radius:50%;
+    background:transparent;
+    color:var(--muted);
+}
+
+.delete-grade:hover {
+    background:var(--danger-hover-bg);
+    color:var(--danger);
+}
+
+.delete-grade svg {
+    width:11px;
+    height:11px;
+}
+
+.empty-grades {
+    color:var(--muted);
+    font-size:13px;
+}
+
+.grade-add-row {
+    display:flex;
+    gap:8px;
+}
+
+.grade-input {
+    width:100px;
+    height:38px;
+    padding:0 10px;
+    border:1px solid var(--border);
+    border-radius:7px;
+    outline:none;
+}
+
+.weight-input {
+    width:75px;
+    height:38px;
+    padding:0 10px;
+    border:1px solid var(--border);
+    border-radius:7px;
+    outline:none;
+}
+
+.grade-add {
+    height:38px;
+    padding:0 14px;
+    border:none;
+    border-radius:7px;
+    background:var(--olive);
+    color:white;
+    font-weight:600;
+    font-size:13px;
+}
+
+.grade-add:hover {
+    background:var(--olive-dark);
+}
+
+.empty-subjects {
+    padding:30px;
+    border:1px dashed var(--border);
+    border-radius:8px;
+    color:var(--muted);
+    font-size:14px;
+    text-align:center;
+    margin-bottom:26px;
+}
+
+.calculator-panel {
+    padding:22px;
+    border:1px solid var(--border);
+    border-radius:10px;
+    background:var(--light);
+}
+
+.calculator-panel h2 {
+    font-size:16px;
+    margin-bottom:6px;
+}
+
+.calculator-panel > p {
+    color:var(--muted);
+    font-size:13px;
+    margin-bottom:16px;
+}
+
+.calculator-row {
+    display:grid;
+    grid-template-columns:1fr 140px 110px auto;
+    gap:10px;
+}
+
+.calculator-select,
+.calculator-row input {
+    height:44px;
+    padding:0 12px;
+    border:1px solid var(--border);
+    border-radius:8px;
+    background:var(--white);
+    outline:none;
+}
+
+.calculator-button {
+    height:44px;
+    padding:0 18px;
+    border:none;
+    border-radius:8px;
+    background:var(--olive);
+    color:white;
+    font-weight:600;
+}
+
+.calculator-button:hover {
+    background:var(--olive-dark);
+}
+
+.calculator-result {
+    margin-top:14px;
+    font-size:14px;
+    font-weight:600;
+}
+
+.calculator-result.bad {
+    color:var(--danger);
+}
+
+.calculator-result.good {
+    color:var(--accent-text);
+}
+
+/* =========================================================
+   DOELEN
+========================================================= */
+
+.week-selector {
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:14px;
+    margin-bottom:18px;
+}
+
+.week-nav-button {
+    width:34px;
+    height:34px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border:1px solid var(--border);
+    border-radius:8px;
+    background:var(--white);
+    color:var(--anthracite);
+}
+
+.week-nav-button:hover:not(:disabled) {
+    background:var(--light);
+}
+
+.week-nav-button:disabled {
+    opacity:.35;
+}
+
+.week-nav-button svg {
+    width:16px;
+    height:16px;
+}
+
+.week-label-box {
+    text-align:center;
+    min-width:230px;
+}
+
+.week-label {
+    font-size:15px;
+    font-weight:700;
+}
+
+.week-readonly {
+    display:none;
+    margin-top:3px;
+    font-size:12px;
+    font-weight:600;
+    color:var(--warning);
+}
+
+.week-readonly.show {
+    display:block;
+}
+
+.week-special-toggle {
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    margin-bottom:20px;
+    font-size:13px;
+    color:var(--muted);
+}
+
+.week-special-toggle input {
+    width:17px;
+    height:17px;
+    accent-color:var(--olive);
+}
+
+.day-tabs {
+    display:flex;
+    gap:7px;
+    margin-bottom:20px;
+    flex-wrap:wrap;
+    justify-content:center;
+}
+
+.day-tab {
+    height:38px;
+    padding:0 16px;
+    border:1px solid var(--border);
+    border-radius:8px;
+    background:var(--white);
+    color:var(--anthracite);
+    font-size:13px;
+    font-weight:600;
+}
+
+.day-tab:hover {
+    background:var(--light);
+}
+
+.day-tab.active {
+    background:var(--olive);
+    border-color:var(--olive);
+    color:white;
+}
+
+.day-tab:disabled {
+    opacity:.4;
+}
+
+.day-panel {
+    padding:24px;
+    background:var(--white);
+    border:1px solid var(--border);
+    border-radius:12px;
+    margin-bottom:28px;
+}
+
+.day-panel-title {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    font-size:17px;
+    font-weight:700;
+    margin-bottom:18px;
+}
+
+.day-panel-readonly {
+    font-size:12px;
+    font-weight:600;
+    color:var(--warning);
+}
+
+.category-group {
+    margin-bottom:22px;
+}
+
+.category-group:last-child {
+    margin-bottom:0;
+}
+
+.category-heading {
+    display:flex;
+    align-items:center;
+    gap:9px;
+    margin-bottom:9px;
+}
+
+.category-icon {
+    width:26px;
+    height:26px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:6px;
+    background:var(--badge-bg);
+    color:var(--olive);
+    flex-shrink:0;
+}
+
+.category-icon svg {
+    width:14px;
+    height:14px;
+}
+
+.category-heading h3 {
+    font-size:14px;
+    font-weight:700;
+}
+
+.checklist-item {
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:14px;
+    padding:9px 0;
+    border-bottom:1px solid var(--border);
+}
+
+.checklist-item:last-child {
+    border-bottom:none;
+}
+
+.checklist-item-text {
+    flex:1;
+    min-width:0;
+}
+
+.checklist-item-label {
+    font-size:13.5px;
+    font-weight:600;
+    line-height:1.4;
+}
+
+.checklist-item-note {
+    margin-top:2px;
+    font-size:12px;
+    color:var(--muted);
+}
+
+.checklist-check {
+    width:19px;
+    height:19px;
+    margin-top:1px;
+    accent-color:var(--olive);
+    flex-shrink:0;
+}
+
+.checklist-number {
+    display:flex;
+    align-items:center;
+    gap:6px;
+    flex-shrink:0;
+}
+
+.checklist-number input {
+    width:64px;
+    height:32px;
+    padding:0 8px;
+    border:1px solid var(--border);
+    border-radius:6px;
+    text-align:right;
+    outline:none;
+}
+
+.checklist-number span {
+    font-size:12px;
+    color:var(--muted);
+}
+
+.week-overview h2 {
+    font-size:18px;
+    margin-bottom:4px;
+}
+
+.week-overview > p {
+    color:var(--muted);
+    font-size:13px;
+    margin-bottom:16px;
+}
+
+.overview-grid {
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:14px;
+}
+
+.overview-card {
+    padding:18px 19px;
+    background:var(--white);
+    border:1px solid var(--border);
+    border-radius:12px;
+}
+
+.overview-card-header {
+    display:flex;
+    align-items:center;
+    gap:9px;
+    margin-bottom:12px;
+}
+
+.overview-card-header h3 {
+    font-size:14px;
+    font-weight:700;
+}
+
+.overview-target {
+    font-size:12px;
+    color:var(--muted);
+    margin-bottom:10px;
+    line-height:1.4;
+}
+
+.overview-progress-row {
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    margin-bottom:6px;
+}
+
+.overview-progress-value {
+    font-size:15px;
+    font-weight:700;
+}
+
+.overview-progress-track {
+    width:100%;
+    height:7px;
+    border-radius:4px;
+    background:var(--light);
+    overflow:hidden;
+}
+
+.overview-progress-fill {
+    height:100%;
+    border-radius:4px;
+    background:var(--danger);
+    transition:width .3s;
+}
+
+.overview-progress-fill.reached {
+    background:var(--success);
+}
+
+.overview-pill {
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+    padding:4px 10px;
+    border-radius:20px;
+    font-size:12px;
+    font-weight:700;
+}
+
+.overview-pill.good {
+    background:var(--badge-bg);
+    color:var(--success);
+}
+
+.overview-pill.bad {
+    background:var(--badge-bg);
+    color:var(--danger);
+}
+
+.overview-mini-list {
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+}
+
+.overview-mini-item {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    font-size:12.5px;
+}
+
+.overview-mini-item span:first-child {
+    color:var(--muted);
+}
+
+@media(max-width:620px) {
+    .overview-grid {
+        grid-template-columns:1fr;
+    }
+
+    .day-tab {
+        padding:0 12px;
+        font-size:12.5px;
+    }
+}
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+.modal {
+    position:fixed;
+    inset:0;
+    z-index:100;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    background:rgba(52,56,51,.55);
+}
+
+.modal.show {
+    display:flex;
+}
+
+.modal-box {
+    width:100%;
+    max-width:440px;
+    padding:26px;
+    background:var(--white);
+    border-radius:12px;
+    box-shadow:0 20px 60px rgba(0,0,0,.2);
+}
+
+.modal-box h2 {
+    margin-bottom:20px;
+    font-size:20px;
+}
+
+.modal-field {
+    margin-bottom:15px;
+}
+
+.modal-field label {
+    display:block;
+    margin-bottom:7px;
+    font-size:13px;
+    font-weight:600;
+}
+
+.modal-field input {
+    width:100%;
+    height:44px;
+    padding:0 12px;
+    border:1px solid var(--border);
+    border-radius:8px;
+    outline:none;
+}
+
+.modal-field input:focus {
+    border-color:var(--olive);
+    box-shadow:0 0 0 3px rgba(86,99,68,.10);
+}
+
+.modal-actions {
+    display:flex;
+    justify-content:flex-end;
+    gap:8px;
+    margin-top:20px;
+}
+
+.modal-cancel {
+    height:40px;
+    padding:0 14px;
+    border:1px solid var(--border);
+    border-radius:7px;
+    background:var(--white);
+    font-weight:600;
+}
+
+.modal-save {
+    height:40px;
+    padding:0 14px;
+    border:none;
+    border-radius:7px;
+    background:var(--olive);
+    color:white;
+    font-weight:600;
+}
+
+.modal-save:hover {
+    background:var(--olive-dark);
+}
+
+/* =========================================================
+   MOBIEL
+========================================================= */
+
+@media(max-width:850px) {
+    .dashboard {
+        grid-template-columns:1fr;
+    }
+
+    .stats-strip {
+        grid-template-columns:repeat(2,minmax(0,1fr));
+    }
+}
+
+@media(max-width:750px) {
+
+    .topbar {
+        padding:0 17px;
+    }
+
+    main {
+        width:min(100% - 28px,1080px);
+        padding:28px 0;
+    }
+
+    .notes-layout {
+        grid-template-columns:1fr;
+    }
+
+    .notes-sidebar {
+        order:1;
+    }
+
+    .note-editor {
+        order:2;
+    }
+
+    .notes-list {
+        max-height:220px;
+    }
+}
+
+@media(max-width:500px) {
+
+    .login-box {
+        padding:30px 23px;
+    }
+
+    .page-header h1 {
+        font-size:25px;
+    }
+
+    #homePage .page-header,
+    #homePage .dashboard-card,
+    #homePage .stat-card {
+        text-align:center;
+    }
+
+    .stats-strip {
+        grid-template-columns:1fr;
+    }
+
+    .content-panel,
+    .note-editor,
+    .shortcuts-panel {
+        padding:18px;
+    }
+
+    .note-editor-top {
+        flex-direction:column;
+    }
+
+    .delete-note-button {
+        width:100%;
+    }
+
+    .note-content {
+        min-height:320px;
+    }
+
+    .note-editor-footer {
+        flex-direction:column;
+        gap:12px;
+        align-items:stretch;
+    }
+
+    .primary-button {
+        width:100%;
+    }
+
+    .todo-input-row,
+    .deadline-input-row {
+        grid-template-columns:1fr;
+    }
+
+    .todo-add,
+    .deadline-add {
+        width:100%;
+    }
+
+    .subject-input-row {
+        grid-template-columns:1fr;
+    }
+
+    .subject-add {
+        width:100%;
+    }
+
+    .calculator-row {
+        grid-template-columns:1fr;
+    }
+
+    .shortcuts-list {
+        flex-direction:column;
+    }
+
+    .shortcut-item {
+        width:100%;
+    }
+
+    .shortcut-link {
+        flex:1;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- =========================================================
+     SVG ICONS
+========================================================= -->
+
+<svg style="display:none">
+
+<symbol id="grid" viewBox="0 0 24 24">
+    <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+    <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+    <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+    <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+</symbol>
+
+<symbol id="note" viewBox="0 0 24 24">
+    <path d="M5 3h10l4 4v14H5z"></path>
+    <path d="M14 3v5h5"></path>
+    <path d="M8 12h8"></path>
+    <path d="M8 16h6"></path>
+</symbol>
+
+<symbol id="check" viewBox="0 0 24 24">
+    <rect x="4" y="4" width="16" height="16" rx="3"></rect>
+    <path d="m8 12 2.5 2.5L16 9"></path>
+</symbol>
+
+<symbol id="calendar" viewBox="0 0 24 24">
+    <rect x="3" y="5" width="18" height="16" rx="2"></rect>
+    <path d="M16 3v4M8 3v4M3 10h18"></path>
+</symbol>
+
+<symbol id="link" viewBox="0 0 24 24">
+    <path d="M10 13a5 5 0 0 0 7.07.07l2-2a5 5 0 0 0-7.07-7.07l-1.15 1.15"></path>
+    <path d="M14 11a5 5 0 0 0-7.07-.07l-2 2A5 5 0 0 0 7 20l1.15-1.15"></path>
+</symbol>
+
+<symbol id="arrow-right" viewBox="0 0 24 24">
+    <path d="M5 12h14"></path>
+    <path d="m13 6 6 6-6 6"></path>
+</symbol>
+
+<symbol id="arrow-left" viewBox="0 0 24 24">
+    <path d="M19 12H5"></path>
+    <path d="m11 18-6-6 6-6"></path>
+</symbol>
+
+<symbol id="plus" viewBox="0 0 24 24">
+    <path d="M12 5v14"></path>
+    <path d="M5 12h14"></path>
+</symbol>
+
+<symbol id="trash" viewBox="0 0 24 24">
+    <path d="M4 7h16"></path>
+    <path d="M9 7V4h6v3"></path>
+    <path d="M7 7l1 13h8l1-13"></path>
+    <path d="M10 11v5"></path>
+    <path d="M14 11v5"></path>
+</symbol>
+
+<symbol id="book" viewBox="0 0 24 24">
+    <path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v17H6.5A2.5 2.5 0 0 0 4 21.5z"></path>
+    <path d="M4 19.5V4.5"></path>
+    <path d="M20 19H6.5A2.5 2.5 0 0 0 4 21.5"></path>
+</symbol>
+
+<symbol id="clock" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="9"></circle>
+    <path d="M12 7v5l3.5 2"></path>
+</symbol>
+
+<symbol id="chart" viewBox="0 0 24 24">
+    <path d="M4 20V10"></path>
+    <path d="M12 20V4"></path>
+    <path d="M20 20v-7"></path>
+    <path d="M2 20h20"></path>
+</symbol>
+
+<symbol id="sun" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4.2"></circle>
+    <path d="M12 3v2.2"></path>
+    <path d="M12 18.8V21"></path>
+    <path d="M4.9 4.9l1.55 1.55"></path>
+    <path d="M17.55 17.55 19.1 19.1"></path>
+    <path d="M3 12h2.2"></path>
+    <path d="M18.8 12H21"></path>
+    <path d="M4.9 19.1l1.55-1.55"></path>
+    <path d="M17.55 6.45 19.1 4.9"></path>
+</symbol>
+
+<symbol id="moon" viewBox="0 0 24 24">
+    <path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.8 6.8 0 0 0 10.5 10.5z"></path>
+</symbol>
+
+<symbol id="target" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="9"></circle>
+    <circle cx="12" cy="12" r="5"></circle>
+    <circle cx="12" cy="12" r="1"></circle>
+</symbol>
+
+<symbol id="chevron-left" viewBox="0 0 24 24">
+    <path d="M15 6l-6 6 6 6"></path>
+</symbol>
+
+<symbol id="chevron-right" viewBox="0 0 24 24">
+    <path d="M9 6l6 6-6 6"></path>
+</symbol>
+
+<symbol id="dumbbell" viewBox="0 0 24 24">
+    <path d="M4 9v6"></path>
+    <path d="M2 10.5v3"></path>
+    <path d="M20 9v6"></path>
+    <path d="M22 10.5v3"></path>
+    <path d="M4 12h16"></path>
+    <path d="M8 9.5v5"></path>
+    <path d="M16 9.5v5"></path>
+</symbol>
+
+<symbol id="euro" viewBox="0 0 24 24">
+    <path d="M17 6.5a7 7 0 1 0 0 11"></path>
+    <path d="M4 10h10"></path>
+    <path d="M4 14h9"></path>
+</symbol>
+
+<symbol id="bed" viewBox="0 0 24 24">
+    <path d="M3 18v-7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v7"></path>
+    <path d="M3 15h18"></path>
+    <path d="M3 18v2M21 18v2"></path>
+    <path d="M6 11V8a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3"></path>
+</symbol>
+
+<symbol id="pages" viewBox="0 0 24 24">
+    <path d="M12 5v15"></path>
+    <path d="M4 6c2-1 5-1.3 8-1s6-1 8 0v13c-2-1-5-.7-8-1s-6 0-8 1z"></path>
+</symbol>
+
+<symbol id="apple" viewBox="0 0 24 24">
+    <path d="M12 8c-3 0-5.5 2.6-5.5 6.2C6.5 18 8.7 20 11 20c1 0 1.4-.5 2-.5s1 .5 2 .5c2.1 0 4.5-2.3 4.5-5.8C19.5 10.4 17.2 8 14.5 8c-.9 0-1.6.3-2.2.6"></path>
+    <path d="M12 8c0-1.7 1-3 2.5-3.4"></path>
+</symbol>
+
+<symbol id="scroll" viewBox="0 0 24 24">
+    <path d="M6 4h11a2.5 2.5 0 0 1 2.5 2.5V18"></path>
+    <path d="M6 4a2.5 2.5 0 0 0-2.5 2.5v11A2.5 2.5 0 0 0 6 20h12"></path>
+    <path d="M18 20a2.5 2.5 0 0 1-2.5-2.5V18h5"></path>
+    <path d="M8 9h7"></path>
+    <path d="M8 12.5h7"></path>
+</symbol>
+
+<symbol id="external-link" viewBox="0 0 24 24">
+    <path d="M14 4h6v6"></path>
+    <path d="M20 4 10 14"></path>
+    <path d="M18 13v5a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h5"></path>
+</symbol>
+
+</svg>
+
+
+<!-- =========================================================
+     LOGIN
+========================================================= -->
+
+<section id="loginPage">
+
+<button
+    id="loginThemeToggleButton"
+    class="theme-toggle-button login-theme-toggle"
+    onclick="toggleTheme()"
+    title="Donkere modus wisselen"
+>
+<svg fill="none"
+     stroke="currentColor"
+     stroke-width="1.8"
+     stroke-linecap="round"
+     stroke-linejoin="round">
+    <use
+        id="loginThemeToggleIcon"
+        href="#moon"
+    ></use>
+</svg>
+</button>
+
+<div id="loginBox" class="login-box">
+
+<div class="login-mark">
+<svg fill="none"
+     stroke="currentColor"
+     stroke-width="1.8"
+     stroke-linecap="round"
+     stroke-linejoin="round">
+    <use href="#grid"></use>
+</svg>
+</div>
+
+<h1>Persoonlijk dashboard</h1>
+
+<p>
+Log in om je persoonlijke gegevens vanaf al je apparaten te openen.
+</p>
+
+<label class="input-label">
+E-mailadres
+</label>
+
+<input
+    id="emailInput"
+    class="login-input"
+    type="email"
+    autocomplete="email"
+    placeholder="jouw@email.nl"
+>
+
+<label class="input-label">
+Wachtwoord
+</label>
+
+<input
+    id="passwordInput"
+    class="login-input"
+    type="password"
+    autocomplete="current-password"
+    placeholder="Wachtwoord"
+>
+
+<button
+    id="loginButton"
+    class="login-button"
+    onclick="login()"
+>
+    Inloggen
+</button>
+
+<div id="loginError" class="login-error"></div>
+
+<div class="login-switch">
+Nog geen account?
+<button
+    class="login-switch-button"
+    onclick="showSignupForm()"
+>
+    Registreren
+</button>
+</div>
+
+</div>
+
+
+<div
+    id="signupBox"
+    class="login-box"
+    style="display:none"
+>
+
+<div class="login-mark">
+<svg fill="none"
+     stroke="currentColor"
+     stroke-width="1.8"
+     stroke-linecap="round"
+     stroke-linejoin="round">
+    <use href="#grid"></use>
+</svg>
+</div>
+
+<h1>Account aanmaken</h1>
+
+<p>
+Maak een account om je eigen persoonlijke dashboard te krijgen.
+</p>
+
+<label class="input-label">
+E-mailadres
+</label>
+
+<input
+    id="signupEmailInput"
+    class="login-input"
+    type="email"
+    autocomplete="email"
+    placeholder="jouw@email.nl"
+>
+
+<label class="input-label">
+Wachtwoord
+</label>
+
+<input
+    id="signupPasswordInput"
+    class="login-input"
+    type="password"
+    autocomplete="new-password"
+    placeholder="Minimaal 6 tekens"
+>
+
+<label class="input-label">
+Wachtwoord herhalen
+</label>
+
+<input
+    id="signupConfirmInput"
+    class="login-input"
+    type="password"
+    autocomplete="new-password"
+    placeholder="Wachtwoord herhalen"
+>
+
+<button
+    id="signupButton"
+    class="login-button"
+    onclick="signUp()"
+>
+    Account aanmaken
+</button>
+
+<div id="signupError" class="login-error"></div>
+
+<div id="signupSuccess" class="login-success"></div>
+
+<div class="login-switch">
+Heb je al een account?
+<button
+    class="login-switch-button"
+    onclick="showLoginForm()"
+>
+    Inloggen
+</button>
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =========================================================
+     WEBSITE
+========================================================= -->
+
+<section id="website">
+
+<header class="topbar">
+
+<div class="brand">
+
+<div class="brand-mark">
+<svg fill="none"
+     stroke="currentColor"
+     stroke-width="1.8"
+     stroke-linecap="round"
+     stroke-linejoin="round">
+    <use href="#grid"></use>
+</svg>
+</div>
+
+Persoonlijk dashboard
+
+</div>
+
+<div class="topbar-actions">
+
+<button
+    id="themeToggleButton"
+    class="theme-toggle-button"
+    onclick="toggleTheme()"
+    title="Donkere modus wisselen"
+>
+<svg fill="none"
+     stroke="currentColor"
+     stroke-width="1.8"
+     stroke-linecap="round"
+     stroke-linejoin="round">
+    <use
+        id="themeToggleIcon"
+        href="#moon"
+    ></use>
+</svg>
+</button>
+
+<button
+    class="logout-button"
+    onclick="logout()"
+>
+Uitloggen
+</button>
+
+</div>
+
+</header>
+
+
+<main>
+
+<!-- =========================================================
+     HOME
+========================================================= -->
+
+<section id="homePage" class="page active">
+
+<div class="page-header">
+<h1>Overzicht</h1>
+<p>Kies wat je wilt openen.</p>
+</div>
+
+
+<!-- =========================================================
+     SNELLE STATISTIEKEN
+========================================================= -->
+
+<div
+    id="statsStrip"
+    class="stats-strip"
+>
+
+<div class="stat-card">
+<div class="stat-top">
+<div class="stat-icon">
+<svg fill="none"
+     stroke="currentColor"
+     stroke-width="1.8"
+     stroke-linecap="round"
+     stroke-linejoin="round">
+    <use href="#book"></use>
+</svg>
+</div>
+</div>
+<div
+    id="statHuiswerkValue"
+    class="stat-value"
+>0</div>
+<div class="stat-label">Openstaand huiswerk</div>
+</div>
+
+<div class="stat-card">
+<div class="stat-top">
+<div
+    id="statDeadlineIcon"
+    class="stat-icon"
+>
+<svg fill="none"
+     stroke="currentColor"
+     stroke-width="1.8"
+     stroke-linecap="round"
+     stroke-linejoin="round">
+    <use href="#calendar"></use>
+</svg>
+</div>
+</div>
+<div
+    id="statDeadlineValue"
+    class="stat-value"
+>-</div>
+<div
+    id="statDeadlineLabel"
+    class="stat-label"
+>Geen openstaande deadlines</div>
+</div>
+
+<div class="stat-card">
+<div class="stat-top">
+<div class="stat-icon">
+<svg fill="none"
+     stroke="currentColor"
+     stroke-width="1.8"
+     stroke-linecap="round"
+     stroke-linejoin="round">
+    <use href="#chart"></use>
+</svg>
+</div>
+</div>
+<div
+    id="statGradeValue"
+    class="stat-value"
+>-</div>
+<div
+    id="statGradeLabel"
+    class="stat-label"
+>Nog geen cijfers</div>
+</div>
+
+<div class="stat-card">
+<div class="stat-top">
+<div class="stat-icon">
+<svg fill="none"
+     stroke="currentColor"
+     stroke-width="1.8"
+     stroke-linecap="round"
+     stroke-linejoin="round">
+    <use href="#clock"></use>
+</svg>
+</div>
+</div>
+<div
+    id="statStudyValue"
+    class="stat-value"
+>0u 00m</div>
+<div class="stat-label">Geleerd deze week (doel 10u)</div>
+<div class="stat-progress-track">
+<div
+    id="statStudyFill"
+    class="stat-progress-fill"
+    style="width:0%"
+></div>
+</div>
+</div>
+
+</div>
+
+
+<div class="dashboard">
+
+
+<article class="dashboard-card">
+
+<div class="card-icon">
+<svg fill="none"
+     stroke="currentColor"
+     stroke-width="1.8"
+     stroke-linecap="round"
+     stroke-linejoin="round">
+    <use href="#note"></use>
+</svg>
+</div>
+
+<h2>Notities</h2>
+
+<p>
+Maak meerdere losse notities en bewaar ze overzichtelijk.
+</p>
+
+<button
+    class="card-button"
+    onclick="openPage('notesPage')"
+>
+    Openen
+
+    <svg fill="none"
+         stroke="currentColor"
+         stroke-width="1.8"
+         stroke-linecap="round"
+         stroke-linejoin="round">
+        <use href="#arrow-right"></use>
+    </svg>
+</button>
+
+</article>
+
+
+<article class="dashboard-card">
+
+<div class="card-icon">
+<svg fill="none"
+     stroke="currentColor"
+     stroke-width="1.8"
+     stroke-linecap="round"
+     stroke-linejoin="round">
+    <use href="#check"></use>
+</svg>
+</div>
+
+<h2>To-do lijst</h2>
+
+<p>
+Voeg taken toe en houd bij wat nog gedaan moet worden.
+</p>
+
+<button
+    class="card-button"
+    onclick="openPage('todoPage')"
+>
+    Openen
+
+    <svg fill="none"
+         stroke="currentColor"
+         stroke-width="1.8"
+         stroke-linecap="round"
+         stroke-linejoin="round">
+        <use href="#arrow-right"></use>
+    </svg>
+</button>
+
+</article>
+
+
+<article class="dashboard-card">
+
+<div class="card-icon">
+<svg fill="none"
+     stroke="currentColor"
+     stroke-width="1.8"
+     stroke-linecap="round"
+     stroke-linejoin="round">
+    <use href="#calendar"></use>
+</svg>
+</div>
+
+<h2>Deadlines</h2>
+
+<p>
+Bewaar belangrijke deadlines en koppel er een datum aan.
+</p>
+
+<button
+    class="card-button"
+    onclick="openPage('deadlinesPage')"
+>
+    Openen
+
+    <svg fill="none"
+         stroke="currentColor"
+         stroke-width="1.8"
+         stroke-linecap="round"
+         stroke-linejoin="round">
+        <use href="#arrow-right"></use>
+    </svg>
+</button>
+
+</article>
+
+
+<article class="dashboard-card">
+
+<div class="card-icon">
+<svg fill="none"
+     stroke="currentColor"
+     stroke-width="1.8"
+     stroke-linecap="round"
+     stroke-linejoin="round">
+    <use href="#book"></use>
+</svg>
+</div>
+
+<h2>Huiswerk</h2>
+
+<p>
+Houd per vak bij welk huiswerk je moet maken en wanneer het af moet.
+</p>
+
+<button
+    class="card-button"
+    onclick="openPage('huiswerkPage')"
+>
+    Openen
+
+    <svg fill="none"
+         stroke="currentColor"
+         stroke-width="1.8"
+         stroke-linecap="round"
+         stroke-linejoin="round">
+        <use href="#arrow-right"></use>
+    </svg>
+</button>
+
+</article>
+
+
+<article class="dashboard-card">
+
+<div class="card-icon">
+<svg fill="none"
+     stroke="currentColor"
+     stroke-width="1.8"
+     stroke-linecap="round"
+     stroke-linejoin="round">
+    <use href="#clock"></use>
+</svg>
+</div>
+
+<h2>Studietimer</h2>
+
+<p>
+Tim hoelang je leert en houd je voortgang per week bij.
+</p>
+
+<button
+    class="card-button"
+    onclick="openPage('studyPage')"
+>
+    Openen
+
+    <svg fill="none"
+         stroke="currentColor"
+         stroke-width="1.8"
+         stroke-linecap="round"
+         stroke-linejoin="round">
+        <use href="#arrow-right"></use>
+    </svg>
+</button>
+
+</article>
+
+
+<article class="dashboard-card">
+
+<div class="card-icon">
+<svg fill="none"
+     stroke="currentColor"
+     stroke-width="1.8"
+     stroke-linecap="round"
+     stroke-linejoin="round">
+    <use href="#chart"></use>
+</svg>
+</div>
+
+<h2>Cijfers</h2>
+
+<p>
+Houd je cijfers per vak bij en bereken wat je nog nodig hebt.
+</p>
+
+<button
+    class="card-button"
+    onclick="openPage('cijfersPage')"
+>
+    Openen
+
+    <svg fill="none"
+         stroke="currentColor"
+         stroke-width="1.8"
+         stroke-linecap="round"
+         stroke-linejoin="round">
+        <use href="#arrow-right"></use>
+    </svg>
+</button>
+
+</article>
+
+
+<article class="dashboard-card">
+
+<div class="card-icon">
+<svg fill="none"
+     stroke="currentColor"
+     stroke-width="1.8"
+     stroke-linecap="round"
+     stroke-linejoin="round">
+    <use href="#target"></use>
+</svg>
+</div>
+
+<h2>Doelen</h2>
+
+<p>
+Dagelijkse, dagspecifieke en wekelijkse eisen per categorie bijhouden.
+</p>
+
+<button
+    class="card-button"
+    onclick="openPage('doelenPage')"
+>
+    Openen
+
+    <svg fill="none"
+         stroke="currentColor"
+         stroke-width="1.8"
+         stroke-linecap="round"
+         stroke-linejoin="round">
+        <use href="#arrow-right"></use>
+    </svg>
+</button>
+
+</article>
+
+
+<article class="dashboard-card">
+
+<div class="card-icon">
+<svg fill="none"
+     stroke="currentColor"
+     stroke-width="1.8"
+     stroke-linecap="round"
+     stroke-linejoin="round">
+    <use href="#scroll"></use>
+</svg>
+</div>
+
+<h2>Contract</h2>
+
+<p>
+Het contract met jezelf voor schooljaar 2026/2027.
+</p>
+
+<a
+    class="card-button"
+    href="Contract.pdf"
+    target="_blank"
+    rel="noopener noreferrer"
+>
+    Openen
+
+    <svg fill="none"
+         stroke="currentColor"
+         stroke-width="1.8"
+         stroke-linecap="round"
+         stroke-linejoin="round">
+        <use href="#external-link"></use>
+    </svg>
+</a>
+
+</article>
+
+</div>
+
+
+<!-- =========================================================
+     SNELKOPPELINGEN
+========================================================= -->
+
+<div class="shortcuts-panel">
+
+<div class="shortcuts-header">
+
+<h2>Snelkoppelingen</h2>
+
+<button
+    class="add-shortcut-button"
+    onclick="openShortcutModal()"
+    title="Snelkoppeling toevoegen"
+>
+    <svg fill="none"
+         stroke="currentColor"
+         stroke-width="1.8"
+         stroke-linecap="round"
+         stroke-linejoin="round">
+        <use href="#plus"></use>
+    </svg>
+</button>
+
+</div>
+
+<div
+    id="shortcutsList"
+    class="shortcuts-list"
+></div>
+
+</div>
+
+</section>
+
+
+<!-- =========================================================
+     NOTITIES
+========================================================= -->
+
+<section id="notesPage" class="page">
+
+<button
+    class="back-button"
+    onclick="openPage('homePage')"
+>
+    <svg fill="none"
+         stroke="currentColor"
+         stroke-width="1.8"
+         stroke-linecap="round"
+         stroke-linejoin="round">
+        <use href="#arrow-left"></use>
+    </svg>
+
+    Terug naar overzicht
+</button>
+
+<div class="page-header">
+<h1>Notities</h1>
+<p>Maak en beheer meerdere losse notities.</p>
+</div>
+
+<div class="notes-layout">
+
+<aside class="notes-sidebar">
+
+<div class="notes-sidebar-header">
+
+<h2>Mijn notities</h2>
+
+<button
+    class="new-note-button"
+    onclick="createNote()"
+    title="Nieuwe notitie"
+>
+    <svg fill="none"
+         stroke="currentColor"
+         stroke-width="1.8"
+         stroke-linecap="round"
+         stroke-linejoin="round">
+        <use href="#plus"></use>
+    </svg>
+</button>
+
+</div>
+
+<div
+    id="notesList"
+    class="notes-list"
+></div>
+
+</aside>
+
+
+<div class="note-editor">
+
+<div class="note-editor-top">
+
+<input
+    id="noteTitle"
+    class="note-title"
+    type="text"
+    placeholder="Titel van de notitie"
+    maxlength="100"
+>
+
+<button
+    id="deleteNoteButton"
+    class="delete-note-button"
+    onclick="deleteCurrentNote()"
+    title="Notitie verwijderen"
+>
+    <svg fill="none"
+         stroke="currentColor"
+         stroke-width="1.8"
+         stroke-linecap="round"
+         stroke-linejoin="round">
+        <use href="#trash"></use>
+    </svg>
+</button>
+
+</div>
+
+<textarea
+    id="noteContent"
+    class="note-content"
+    placeholder="Begin met typen..."
+></textarea>
+
+<div class="note-editor-footer">
+
+<button
+    class="primary-button"
+    onclick="saveCurrentNote()"
+>
+    Notitie opslaan
+</button>
+
+<span
+    id="noteSavedMessage"
+    class="saved-message"
+>
+    Opgeslagen
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =========================================================
+     TODO
+========================================================= -->
+
+<section id="todoPage" class="page">
+
+<button
+    class="back-button"
+    onclick="openPage('homePage')"
+>
+    <svg fill="none"
+         stroke="currentColor"
+         stroke-width="1.8"
+         stroke-linecap="round"
+         stroke-linejoin="round">
+        <use href="#arrow-left"></use>
+    </svg>
+
+    Terug naar overzicht
+</button>
+
+<div class="page-header">
+<h1>To-do lijst</h1>
+<p>Houd je taken overzichtelijk bij.</p>
+</div>
+
+<div class="content-panel">
+
+<div class="todo-input-row">
+
+<input
+    id="todoInput"
+    class="todo-input"
+    type="text"
+    placeholder="Nieuwe taak..."
+    maxlength="200"
+>
+
+<button
+    class="todo-add"
+    onclick="addTodo()"
+>
+    Taak toevoegen
+</button>
+
+</div>
+
+<div
+    id="todoList"
+    class="todo-list"
+></div>
+
+</div>
+
+</section>
+
+
+<!-- =========================================================
+     DEADLINES
+========================================================= -->
+
+<section id="deadlinesPage" class="page">
+
+<button
+    class="back-button"
+    onclick="openPage('homePage')"
+>
+    <svg fill="none"
+         stroke="currentColor"
+         stroke-width="1.8"
+         stroke-linecap="round"
+         stroke-linejoin="round">
+        <use href="#arrow-left"></use>
+    </svg>
+
+    Terug naar overzicht
+</button>
+
+<div class="page-header">
+<h1>Deadlines</h1>
+<p>Houd belangrijke deadlines en datums bij.</p>
+</div>
+
+<div class="content-panel">
+
+<div class="deadline-input-row">
+
+<input
+    id="deadlineTitleInput"
+    class="deadline-input"
+    type="text"
+    placeholder="Nieuwe deadline..."
+    maxlength="200"
+>
+
+<button
+    class="deadline-add"
+    onclick="addDeadline()"
+>
+    Deadline toevoegen
+</button>
+
+</div>
+
+<div
+    id="deadlineList"
+    class="deadline-list"
+></div>
+
+</div>
+
+</section>
+
+
+<!-- =========================================================
+     HUISWERK
+========================================================= -->
+
+<section id="huiswerkPage" class="page">
+
+<button
+    class="back-button"
+    onclick="openPage('homePage')"
+>
+    <svg fill="none"
+         stroke="currentColor"
+         stroke-width="1.8"
+         stroke-linecap="round"
+         stroke-linejoin="round">
+        <use href="#arrow-left"></use>
+    </svg>
+
+    Terug naar overzicht
+</button>
+
+<div class="page-header">
+<h1>Huiswerk</h1>
+<p>Houd per vak bij welk huiswerk je moet maken en wanneer het af moet.</p>
+</div>
+
+<div class="content-panel">
+
+<div class="huiswerk-toolbar">
+
+<button
+    class="primary-button"
+    onclick="openHuiswerkModal()"
+>
+    Huiswerk toevoegen
+</button>
+
+</div>
+
+<div
+    id="huiswerkList"
+    class="huiswerk-list"
+></div>
+
+</div>
+
+</section>
+
+
+<!-- =========================================================
+     STUDIETIMER
+========================================================= -->
+
+<section id="studyPage" class="page">
+
+<button
+    class="back-button"
+    onclick="openPage('homePage')"
+>
+    <svg fill="none"
+         stroke="currentColor"
+         stroke-width="1.8"
+         stroke-linecap="round"
+         stroke-linejoin="round">
+        <use href="#arrow-left"></use>
+    </svg>
+
+    Terug naar overzicht
+</button>
+
+<div class="page-header">
+<h1>Studietimer</h1>
+<p>Tim hoelang je leert en houd je voortgang per week bij.</p>
+</div>
+
+<div class="timer-panel">
+
+<div
+    id="timerDisplay"
+    class="timer-display"
+>
+    00:00:00
+</div>
+
+<div class="timer-buttons">
+
+<button
+    id="timerStartButton"
+    class="timer-start"
+    onclick="startTimer()"
+>
+    Start
+</button>
+
+<button
+    id="timerStopButton"
+    class="timer-stop"
+    onclick="stopTimer()"
+    style="display:none"
+>
+    Stop en opslaan
+</button>
+
+<button
+    class="timer-manual"
+    onclick="openStudyModal()"
+>
+    Tijd handmatig toevoegen
+</button>
+
+</div>
+
+</div>
+
+<div class="content-panel">
+
+<div class="study-weeks-header">
+<h2>Voortgang per week</h2>
+<p>Streefdoel: 10 uur per week. De balk wordt groen zodra je dat haalt.</p>
+</div>
+
+<div
+    id="studyWeekList"
+    class="study-week-list"
+></div>
+
+</div>
+
+</section>
+
+
+<!-- =========================================================
+     CIJFERS
+========================================================= -->
+
+<section id="cijfersPage" class="page">
+
+<button
+    class="back-button"
+    onclick="openPage('homePage')"
+>
+    <svg fill="none"
+         stroke="currentColor"
+         stroke-width="1.8"
+         stroke-linecap="round"
+         stroke-linejoin="round">
+        <use href="#arrow-left"></use>
+    </svg>
+
+    Terug naar overzicht
+</button>
+
+<div class="page-header">
+<h1>Cijfers</h1>
+<p>Houd je cijfers per vak bij en bereken wat je nog nodig hebt.</p>
+</div>
+
+<div class="content-panel">
+
+<div class="subject-input-row">
+
+<input
+    id="subjectNameInput"
+    class="subject-input"
+    type="text"
+    placeholder="Nieuw vak..."
+    maxlength="60"
+>
+
+<button
+    class="subject-add"
+    onclick="addSubject()"
+>
+    Vak toevoegen
+</button>
+
+</div>
+
+<div
+    id="subjectList"
+    class="subject-list"
+></div>
+
+<div class="calculator-panel">
+
+<h2>Uitrekenmachine</h2>
+
+<p>
+Kies een vak en het gemiddelde dat je wilt halen. Dan wordt berekend welk cijfer je minimaal nodig hebt voor je volgende toets.
+</p>
+
+<div class="calculator-row">
+
+<select
+    id="calcSubjectSelect"
+    class="calculator-select"
+></select>
+
+<input
+    id="calcTargetInput"
+    type="number"
+    step="0.1"
+    min="1"
+    max="10"
+    placeholder="Gewenst gemiddelde"
+>
+
+<input
+    id="calcWeightInput"
+    type="number"
+    step="1"
+    min="1"
+    value="1"
+    placeholder="Weging"
+>
+
+<button
+    class="calculator-button"
+    onclick="calculateRequiredGrade()"
+>
+    Bereken
+</button>
+
+</div>
+
+<div
+    id="calculatorResult"
+    class="calculator-result"
+></div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =========================================================
+     DOELEN
+========================================================= -->
+
+<section id="doelenPage" class="page">
+
+<button
+    class="back-button"
+    onclick="openPage('homePage')"
+>
+    <svg fill="none"
+         stroke="currentColor"
+         stroke-width="1.8"
+         stroke-linecap="round"
+         stroke-linejoin="round">
+        <use href="#arrow-left"></use>
+    </svg>
+
+    Terug naar overzicht
+</button>
+
+<div class="page-header">
+<h1>Doelen</h1>
+<p>Dagelijkse, dagspecifieke en wekelijkse eisen per categorie.</p>
+</div>
+
+<div class="week-selector">
+
+<button
+    id="weekPrevButton"
+    class="week-nav-button"
+    onclick="trackerChangeWeek(-1)"
+>
+<svg fill="none"
+     stroke="currentColor"
+     stroke-width="1.8"
+     stroke-linecap="round"
+     stroke-linejoin="round">
+    <use href="#chevron-left"></use>
+</svg>
+</button>
+
+<div class="week-label-box">
+<div id="weekLabel" class="week-label"></div>
+<div id="weekReadonly" class="week-readonly">Afgelopen week — alleen ter inzage</div>
+</div>
+
+<button
+    id="weekNextButton"
+    class="week-nav-button"
+    onclick="trackerChangeWeek(1)"
+>
+<svg fill="none"
+     stroke="currentColor"
+     stroke-width="1.8"
+     stroke-linecap="round"
+     stroke-linejoin="round">
+    <use href="#chevron-right"></use>
+</svg>
+</button>
+
+</div>
+
+<label class="week-special-toggle">
+<input
+    id="weekSpecialCheckbox"
+    type="checkbox"
+    onchange="toggleTrackerWeekSpecial()"
+>
+Bijzondere week (feestdag, verjaardag, familiegelegenheid of proefwerkperiode) — sportnorm wordt dan 5 dagen
+</label>
+
+<div id="dayTabs" class="day-tabs"></div>
+
+<div class="day-panel">
+<div id="dayPanelTitle" class="day-panel-title"></div>
+<div id="dayChecklist"></div>
+</div>
+
+<div class="week-overview">
+<h2>Week overzicht</h2>
+<p>Status van de wekelijkse eisen voor de geselecteerde week.</p>
+<div id="overviewGrid" class="overview-grid"></div>
+</div>
+
+</section>
+
+
+</main>
+
+
+</section>
+
+
+<!-- =========================================================
+     SNELKOPPELING MODAL
+========================================================= -->
+
+<div
+    id="shortcutModal"
+    class="modal"
+>
+
+<div class="modal-box">
+
+<h2>
+Snelkoppeling toevoegen
+</h2>
+
+<div class="modal-field">
+
+<label for="shortcutTitle">
+Naam
+</label>
+
+<input
+    id="shortcutTitle"
+    class="shortcut-input"
+    type="text"
+    maxlength="60"
+    placeholder="Bijvoorbeeld GitHub"
+>
+
+</div>
+
+<div class="modal-field">
+
+<label for="shortcutUrl">
+Website
+</label>
+
+<input
+    id="shortcutUrl"
+    class="shortcut-input"
+    type="url"
+    placeholder="https://example.com"
+>
+
+</div>
+
+<div class="modal-actions">
+
+<button
+    class="modal-cancel"
+    onclick="closeShortcutModal()"
+>
+    Annuleren
+</button>
+
+<button
+    class="modal-save"
+    onclick="addShortcut()"
+>
+    Toevoegen
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- =========================================================
+     HUISWERK MODAL
+========================================================= -->
+
+<div
+    id="huiswerkModal"
+    class="modal"
+>
+
+<div class="modal-box">
+
+<h2>
+Huiswerk toevoegen
+</h2>
+
+<div class="modal-field">
+
+<label for="huiswerkSubject">
+Vak
+</label>
+
+<input
+    id="huiswerkSubject"
+    type="text"
+    maxlength="60"
+    placeholder="Bijvoorbeeld Wiskunde"
+>
+
+</div>
+
+<div class="modal-field">
+
+<label for="huiswerkTask">
+Huiswerk
+</label>
+
+<input
+    id="huiswerkTask"
+    type="text"
+    maxlength="200"
+    placeholder="Bijvoorbeeld paragraaf 3.2 maken"
+>
+
+</div>
+
+<div class="modal-field">
+
+<label for="huiswerkDate">
+Deadline
+</label>
+
+<input
+    id="huiswerkDate"
+    type="date"
+>
+
+</div>
+
+<div class="modal-actions">
+
+<button
+    class="modal-cancel"
+    onclick="closeHuiswerkModal()"
+>
+    Annuleren
+</button>
+
+<button
+    class="modal-save"
+    onclick="addHuiswerk()"
+>
+    Opslaan
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- =========================================================
+     STUDIETIJD MODAL
+========================================================= -->
+
+<div
+    id="studyModal"
+    class="modal"
+>
+
+<div class="modal-box">
+
+<h2>
+Tijd toevoegen
+</h2>
+
+<div class="modal-field">
+
+<label for="studyDate">
+Datum
+</label>
+
+<input
+    id="studyDate"
+    type="date"
+>
+
+</div>
+
+<div class="modal-field">
+
+<label for="studyHours">
+Uren
+</label>
+
+<input
+    id="studyHours"
+    type="number"
+    min="0"
+    max="24"
+    step="1"
+    value="0"
+>
+
+</div>
+
+<div class="modal-field">
+
+<label for="studyMinutes">
+Minuten
+</label>
+
+<input
+    id="studyMinutes"
+    type="number"
+    min="0"
+    max="59"
+    step="1"
+    value="0"
+>
+
+</div>
+
+<div class="modal-actions">
+
+<button
+    class="modal-cancel"
+    onclick="closeStudyModal()"
+>
+    Annuleren
+</button>
+
+<button
+    class="modal-save"
+    onclick="addManualStudyTime()"
+>
+    Opslaan
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- =========================================================
+     SUPABASE
+========================================================= -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+/* =========================================================
+   DONKERE MODUS
+========================================================= */
+
+function applyTheme(theme) {
+
+    document.documentElement.setAttribute(
+        "data-theme",
+        theme
+    );
+
+    const iconHref =
+        theme === "dark"
+            ? "#sun"
+            : "#moon";
+
+    const icon =
+        document.getElementById(
+            "themeToggleIcon"
+        );
+
+    if (icon) {
+
+        icon.setAttribute(
+            "href",
+            iconHref
+        );
+
+    }
+
+    const loginIcon =
+        document.getElementById(
+            "loginThemeToggleIcon"
+        );
+
+    if (loginIcon) {
+
+        loginIcon.setAttribute(
+            "href",
+            iconHref
+        );
+
+    }
+
+    const themeColorMeta =
+        document.querySelector(
+            'meta[name="theme-color"]'
+        );
+
+    if (themeColorMeta) {
+
+        themeColorMeta.setAttribute(
+            "content",
+            theme === "dark"
+                ? "#14150f"
+                : "#343833"
+        );
+
+    }
+}
+
+
+function toggleTheme() {
+
+    const current =
+        document.documentElement.getAttribute(
+            "data-theme"
+        );
+
+    const next =
+        current === "dark"
+            ? "light"
+            : "dark";
+
+    localStorage.setItem(
+        "theme",
+        next
+    );
+
+    applyTheme(next);
+}
+
+
+(function initTheme() {
+
+    const savedTheme =
+        localStorage.getItem(
+            "theme"
+        );
+
+    if (savedTheme) {
+
+        applyTheme(savedTheme);
+
+        return;
+    }
+
+    const prefersDark =
+        window.matchMedia(
+            "(prefers-color-scheme: dark)"
+        ).matches;
+
+    applyTheme(
+        prefersDark
+            ? "dark"
+            : "light"
+    );
+
+})();
+
+
+/* =========================================================
+   SUPABASE CONFIGURATIE
+========================================================= */
+
+const SUPABASE_URL =
+    "https://nrhvxcnokhvdampevlen.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_2-C21qtuPZbxawIAu2liyg_kT2ua_Ac";
+
+const supabaseClient =
+    supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+/* =========================================================
+   DATA
+========================================================= */
+
+let notes = [];
+let todos = [];
+let deadlines = [];
+let huiswerk = [];
+let studySessions = [];
+let subjects = [];
+let grades = [];
+let shortcuts = [];
+
+let currentNoteId = null;
+
+let timerInterval = null;
+let timerStartTimestamp = null;
+
+let trackerWeekStart = null;
+let trackerSelectedDate = null;
+let trackerEntries = {};
+let trackerWeekSpecial = false;
+
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+async function login() {
+
+    const email =
+        document
+            .getElementById("emailInput")
+            .value
+            .trim();
+
+    const password =
+        document
+            .getElementById("passwordInput")
+            .value;
+
+    const error =
+        document.getElementById("loginError");
+
+    const button =
+        document.getElementById("loginButton");
+
+    error.style.display = "none";
+    error.textContent = "";
+
+    if (!email || !password) {
+
+        error.textContent =
+            "Vul je e-mailadres en wachtwoord in.";
+
+        error.style.display = "block";
+
+        return;
+    }
+
+    button.disabled = true;
+    button.textContent = "Inloggen...";
+
+    try {
+
+        const {
+            data,
+            error: loginError
+        } =
+            await supabaseClient.auth
+                .signInWithPassword({
+                    email:email,
+                    password:password
+                });
+
+        if (loginError) {
+
+            console.error(
+                "Supabase login error:",
+                loginError
+            );
+
+            error.textContent =
+                loginError.message ||
+                "Inloggen mislukt.";
+
+            error.style.display = "block";
+
+            return;
+        }
+
+        console.log(
+            "Succesvol ingelogd:",
+            data.user
+        );
+
+        await showWebsite();
+
+    } catch (err) {
+
+        console.error(
+            "Onverwachte loginfout:",
+            err
+        );
+
+        error.textContent =
+            "Er is een onverwachte fout opgetreden: " +
+            (err.message || err);
+
+        error.style.display = "block";
+
+    } finally {
+
+        button.disabled = false;
+        button.textContent = "Inloggen";
+    }
+}
+
+
+/* =========================================================
+   REGISTREREN
+========================================================= */
+
+async function signUp() {
+
+    const email =
+        document
+            .getElementById("signupEmailInput")
+            .value
+            .trim();
+
+    const password =
+        document
+            .getElementById("signupPasswordInput")
+            .value;
+
+    const confirmPassword =
+        document
+            .getElementById("signupConfirmInput")
+            .value;
+
+    const error =
+        document.getElementById(
+            "signupError"
+        );
+
+    const success =
+        document.getElementById(
+            "signupSuccess"
+        );
+
+    const button =
+        document.getElementById(
+            "signupButton"
+        );
+
+    error.style.display = "none";
+    error.textContent = "";
+
+    success.style.display = "none";
+    success.textContent = "";
+
+    if (!email || !password || !confirmPassword) {
+
+        error.textContent =
+            "Vul je e-mailadres en beide wachtwoordvelden in.";
+
+        error.style.display = "block";
+
+        return;
+    }
+
+    if (password.length < 6) {
+
+        error.textContent =
+            "Je wachtwoord moet minimaal 6 tekens lang zijn.";
+
+        error.style.display = "block";
+
+        return;
+    }
+
+    if (password !== confirmPassword) {
+
+        error.textContent =
+            "De wachtwoorden komen niet overeen.";
+
+        error.style.display = "block";
+
+        return;
+    }
+
+    button.disabled = true;
+    button.textContent = "Account aanmaken...";
+
+    try {
+
+        const {
+            data,
+            error: signUpError
+        } =
+            await supabaseClient.auth
+                .signUp({
+                    email:email,
+                    password:password
+                });
+
+        if (signUpError) {
+
+            console.error(
+                "Supabase registratie error:",
+                signUpError
+            );
+
+            error.textContent =
+                signUpError.message ||
+                "Registreren mislukt.";
+
+            error.style.display = "block";
+
+            return;
+        }
+
+        if (data.session) {
+
+            console.log(
+                "Account aangemaakt en direct ingelogd:",
+                data.user
+            );
+
+            await showWebsite();
+
+            return;
+        }
+
+        success.textContent =
+            "Je account is aangemaakt. Check je e-mail om je account te bevestigen, en log daarna in.";
+
+        success.style.display = "block";
+
+        document.getElementById(
+            "signupEmailInput"
+        ).value = "";
+
+        document.getElementById(
+            "signupPasswordInput"
+        ).value = "";
+
+        document.getElementById(
+            "signupConfirmInput"
+        ).value = "";
+
+    } catch (err) {
+
+        console.error(
+            "Onverwachte registratiefout:",
+            err
+        );
+
+        error.textContent =
+            "Er is een onverwachte fout opgetreden: " +
+            (err.message || err);
+
+        error.style.display = "block";
+
+    } finally {
+
+        button.disabled = false;
+        button.textContent = "Account aanmaken";
+    }
+}
+
+
+function showSignupForm() {
+
+    document.getElementById(
+        "loginError"
+    ).style.display = "none";
+
+    document.getElementById(
+        "loginBox"
+    ).style.display = "none";
+
+    document.getElementById(
+        "signupBox"
+    ).style.display = "block";
+
+    document.getElementById(
+        "signupEmailInput"
+    ).focus();
+}
+
+
+function showLoginForm() {
+
+    document.getElementById(
+        "signupError"
+    ).style.display = "none";
+
+    document.getElementById(
+        "signupSuccess"
+    ).style.display = "none";
+
+    document.getElementById(
+        "signupBox"
+    ).style.display = "none";
+
+    document.getElementById(
+        "loginBox"
+    ).style.display = "block";
+
+    document.getElementById(
+        "emailInput"
+    ).focus();
+}
+
+
+/* =========================================================
+   WEBSITE TONEN
+========================================================= */
+
+async function showWebsite() {
+
+    document
+        .getElementById("loginPage")
+        .style.display = "none";
+
+    document
+        .getElementById("website")
+        .style.display = "block";
+
+    await loadAllData();
+}
+
+
+/* =========================================================
+   UITLOGGEN
+========================================================= */
+
+async function logout() {
+
+    const {
+        error
+    } =
+        await supabaseClient.auth.signOut();
+
+    if (error) {
+
+        console.error(
+            "Uitloggen mislukt:",
+            error
+        );
+
+        return;
+    }
+
+    document
+        .getElementById("website")
+        .style.display = "none";
+
+    document
+        .getElementById("loginPage")
+        .style.display = "flex";
+
+    document
+        .getElementById("passwordInput")
+        .value = "";
+
+    showLoginForm();
+
+    openPage("homePage");
+}
+
+
+/* =========================================================
+   SESSION
+========================================================= */
+
+async function checkSession() {
+
+    try {
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient.auth.getSession();
+
+        if (error) {
+
+            console.error(
+                "Session error:",
+                error
+            );
+
+            return;
+        }
+
+        if (data.session) {
+
+            console.log(
+                "Bestaande sessie gevonden."
+            );
+
+            await showWebsite();
+
+        } else {
+
+            console.log(
+                "Geen actieve sessie."
+            );
+        }
+
+    } catch (err) {
+
+        console.error(
+            "Session controleren mislukt:",
+            err
+        );
+    }
+}
+
+
+supabaseClient.auth.onAuthStateChange(
+    async (event, session) => {
+
+        console.log(
+            "Auth event:",
+            event
+        );
+
+        if (event === "SIGNED_OUT") {
+
+            document
+                .getElementById("website")
+                .style.display = "none";
+
+            document
+                .getElementById("loginPage")
+                .style.display = "flex";
+        }
+
+    }
+);
+
+
+/* =========================================================
+   PAGINA'S
+========================================================= */
+
+function openPage(pageId) {
+
+    document
+        .querySelectorAll(".page")
+        .forEach(page => {
+            page.classList.remove("active");
+        });
+
+    const page =
+        document.getElementById(pageId);
+
+    if (!page) return;
+
+    page.classList.add("active");
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+
+    if (pageId === "notesPage") {
+        loadNotes();
+    }
+
+    if (pageId === "todoPage") {
+        loadTodos();
+    }
+
+    if (pageId === "deadlinesPage") {
+        loadDeadlines();
+    }
+
+    if (pageId === "huiswerkPage") {
+        loadHuiswerk();
+    }
+
+    if (pageId === "studyPage") {
+        loadStudySessions();
+    }
+
+    if (pageId === "cijfersPage") {
+        loadCijfers();
+    }
+
+    if (pageId === "doelenPage") {
+        initTracker();
+    }
+
+    if (pageId === "homePage") {
+        loadShortcuts();
+        renderQuickStats();
+    }
+}
+
+
+/* =========================================================
+   GEBRUIKER
+========================================================= */
+
+async function getCurrentUser() {
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient.auth.getUser();
+
+    if (error || !data.user) {
+
+        console.error(
+            "Gebruiker ophalen:",
+            error
+        );
+
+        return null;
+    }
+
+    return data.user;
+}
+
+
+/* =========================================================
+   ALLES LADEN
+========================================================= */
+
+async function loadAllData() {
+
+    await Promise.all([
+        loadNotes(),
+        loadTodos(),
+        loadDeadlines(),
+        loadHuiswerk(),
+        loadStudySessions(),
+        loadCijfers(),
+        loadShortcuts()
+    ]);
+
+    renderQuickStats();
+}
+
+
+/* =========================================================
+   SNELLE STATISTIEKEN
+========================================================= */
+
+function renderQuickStats() {
+
+    /* Huiswerk */
+
+    const openHuiswerk =
+        huiswerk.filter(
+            item => !item.completed
+        ).length;
+
+    document.getElementById(
+        "statHuiswerkValue"
+    ).textContent =
+        openHuiswerk;
+
+
+    /* Eerstvolgende deadline */
+
+    const openDeadlines =
+        deadlines.filter(
+            deadline => !deadline.completed
+        );
+
+    const deadlineValueEl =
+        document.getElementById(
+            "statDeadlineValue"
+        );
+
+    const deadlineLabelEl =
+        document.getElementById(
+            "statDeadlineLabel"
+        );
+
+    const deadlineIconEl =
+        document.getElementById(
+            "statDeadlineIcon"
+        );
+
+    if (!openDeadlines.length) {
+
+        deadlineValueEl.textContent =
+            "-";
+
+        deadlineLabelEl.textContent =
+            "Geen openstaande deadlines";
+
+        deadlineIconEl.classList.remove(
+            "stat-icon-warning"
+        );
+
+    } else {
+
+        const sortedDeadlines =
+            [...openDeadlines].sort(
+                (a, b) =>
+                    a.deadline_date.localeCompare(
+                        b.deadline_date
+                    )
+            );
+
+        const nextDeadline =
+            sortedDeadlines[0];
+
+        const daysUntil =
+            getDaysUntil(
+                nextDeadline.deadline_date
+            );
+
+        if (daysUntil < 0) {
+
+            deadlineValueEl.textContent =
+                "Te laat";
+
+            deadlineIconEl.classList.add(
+                "stat-icon-warning"
+            );
+
+        } else if (daysUntil === 0) {
+
+            deadlineValueEl.textContent =
+                "Vandaag";
+
+            deadlineIconEl.classList.add(
+                "stat-icon-warning"
+            );
+
+        } else if (daysUntil === 1) {
+
+            deadlineValueEl.textContent =
+                "Morgen";
+
+            deadlineIconEl.classList.remove(
+                "stat-icon-warning"
+            );
+
+        } else {
+
+            deadlineValueEl.textContent =
+                "Over " +
+                daysUntil +
+                " dagen";
+
+            deadlineIconEl.classList.remove(
+                "stat-icon-warning"
+            );
+
+        }
+
+        deadlineLabelEl.textContent =
+            nextDeadline.title;
+
+    }
+
+
+    /* Gemiddeld cijfer */
+
+    const gradeValueEl =
+        document.getElementById(
+            "statGradeValue"
+        );
+
+    const gradeLabelEl =
+        document.getElementById(
+            "statGradeLabel"
+        );
+
+    if (!grades.length) {
+
+        gradeValueEl.textContent =
+            "-";
+
+        gradeLabelEl.textContent =
+            "Nog geen cijfers";
+
+    } else {
+
+        gradeValueEl.textContent =
+            getAverage(
+                grades
+            ).toFixed(1);
+
+        gradeLabelEl.textContent =
+            "Gemiddeld cijfer";
+
+    }
+
+
+    /* Studietijd deze week */
+
+    const currentWeekStart =
+        getWeekStart(
+            getToday()
+        );
+
+    const secondsThisWeek =
+        studySessions
+            .filter(
+                session =>
+                    getWeekStart(
+                        session.session_date
+                    ) ===
+                    currentWeekStart
+            )
+            .reduce(
+                (total, session) =>
+                    total +
+                    session.duration_seconds,
+                0
+            );
+
+    document.getElementById(
+        "statStudyValue"
+    ).textContent =
+        formatDuration(
+            secondsThisWeek,
+            true
+        );
+
+    const studyHours =
+        secondsThisWeek / 3600;
+
+    const studyPercentage =
+        Math.min(
+            (studyHours / 10) * 100,
+            100
+        );
+
+    const studyFillEl =
+        document.getElementById(
+            "statStudyFill"
+        );
+
+    studyFillEl.style.width =
+        studyPercentage + "%";
+
+    studyFillEl.classList.toggle(
+        "reached",
+        studyHours >= 10
+    );
+}
+
+
+function getDaysUntil(
+    dateString
+) {
+
+    const [
+        year,
+        month,
+        day
+    ] =
+        dateString.split("-").map(
+            Number
+        );
+
+    const target =
+        new Date(
+            year,
+            month - 1,
+            day
+        );
+
+    const [
+        todayYear,
+        todayMonth,
+        todayDay
+    ] =
+        getToday().split("-").map(
+            Number
+        );
+
+    const today =
+        new Date(
+            todayYear,
+            todayMonth - 1,
+            todayDay
+        );
+
+    const diffMs =
+        target.getTime() -
+        today.getTime();
+
+    return Math.round(
+        diffMs / (1000 * 60 * 60 * 24)
+    );
+}
+
+
+/* =========================================================
+   NOTITIES
+========================================================= */
+
+async function loadNotes() {
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("notes")
+            .select("*")
+            .order("updated_at", {
+                ascending:false
+            });
+
+    if (error) {
+
+        console.error(
+            "Notities laden:",
+            error
+        );
+
+        return;
+    }
+
+    notes = data || [];
+
+    if (
+        !notes.some(
+            note => note.id === currentNoteId
+        )
+    ) {
+
+        currentNoteId =
+            notes.length
+                ? notes[0].id
+                : null;
+    }
+
+    renderNotesList();
+    renderCurrentNote();
+}
+
+
+function renderNotesList() {
+
+    const list =
+        document.getElementById(
+            "notesList"
+        );
+
+    list.innerHTML = "";
+
+    if (!notes.length) {
+
+        list.innerHTML = `
+            <div class="empty-notes">
+                Je hebt nog geen notities.<br>
+                Gebruik + om een nieuwe notitie te maken.
+            </div>
+        `;
+
+        return;
+    }
+
+    notes.forEach(note => {
+
+        const button =
+            document.createElement("button");
+
+        button.className =
+            "note-list-item";
+
+        if (note.id === currentNoteId) {
+            button.classList.add("active");
+        }
+
+        const title =
+            document.createElement("span");
+
+        title.className =
+            "note-list-title";
+
+        title.textContent =
+            note.title?.trim() ||
+            "Zonder titel";
+
+        const date =
+            document.createElement("span");
+
+        date.className =
+            "note-list-date";
+
+        date.textContent =
+            formatDate(note.updated_at);
+
+        button.appendChild(title);
+        button.appendChild(date);
+
+        button.onclick = () => {
+
+            currentNoteId =
+                note.id;
+
+            renderNotesList();
+            renderCurrentNote();
+        };
+
+        list.appendChild(button);
+    });
+}
+
+
+async function createNote() {
+
+    const user =
+        await getCurrentUser();
+
+    if (!user) {
+
+        alert(
+            "Je bent niet ingelogd."
+        );
+
+        return;
+    }
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("notes")
+            .insert({
+                user_id:user.id,
+                title:"Nieuwe notitie",
+                content:""
+            })
+            .select()
+            .single();
+
+    if (error) {
+
+        console.error(
+            "Notitie aanmaken:",
+            error
+        );
+
+        alert(
+            "De notitie kon niet worden aangemaakt."
+        );
+
+        return;
+    }
+
+    currentNoteId =
+        data.id;
+
+    await loadNotes();
+
+    document
+        .getElementById("noteTitle")
+        .focus();
+}
+
+
+function renderCurrentNote() {
+
+    const title =
+        document.getElementById(
+            "noteTitle"
+        );
+
+    const content =
+        document.getElementById(
+            "noteContent"
+        );
+
+    const deleteButton =
+        document.getElementById(
+            "deleteNoteButton"
+        );
+
+    const note =
+        notes.find(
+            note =>
+                note.id === currentNoteId
+        );
+
+    if (!note) {
+
+        title.value = "";
+        content.value = "";
+
+        deleteButton.style.display =
+            "none";
+
+        return;
+    }
+
+    deleteButton.style.display =
+        "flex";
+
+    title.value =
+        note.title || "";
+
+    content.value =
+        note.content || "";
+}
+
+
+async function saveCurrentNote() {
+
+    if (currentNoteId === null) {
+        return;
+    }
+
+    const title =
+        document
+            .getElementById("noteTitle")
+            .value
+            .trim();
+
+    const content =
+        document
+            .getElementById("noteContent")
+            .value;
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("notes")
+            .update({
+                title:title,
+                content:content,
+                updated_at:
+                    new Date().toISOString()
+            })
+            .eq(
+                "id",
+                currentNoteId
+            );
+
+    if (error) {
+
+        console.error(
+            "Notitie opslaan:",
+            error
+        );
+
+        alert(
+            "De notitie kon niet worden opgeslagen."
+        );
+
+        return;
+    }
+
+    await loadNotes();
+
+    const message =
+        document.getElementById(
+            "noteSavedMessage"
+        );
+
+    message.classList.add("show");
+
+    setTimeout(() => {
+
+        message.classList.remove("show");
+
+    },1800);
+}
+
+
+async function deleteCurrentNote() {
+
+    if (currentNoteId === null) {
+        return;
+    }
+
+    if (
+        !confirm(
+            "Weet je zeker dat je deze notitie wilt verwijderen?"
+        )
+    ) {
+        return;
+    }
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("notes")
+            .delete()
+            .eq(
+                "id",
+                currentNoteId
+            );
+
+    if (error) {
+
+        console.error(
+            "Notitie verwijderen:",
+            error
+        );
+
+        alert(
+            "De notitie kon niet worden verwijderd."
+        );
+
+        return;
+    }
+
+    currentNoteId = null;
+
+    await loadNotes();
+}
+
+
+/* =========================================================
+   TODO
+========================================================= */
+
+async function loadTodos() {
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("todos")
+            .select("*")
+            .order("created_at", {
+                ascending:true
+            });
+
+    if (error) {
+
+        console.error(
+            "Taken laden:",
+            error
+        );
+
+        return;
+    }
+
+    todos = data || [];
+
+    renderTodos();
+}
+
+
+async function addTodo() {
+
+    const input =
+        document.getElementById(
+            "todoInput"
+        );
+
+    const text =
+        input.value.trim();
+
+    if (!text) {
+
+        input.focus();
+
+        return;
+    }
+
+    const user =
+        await getCurrentUser();
+
+    if (!user) {
+
+        alert(
+            "Je bent niet ingelogd."
+        );
+
+        return;
+    }
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("todos")
+            .insert({
+                user_id:user.id,
+                text:text,
+                completed:false
+            });
+
+    if (error) {
+
+        console.error(
+            "Taak toevoegen:",
+            error
+        );
+
+        alert(
+            "De taak kon niet worden toegevoegd."
+        );
+
+        return;
+    }
+
+    input.value = "";
+
+    await loadTodos();
+
+    input.focus();
+}
+
+
+function renderTodos() {
+
+    const list =
+        document.getElementById(
+            "todoList"
+        );
+
+    list.innerHTML = "";
+
+    if (!todos.length) {
+
+        list.innerHTML = `
+            <div class="empty-todo">
+                Je hebt momenteel geen taken.
+            </div>
+        `;
+
+        return;
+    }
+
+    todos.forEach(todo => {
+
+        const item =
+            document.createElement("div");
+
+        item.className =
+            "todo-item" +
+            (
+                todo.completed
+                    ? " completed"
+                    : ""
+            );
+
+        const checkbox =
+            document.createElement("input");
+
+        checkbox.type =
+            "checkbox";
+
+        checkbox.className =
+            "todo-check";
+
+        checkbox.checked =
+            todo.completed;
+
+        checkbox.addEventListener(
+            "change",
+            () =>
+                toggleTodo(
+                    todo.id,
+                    todo.completed
+                )
+        );
+
+        const text =
+            document.createElement("span");
+
+        text.className =
+            "todo-text";
+
+        text.textContent =
+            todo.text;
+
+        const deleteButton =
+            document.createElement("button");
+
+        deleteButton.className =
+            "delete-todo";
+
+        deleteButton.title =
+            "Taak verwijderen";
+
+        deleteButton.innerHTML = `
+            <svg fill="none"
+                 stroke="currentColor"
+                 stroke-width="1.8"
+                 stroke-linecap="round"
+                 stroke-linejoin="round">
+                <use href="#trash"></use>
+            </svg>
+        `;
+
+        deleteButton.onclick =
+            () =>
+                deleteTodo(
+                    todo.id
+                );
+
+        item.appendChild(
+            checkbox
+        );
+
+        item.appendChild(
+            text
+        );
+
+        item.appendChild(
+            deleteButton
+        );
+
+        list.appendChild(
+            item
+        );
+    });
+}
+
+
+async function toggleTodo(
+    id,
+    currentValue
+) {
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("todos")
+            .update({
+                completed:
+                    !currentValue
+            })
+            .eq(
+                "id",
+                id
+            );
+
+    if (error) {
+
+        console.error(
+            "Taak aanpassen:",
+            error
+        );
+
+        return;
+    }
+
+    await loadTodos();
+}
+
+
+async function deleteTodo(id) {
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("todos")
+            .delete()
+            .eq(
+                "id",
+                id
+            );
+
+    if (error) {
+
+        console.error(
+            "Taak verwijderen:",
+            error
+        );
+
+        return;
+    }
+
+    await loadTodos();
+}
+
+
+/* =========================================================
+   DEADLINES
+========================================================= */
+
+async function loadDeadlines() {
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("deadlines")
+            .select("*")
+            .order("deadline_date", {
+                ascending:true
+            });
+
+    if (error) {
+
+        console.error(
+            "Deadlines laden:",
+            error
+        );
+
+        return;
+    }
+
+    deadlines =
+        data || [];
+
+    renderDeadlines();
+}
+
+
+async function addDeadline() {
+
+    const titleInput =
+        document.getElementById(
+            "deadlineTitleInput"
+        );
+
+    const title =
+        titleInput.value.trim();
+
+    if (!title) {
+
+        titleInput.focus();
+
+        return;
+    }
+
+    const date =
+        prompt(
+            "Voer de deadline in als YYYY-MM-DD",
+            getToday()
+        );
+
+    if (!date) {
+        return;
+    }
+
+    if (
+        !/^\d{4}-\d{2}-\d{2}$/.test(date)
+    ) {
+
+        alert(
+            "Gebruik het formaat YYYY-MM-DD."
+        );
+
+        return;
+    }
+
+    const user =
+        await getCurrentUser();
+
+    if (!user) {
+
+        alert(
+            "Je bent niet ingelogd."
+        );
+
+        return;
+    }
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("deadlines")
+            .insert({
+                user_id:user.id,
+                title:title,
+                description:"",
+                deadline_date:date,
+                completed:false
+            });
+
+    if (error) {
+
+        console.error(
+            "Deadline toevoegen:",
+            error
+        );
+
+        alert(
+            "De deadline kon niet worden toegevoegd."
+        );
+
+        return;
+    }
+
+    titleInput.value = "";
+
+    await loadDeadlines();
+
+    titleInput.focus();
+}
+
+
+function renderDeadlines() {
+
+    const list =
+        document.getElementById(
+            "deadlineList"
+        );
+
+    list.innerHTML = "";
+
+    if (!deadlines.length) {
+
+        list.innerHTML = `
+            <div class="empty-deadlines">
+                Je hebt momenteel geen deadlines.
+            </div>
+        `;
+
+        return;
+    }
+
+    deadlines.forEach(deadline => {
+
+        const item =
+            document.createElement("div");
+
+        const status =
+            getDeadlineStatus(
+                deadline.deadline_date
+            );
+
+        item.className =
+            "deadline-item " +
+            status +
+            (
+                deadline.completed
+                    ? " completed"
+                    : ""
+            );
+
+        const checkbox =
+            document.createElement("input");
+
+        checkbox.type =
+            "checkbox";
+
+        checkbox.className =
+            "deadline-check";
+
+        checkbox.checked =
+            deadline.completed;
+
+        checkbox.addEventListener(
+            "change",
+            () =>
+                toggleDeadline(
+                    deadline.id,
+                    deadline.completed
+                )
+        );
+
+        const main =
+            document.createElement("div");
+
+        main.className =
+            "deadline-main";
+
+        const title =
+            document.createElement("div");
+
+        title.className =
+            "deadline-title";
+
+        title.textContent =
+            deadline.title;
+
+        const date =
+            document.createElement("span");
+
+        date.className =
+            "deadline-date";
+
+        date.textContent =
+            formatDeadlineDate(
+                deadline.deadline_date
+            );
+
+        main.appendChild(title);
+        main.appendChild(date);
+
+        const deleteButton =
+            document.createElement("button");
+
+        deleteButton.className =
+            "delete-deadline";
+
+        deleteButton.title =
+            "Deadline verwijderen";
+
+        deleteButton.innerHTML = `
+            <svg fill="none"
+                 stroke="currentColor"
+                 stroke-width="1.8"
+                 stroke-linecap="round"
+                 stroke-linejoin="round">
+                <use href="#trash"></use>
+            </svg>
+        `;
+
+        deleteButton.onclick =
+            () =>
+                deleteDeadline(
+                    deadline.id
+                );
+
+        item.appendChild(
+            checkbox
+        );
+
+        item.appendChild(
+            main
+        );
+
+        item.appendChild(
+            deleteButton
+        );
+
+        list.appendChild(
+            item
+        );
+    });
+}
+
+
+async function toggleDeadline(
+    id,
+    currentValue
+) {
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("deadlines")
+            .update({
+                completed:
+                    !currentValue
+            })
+            .eq(
+                "id",
+                id
+            );
+
+    if (error) {
+
+        console.error(
+            "Deadline aanpassen:",
+            error
+        );
+
+        return;
+    }
+
+    await loadDeadlines();
+}
+
+
+async function deleteDeadline(id) {
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("deadlines")
+            .delete()
+            .eq(
+                "id",
+                id
+            );
+
+    if (error) {
+
+        console.error(
+            "Deadline verwijderen:",
+            error
+        );
+
+        return;
+    }
+
+    await loadDeadlines();
+}
+
+
+function getDeadlineStatus(
+    dateString
+) {
+
+    const today =
+        getToday();
+
+    if (dateString < today) {
+        return "overdue";
+    }
+
+    if (dateString === today) {
+        return "today";
+    }
+
+    return "";
+}
+
+
+/* =========================================================
+   HUISWERK
+========================================================= */
+
+async function loadHuiswerk() {
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("huiswerk")
+            .select("*")
+            .order("deadline_date", {
+                ascending:true
+            });
+
+    if (error) {
+
+        console.error(
+            "Huiswerk laden:",
+            error
+        );
+
+        return;
+    }
+
+    huiswerk =
+        data || [];
+
+    renderHuiswerk();
+}
+
+
+function openHuiswerkModal() {
+
+    document
+        .getElementById(
+            "huiswerkModal"
+        )
+        .classList.add("show");
+
+    document
+        .getElementById(
+            "huiswerkSubject"
+        )
+        .focus();
+}
+
+
+function closeHuiswerkModal() {
+
+    document
+        .getElementById(
+            "huiswerkModal"
+        )
+        .classList.remove("show");
+
+    document.getElementById(
+        "huiswerkSubject"
+    ).value = "";
+
+    document.getElementById(
+        "huiswerkTask"
+    ).value = "";
+
+    document.getElementById(
+        "huiswerkDate"
+    ).value = "";
+}
+
+
+async function addHuiswerk() {
+
+    const subjectInput =
+        document.getElementById(
+            "huiswerkSubject"
+        );
+
+    const taskInput =
+        document.getElementById(
+            "huiswerkTask"
+        );
+
+    const dateInput =
+        document.getElementById(
+            "huiswerkDate"
+        );
+
+    const subject =
+        subjectInput.value.trim();
+
+    const task =
+        taskInput.value.trim();
+
+    const date =
+        dateInput.value;
+
+    if (!subject || !task || !date) {
+
+        alert(
+            "Vul een vak, het huiswerk en een deadline in."
+        );
+
+        return;
+    }
+
+    const user =
+        await getCurrentUser();
+
+    if (!user) {
+
+        alert(
+            "Je bent niet ingelogd."
+        );
+
+        return;
+    }
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("huiswerk")
+            .insert({
+                user_id:user.id,
+                subject:subject,
+                task:task,
+                deadline_date:date,
+                completed:false
+            });
+
+    if (error) {
+
+        console.error(
+            "Huiswerk toevoegen:",
+            error
+        );
+
+        alert(
+            "Het huiswerk kon niet worden toegevoegd."
+        );
+
+        return;
+    }
+
+    closeHuiswerkModal();
+
+    await loadHuiswerk();
+}
+
+
+function renderHuiswerk() {
+
+    const list =
+        document.getElementById(
+            "huiswerkList"
+        );
+
+    list.innerHTML = "";
+
+    if (!huiswerk.length) {
+
+        list.innerHTML = `
+            <div class="empty-huiswerk">
+                Je hebt momenteel geen huiswerk openstaan.
+            </div>
+        `;
+
+        return;
+    }
+
+    huiswerk.forEach(item => {
+
+        const el =
+            document.createElement("div");
+
+        const status =
+            getDeadlineStatus(
+                item.deadline_date
+            );
+
+        el.className =
+            "huiswerk-item " +
+            status +
+            (
+                item.completed
+                    ? " completed"
+                    : ""
+            );
+
+        const checkbox =
+            document.createElement("input");
+
+        checkbox.type =
+            "checkbox";
+
+        checkbox.className =
+            "huiswerk-check";
+
+        checkbox.checked =
+            item.completed;
+
+        checkbox.addEventListener(
+            "change",
+            () =>
+                toggleHuiswerk(
+                    item.id,
+                    item.completed
+                )
+        );
+
+        const main =
+            document.createElement("div");
+
+        main.className =
+            "huiswerk-main";
+
+        const subject =
+            document.createElement("span");
+
+        subject.className =
+            "huiswerk-subject";
+
+        subject.textContent =
+            item.subject;
+
+        const task =
+            document.createElement("div");
+
+        task.className =
+            "huiswerk-task";
+
+        task.textContent =
+            item.task;
+
+        const date =
+            document.createElement("span");
+
+        date.className =
+            "huiswerk-date";
+
+        date.textContent =
+            formatDeadlineDate(
+                item.deadline_date
+            );
+
+        main.appendChild(subject);
+        main.appendChild(task);
+        main.appendChild(date);
+
+        const deleteButton =
+            document.createElement("button");
+
+        deleteButton.className =
+            "delete-huiswerk";
+
+        deleteButton.title =
+            "Huiswerk verwijderen";
+
+        deleteButton.innerHTML = `
+            <svg fill="none"
+                 stroke="currentColor"
+                 stroke-width="1.8"
+                 stroke-linecap="round"
+                 stroke-linejoin="round">
+                <use href="#trash"></use>
+            </svg>
+        `;
+
+        deleteButton.onclick =
+            () =>
+                deleteHuiswerk(
+                    item.id
+                );
+
+        el.appendChild(
+            checkbox
+        );
+
+        el.appendChild(
+            main
+        );
+
+        el.appendChild(
+            deleteButton
+        );
+
+        list.appendChild(
+            el
+        );
+    });
+}
+
+
+async function toggleHuiswerk(
+    id,
+    currentValue
+) {
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("huiswerk")
+            .update({
+                completed:
+                    !currentValue
+            })
+            .eq(
+                "id",
+                id
+            );
+
+    if (error) {
+
+        console.error(
+            "Huiswerk aanpassen:",
+            error
+        );
+
+        return;
+    }
+
+    await loadHuiswerk();
+}
+
+
+async function deleteHuiswerk(id) {
+
+    if (
+        !confirm(
+            "Dit huiswerk verwijderen?"
+        )
+    ) {
+        return;
+    }
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("huiswerk")
+            .delete()
+            .eq(
+                "id",
+                id
+            );
+
+    if (error) {
+
+        console.error(
+            "Huiswerk verwijderen:",
+            error
+        );
+
+        return;
+    }
+
+    await loadHuiswerk();
+}
+
+
+/* =========================================================
+   STUDIETIMER
+========================================================= */
+
+async function loadStudySessions() {
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("study_sessions")
+            .select("*")
+            .order("session_date", {
+                ascending:false
+            });
+
+    if (error) {
+
+        console.error(
+            "Studiesessies laden:",
+            error
+        );
+
+        return;
+    }
+
+    studySessions =
+        data || [];
+
+    renderStudyWeeks();
+}
+
+
+function startTimer() {
+
+    if (timerInterval) {
+        return;
+    }
+
+    timerStartTimestamp =
+        Date.now();
+
+    document.getElementById(
+        "timerStartButton"
+    ).style.display = "none";
+
+    document.getElementById(
+        "timerStopButton"
+    ).style.display = "";
+
+    const display =
+        document.getElementById(
+            "timerDisplay"
+        );
+
+    display.classList.add(
+        "running"
+    );
+
+    timerInterval =
+        setInterval(
+            () => {
+
+                const elapsed =
+                    Math.floor(
+                        (
+                            Date.now() -
+                            timerStartTimestamp
+                        ) / 1000
+                    );
+
+                display.textContent =
+                    formatDuration(
+                        elapsed
+                    );
+
+            },
+            1000
+        );
+}
+
+
+async function stopTimer() {
+
+    if (!timerInterval) {
+        return;
+    }
+
+    clearInterval(
+        timerInterval
+    );
+
+    timerInterval = null;
+
+    const elapsedSeconds =
+        Math.floor(
+            (
+                Date.now() -
+                timerStartTimestamp
+            ) / 1000
+        );
+
+    timerStartTimestamp = null;
+
+    document.getElementById(
+        "timerStartButton"
+    ).style.display = "";
+
+    document.getElementById(
+        "timerStopButton"
+    ).style.display = "none";
+
+    const display =
+        document.getElementById(
+            "timerDisplay"
+        );
+
+    display.classList.remove(
+        "running"
+    );
+
+    display.textContent =
+        "00:00:00";
+
+    if (elapsedSeconds < 5) {
+        return;
+    }
+
+    await saveStudySession(
+        getToday(),
+        elapsedSeconds
+    );
+}
+
+
+function openStudyModal() {
+
+    document.getElementById(
+        "studyDate"
+    ).value = getToday();
+
+    document.getElementById(
+        "studyHours"
+    ).value = "0";
+
+    document.getElementById(
+        "studyMinutes"
+    ).value = "0";
+
+    document
+        .getElementById(
+            "studyModal"
+        )
+        .classList.add("show");
+}
+
+
+function closeStudyModal() {
+
+    document
+        .getElementById(
+            "studyModal"
+        )
+        .classList.remove("show");
+}
+
+
+async function addManualStudyTime() {
+
+    const date =
+        document.getElementById(
+            "studyDate"
+        ).value;
+
+    const hours =
+        parseInt(
+            document.getElementById(
+                "studyHours"
+            ).value,
+            10
+        ) || 0;
+
+    const minutes =
+        parseInt(
+            document.getElementById(
+                "studyMinutes"
+            ).value,
+            10
+        ) || 0;
+
+    if (!date) {
+
+        alert(
+            "Kies een datum."
+        );
+
+        return;
+    }
+
+    const totalSeconds =
+        (hours * 3600) +
+        (minutes * 60);
+
+    if (totalSeconds <= 0) {
+
+        alert(
+            "Vul een tijdsduur groter dan 0 in."
+        );
+
+        return;
+    }
+
+    await saveStudySession(
+        date,
+        totalSeconds
+    );
+
+    closeStudyModal();
+}
+
+
+async function saveStudySession(
+    date,
+    durationSeconds
+) {
+
+    const user =
+        await getCurrentUser();
+
+    if (!user) {
+
+        alert(
+            "Je bent niet ingelogd."
+        );
+
+        return;
+    }
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("study_sessions")
+            .insert({
+                user_id:user.id,
+                session_date:date,
+                duration_seconds:durationSeconds
+            });
+
+    if (error) {
+
+        console.error(
+            "Studietijd opslaan:",
+            error
+        );
+
+        alert(
+            "De studietijd kon niet worden opgeslagen."
+        );
+
+        return;
+    }
+
+    await loadStudySessions();
+}
+
+
+function renderStudyWeeks() {
+
+    const list =
+        document.getElementById(
+            "studyWeekList"
+        );
+
+    list.innerHTML = "";
+
+    if (!studySessions.length) {
+
+        list.innerHTML = `
+            <div class="empty-study-weeks">
+                Je hebt nog geen studietijd geregistreerd.
+            </div>
+        `;
+
+        return;
+    }
+
+    const weekTotals = {};
+
+    studySessions.forEach(
+        session => {
+
+            const weekStart =
+                getWeekStart(
+                    session.session_date
+                );
+
+            weekTotals[weekStart] =
+                (
+                    weekTotals[weekStart] ||
+                    0
+                ) +
+                session.duration_seconds;
+
+        }
+    );
+
+    const weekStarts =
+        Object.keys(
+            weekTotals
+        ).sort(
+            (a, b) =>
+                b.localeCompare(a)
+        );
+
+    weekStarts.forEach(
+        weekStart => {
+
+            const totalSeconds =
+                weekTotals[weekStart];
+
+            const totalHours =
+                totalSeconds / 3600;
+
+            const percentage =
+                Math.min(
+                    (
+                        totalHours / 10
+                    ) * 100,
+                    100
+                );
+
+            const reached =
+                totalHours >= 10;
+
+            const card =
+                document.createElement("div");
+
+            card.className =
+                "study-week-card";
+
+            const top =
+                document.createElement("div");
+
+            top.className =
+                "study-week-top";
+
+            const label =
+                document.createElement("span");
+
+            label.className =
+                "study-week-label";
+
+            label.textContent =
+                formatWeekLabel(
+                    weekStart
+                );
+
+            const total =
+                document.createElement("span");
+
+            total.className =
+                "study-week-total";
+
+            total.textContent =
+                formatDuration(
+                    totalSeconds,
+                    true
+                );
+
+            top.appendChild(
+                label
+            );
+
+            top.appendChild(
+                total
+            );
+
+            const track =
+                document.createElement("div");
+
+            track.className =
+                "study-progress-track";
+
+            const fill =
+                document.createElement("div");
+
+            fill.className =
+                "study-progress-fill" +
+                (
+                    reached
+                        ? " reached"
+                        : ""
+                );
+
+            fill.style.width =
+                percentage + "%";
+
+            track.appendChild(
+                fill
+            );
+
+            card.appendChild(
+                top
+            );
+
+            card.appendChild(
+                track
+            );
+
+            list.appendChild(
+                card
+            );
+
+        }
+    );
+}
+
+
+function getWeekStart(
+    dateString
+) {
+
+    const [
+        year,
+        month,
+        day
+    ] =
+        dateString.split("-").map(
+            Number
+        );
+
+    const date =
+        new Date(
+            year,
+            month - 1,
+            day
+        );
+
+    const dayOfWeek =
+        date.getDay();
+
+    const diffToMonday =
+        dayOfWeek === 0
+            ? -6
+            : 1 - dayOfWeek;
+
+    date.setDate(
+        date.getDate() +
+        diffToMonday
+    );
+
+    const y =
+        date.getFullYear();
+
+    const m =
+        String(
+            date.getMonth() + 1
+        ).padStart(2, "0");
+
+    const d =
+        String(
+            date.getDate()
+        ).padStart(2, "0");
+
+    return `${y}-${m}-${d}`;
+}
+
+
+function formatWeekLabel(
+    weekStartString
+) {
+
+    const [
+        year,
+        month,
+        day
+    ] =
+        weekStartString.split("-").map(
+            Number
+        );
+
+    const start =
+        new Date(
+            year,
+            month - 1,
+            day
+        );
+
+    const end =
+        new Date(
+            start
+        );
+
+    end.setDate(
+        start.getDate() + 6
+    );
+
+    const startLabel =
+        start.toLocaleDateString(
+            "nl-NL",
+            {
+                day:"2-digit",
+                month:"2-digit"
+            }
+        );
+
+    const endLabel =
+        end.toLocaleDateString(
+            "nl-NL",
+            {
+                day:"2-digit",
+                month:"2-digit",
+                year:"numeric"
+            }
+        );
+
+    return `Week van ${startLabel} t/m ${endLabel}`;
+}
+
+
+function formatDuration(
+    totalSeconds,
+    short
+) {
+
+    const hours =
+        Math.floor(
+            totalSeconds / 3600
+        );
+
+    const minutes =
+        Math.floor(
+            (totalSeconds % 3600) / 60
+        );
+
+    const seconds =
+        totalSeconds % 60;
+
+    if (short) {
+        return `${hours}u ${String(minutes).padStart(2, "0")}m`;
+    }
+
+    return (
+        String(hours).padStart(2, "0") +
+        ":" +
+        String(minutes).padStart(2, "0") +
+        ":" +
+        String(seconds).padStart(2, "0")
+    );
+}
+
+
+/* =========================================================
+   CIJFERS
+========================================================= */
+
+async function loadCijfers() {
+
+    await Promise.all([
+        loadSubjects(),
+        loadGrades()
+    ]);
+
+    renderSubjects();
+
+    renderCalculatorOptions();
+}
+
+
+async function loadSubjects() {
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("subjects")
+            .select("*")
+            .order("created_at", {
+                ascending:true
+            });
+
+    if (error) {
+
+        console.error(
+            "Vakken laden:",
+            error
+        );
+
+        return;
+    }
+
+    subjects =
+        data || [];
+}
+
+
+async function loadGrades() {
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("grades")
+            .select("*")
+            .order("created_at", {
+                ascending:true
+            });
+
+    if (error) {
+
+        console.error(
+            "Cijfers laden:",
+            error
+        );
+
+        return;
+    }
+
+    grades =
+        data || [];
+}
+
+
+async function addSubject() {
+
+    const input =
+        document.getElementById(
+            "subjectNameInput"
+        );
+
+    const name =
+        input.value.trim();
+
+    if (!name) {
+
+        input.focus();
+
+        return;
+    }
+
+    const user =
+        await getCurrentUser();
+
+    if (!user) {
+
+        alert(
+            "Je bent niet ingelogd."
+        );
+
+        return;
+    }
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("subjects")
+            .insert({
+                user_id:user.id,
+                name:name
+            });
+
+    if (error) {
+
+        console.error(
+            "Vak toevoegen:",
+            error
+        );
+
+        alert(
+            "Het vak kon niet worden toegevoegd."
+        );
+
+        return;
+    }
+
+    input.value = "";
+
+    await loadCijfers();
+
+    input.focus();
+}
+
+
+async function deleteSubject(id) {
+
+    if (
+        !confirm(
+            "Dit vak en alle bijbehorende cijfers verwijderen?"
+        )
+    ) {
+        return;
+    }
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("subjects")
+            .delete()
+            .eq(
+                "id",
+                id
+            );
+
+    if (error) {
+
+        console.error(
+            "Vak verwijderen:",
+            error
+        );
+
+        return;
+    }
+
+    await loadCijfers();
+}
+
+
+async function addGrade(
+    subjectId,
+    inputElement,
+    weightElement
+) {
+
+    const value =
+        parseFloat(
+            inputElement.value.replace(
+                ",",
+                "."
+            )
+        );
+
+    if (
+        isNaN(value) ||
+        value < 1 ||
+        value > 10
+    ) {
+
+        alert(
+            "Vul een cijfer tussen 1 en 10 in, bijvoorbeeld 5.5."
+        );
+
+        return;
+    }
+
+    let weight =
+        parseInt(
+            weightElement.value,
+            10
+        );
+
+    if (
+        isNaN(weight) ||
+        weight < 1
+    ) {
+
+        weight = 1;
+    }
+
+    const user =
+        await getCurrentUser();
+
+    if (!user) {
+
+        alert(
+            "Je bent niet ingelogd."
+        );
+
+        return;
+    }
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("grades")
+            .insert({
+                user_id:user.id,
+                subject_id:subjectId,
+                grade:value,
+                weight:weight
+            });
+
+    if (error) {
+
+        console.error(
+            "Cijfer toevoegen:",
+            error
+        );
+
+        alert(
+            "Het cijfer kon niet worden toegevoegd."
+        );
+
+        return;
+    }
+
+    await loadCijfers();
+}
+
+
+async function deleteGrade(id) {
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("grades")
+            .delete()
+            .eq(
+                "id",
+                id
+            );
+
+    if (error) {
+
+        console.error(
+            "Cijfer verwijderen:",
+            error
+        );
+
+        return;
+    }
+
+    await loadCijfers();
+}
+
+
+function renderSubjects() {
+
+    const list =
+        document.getElementById(
+            "subjectList"
+        );
+
+    list.innerHTML = "";
+
+    if (!subjects.length) {
+
+        list.innerHTML = `
+            <div class="empty-subjects">
+                Je hebt nog geen vakken toegevoegd.
+            </div>
+        `;
+
+        return;
+    }
+
+    subjects.forEach(subject => {
+
+        const subjectGrades =
+            grades.filter(
+                grade =>
+                    grade.subject_id ===
+                    subject.id
+            );
+
+        const card =
+            document.createElement("div");
+
+        card.className =
+            "subject-card";
+
+        const header =
+            document.createElement("div");
+
+        header.className =
+            "subject-header";
+
+        const info =
+            document.createElement("div");
+
+        const name =
+            document.createElement("div");
+
+        name.className =
+            "subject-name";
+
+        name.textContent =
+            subject.name;
+
+        const average =
+            document.createElement("div");
+
+        average.className =
+            "subject-average";
+
+        average.textContent =
+            subjectGrades.length
+                ? "Gemiddelde: " +
+                  getAverage(
+                      subjectGrades
+                  ).toFixed(1)
+                : "Nog geen cijfers";
+
+        info.appendChild(name);
+        info.appendChild(average);
+
+        const deleteButton =
+            document.createElement("button");
+
+        deleteButton.className =
+            "delete-subject";
+
+        deleteButton.title =
+            "Vak verwijderen";
+
+        deleteButton.innerHTML = `
+            <svg fill="none"
+                 stroke="currentColor"
+                 stroke-width="1.8"
+                 stroke-linecap="round"
+                 stroke-linejoin="round">
+                <use href="#trash"></use>
+            </svg>
+        `;
+
+        deleteButton.onclick =
+            () =>
+                deleteSubject(
+                    subject.id
+                );
+
+        header.appendChild(info);
+        header.appendChild(deleteButton);
+
+        const gradeList =
+            document.createElement("div");
+
+        gradeList.className =
+            "grade-list";
+
+        if (!subjectGrades.length) {
+
+            const empty =
+                document.createElement("span");
+
+            empty.className =
+                "empty-grades";
+
+            empty.textContent =
+                "Nog geen cijfers ingevoerd.";
+
+            gradeList.appendChild(
+                empty
+            );
+
+        } else {
+
+            subjectGrades.forEach(
+                grade => {
+
+                    const chip =
+                        document.createElement("span");
+
+                    chip.className =
+                        "grade-chip";
+
+                    const value =
+                        document.createElement("span");
+
+                    value.textContent =
+                        Number(
+                            grade.grade
+                        ).toFixed(1) +
+                        (
+                            grade.weight &&
+                            grade.weight !== 1
+                                ? " ×" +
+                                  grade.weight
+                                : ""
+                        );
+
+                    const removeButton =
+                        document.createElement("button");
+
+                    removeButton.className =
+                        "delete-grade";
+
+                    removeButton.title =
+                        "Cijfer verwijderen";
+
+                    removeButton.innerHTML = `
+                        <svg fill="none"
+                             stroke="currentColor"
+                             stroke-width="1.8"
+                             stroke-linecap="round"
+                             stroke-linejoin="round">
+                            <use href="#trash"></use>
+                        </svg>
+                    `;
+
+                    removeButton.onclick =
+                        () =>
+                            deleteGrade(
+                                grade.id
+                            );
+
+                    chip.appendChild(
+                        value
+                    );
+
+                    chip.appendChild(
+                        removeButton
+                    );
+
+                    gradeList.appendChild(
+                        chip
+                    );
+
+                }
+            );
+
+        }
+
+        const addRow =
+            document.createElement("div");
+
+        addRow.className =
+            "grade-add-row";
+
+        const gradeInput =
+            document.createElement("input");
+
+        gradeInput.className =
+            "grade-input";
+
+        gradeInput.type =
+            "number";
+
+        gradeInput.step =
+            "0.1";
+
+        gradeInput.min =
+            "1";
+
+        gradeInput.max =
+            "10";
+
+        gradeInput.placeholder =
+            "Bijv. 5.5";
+
+        const weightInput =
+            document.createElement("input");
+
+        weightInput.className =
+            "weight-input";
+
+        weightInput.type =
+            "number";
+
+        weightInput.step =
+            "1";
+
+        weightInput.min =
+            "1";
+
+        weightInput.value =
+            "1";
+
+        weightInput.title =
+            "Hoe vaak telt dit cijfer mee?";
+
+        weightInput.placeholder =
+            "Weging";
+
+        gradeInput.addEventListener(
+            "keydown",
+            event => {
+
+                if (
+                    event.key === "Enter"
+                ) {
+
+                    addGrade(
+                        subject.id,
+                        gradeInput,
+                        weightInput
+                    );
+
+                    gradeInput.value = "";
+
+                    weightInput.value = "1";
+
+                }
+
+            }
+        );
+
+        const addButton =
+            document.createElement("button");
+
+        addButton.className =
+            "grade-add";
+
+        addButton.textContent =
+            "Toevoegen";
+
+        addButton.onclick =
+            () => {
+
+                addGrade(
+                    subject.id,
+                    gradeInput,
+                    weightInput
+                );
+
+                gradeInput.value = "";
+
+                weightInput.value = "1";
+
+            };
+
+        addRow.appendChild(
+            gradeInput
+        );
+
+        addRow.appendChild(
+            weightInput
+        );
+
+        addRow.appendChild(
+            addButton
+        );
+
+        card.appendChild(header);
+        card.appendChild(gradeList);
+        card.appendChild(addRow);
+
+        list.appendChild(card);
+
+    });
+}
+
+
+function renderCalculatorOptions() {
+
+    const select =
+        document.getElementById(
+            "calcSubjectSelect"
+        );
+
+    const previousValue =
+        select.value;
+
+    select.innerHTML = "";
+
+    if (!subjects.length) {
+
+        const option =
+            document.createElement("option");
+
+        option.value = "";
+
+        option.textContent =
+            "Voeg eerst een vak toe";
+
+        select.appendChild(
+            option
+        );
+
+        return;
+    }
+
+    subjects.forEach(subject => {
+
+        const option =
+            document.createElement("option");
+
+        option.value =
+            subject.id;
+
+        option.textContent =
+            subject.name;
+
+        select.appendChild(
+            option
+        );
+
+    });
+
+    if (
+        subjects.some(
+            subject =>
+                subject.id ===
+                previousValue
+        )
+    ) {
+
+        select.value =
+            previousValue;
+
+    }
+}
+
+
+function calculateRequiredGrade() {
+
+    const select =
+        document.getElementById(
+            "calcSubjectSelect"
+        );
+
+    const subjectId =
+        select.value;
+
+    const targetInput =
+        document.getElementById(
+            "calcTargetInput"
+        );
+
+    const target =
+        parseFloat(
+            targetInput.value.replace(
+                ",",
+                "."
+            )
+        );
+
+    const resultBox =
+        document.getElementById(
+            "calculatorResult"
+        );
+
+    if (!subjectId) {
+
+        resultBox.textContent =
+            "Voeg eerst een vak toe.";
+
+        resultBox.className =
+            "calculator-result bad";
+
+        return;
+    }
+
+    if (
+        isNaN(target) ||
+        target < 1 ||
+        target > 10
+    ) {
+
+        resultBox.textContent =
+            "Vul een geldig gewenst gemiddelde in tussen 1 en 10.";
+
+        resultBox.className =
+            "calculator-result bad";
+
+        return;
+    }
+
+    const weightInput =
+        document.getElementById(
+            "calcWeightInput"
+        );
+
+    let newWeight =
+        parseInt(
+            weightInput.value,
+            10
+        );
+
+    if (
+        isNaN(newWeight) ||
+        newWeight < 1
+    ) {
+
+        newWeight = 1;
+    }
+
+    const subjectGrades =
+        grades.filter(
+            grade =>
+                grade.subject_id ===
+                subjectId
+        );
+
+    const totalWeight =
+        subjectGrades.reduce(
+            (total, grade) =>
+                total +
+                (
+                    Number(
+                        grade.weight
+                    ) || 1
+                ),
+            0
+        );
+
+    const weightedSum =
+        subjectGrades.reduce(
+            (total, grade) =>
+                total +
+                (
+                    Number(grade.grade) *
+                    (
+                        Number(
+                            grade.weight
+                        ) || 1
+                    )
+                ),
+            0
+        );
+
+    const requiredRaw =
+        (
+            (target * (totalWeight + newWeight)) -
+            weightedSum
+        ) / newWeight;
+
+    const required =
+        Math.ceil(
+            requiredRaw * 10
+        ) / 10;
+
+    if (required > 10) {
+
+        resultBox.textContent =
+            "Niet meer haalbaar met één cijfer: je zou minstens een " +
+            required.toFixed(1) +
+            " moeten halen, en het maximum is een 10.";
+
+        resultBox.className =
+            "calculator-result bad";
+
+        return;
+    }
+
+    if (required <= 1) {
+
+        resultBox.textContent =
+            "Je haalt dit gemiddelde sowieso, zelfs met een 1 als volgend cijfer.";
+
+        resultBox.className =
+            "calculator-result good";
+
+        return;
+    }
+
+    resultBox.textContent =
+        "Je hebt minimaal een " +
+        required.toFixed(1) +
+        " nodig voor je volgende cijfer" +
+        (
+            newWeight !== 1
+                ? " (bij een weging van " +
+                  newWeight +
+                  ")"
+                : ""
+        ) +
+        ".";
+
+    resultBox.className =
+        "calculator-result good";
+}
+
+
+function getAverage(gradeArray) {
+
+    const totalWeight =
+        gradeArray.reduce(
+            (total, grade) =>
+                total +
+                (
+                    Number(
+                        grade.weight
+                    ) || 1
+                ),
+            0
+        );
+
+    const weightedSum =
+        gradeArray.reduce(
+            (total, grade) =>
+                total +
+                (
+                    Number(grade.grade) *
+                    (
+                        Number(
+                            grade.weight
+                        ) || 1
+                    )
+                ),
+            0
+        );
+
+    return weightedSum / totalWeight;
+}
+
+
+/* =========================================================
+   DOELEN — CATEGORIEËN
+========================================================= */
+
+const trackerCategories = [
+    {
+        key:"sport",
+        name:"Sport",
+        icon:"dumbbell",
+        items(day) {
+            return [
+                { id:"sport-gedaan", label:"Vandaag gesport", type:"checkbox" }
+            ];
+        }
+    },
+    {
+        key:"school",
+        name:"School / huiswerk",
+        icon:"book",
+        items(day) {
+            const items = [
+                { id:"school-uren", label:"Uren huiswerk/school vandaag", type:"number", suffix:"u", max:6 },
+                { id:"school-af", label:"Huiswerk af", type:"checkbox" }
+            ];
+            if (day === "vrijdag") {
+                items.push({
+                    id:"school-vrijstelling",
+                    label:"Vrijstelling vanaf 17:00 (mits huiswerk af)",
+                    type:"checkbox",
+                    note:"Geldt niet in de week van of vóór de proefwerkweek"
+                });
+            }
+            return items;
+        }
+    },
+    {
+        key:"geld",
+        name:"Geld",
+        icon:"euro",
+        items(day) {
+            const items = [];
+            if (["maandag","dinsdag","woensdag","donderdag","vrijdag"].includes(day)) {
+                items.push({ id:"geld-geen-pin", label:"Geen betaalmiddel bij me, behalve voor toegestane consumptie", type:"checkbox" });
+            }
+            items.push({ id:"geld-werkblok-afgerond", label:"Werkblok Wegkompas of LVH afgerond vandaag", type:"checkbox" });
+            if (day === "maandag") {
+                items.push({ id:"geld-evaluatie", label:"21:30 — uitgaven van afgelopen week bekeken en geëvalueerd", type:"checkbox", note:"Na de voetbaltraining" });
+            }
+            if (day === "zondag") {
+                items.push({ id:"geld-weeklimiet", label:"Deze week binnen het weeklimiet gebleven", type:"checkbox" });
+                items.push({ id:"geld-agenda", label:"Werkblokken Wegkompas en LVH in de agenda gezet voor volgende week", type:"checkbox" });
+            }
+            return items;
+        }
+    },
+    {
+        key:"slaap",
+        name:"Slaap",
+        icon:"bed",
+        items(day) {
+            const items = [
+                { id:"slaap-lezen", label:"Laatste halfuur voor het slapen lezen zonder scherm", type:"checkbox" },
+                { id:"slaap-uren", label:"Geslapen uren ingevuld (voor 07:15)", type:"number", suffix:"u", max:11 }
+            ];
+            if (["zondag","maandag","dinsdag","woensdag","donderdag"].includes(day)) {
+                items.push({ id:"slaap-telefoon", label:"Telefoon om 22:30 buiten de slaapkamer", type:"checkbox" });
+                items.push({ id:"slaap-bed", label:"23:00 in bed, 08:00 op", type:"checkbox" });
+                items.push({ id:"slaap-klaar", label:"Tas, sportkleding en kleding klaar voor 22:30", type:"checkbox" });
+            }
+            return items;
+        }
+    },
+    {
+        key:"lezen",
+        name:"Lezen",
+        icon:"pages",
+        items(day) {
+            if (["vrijdag","zaterdag","zondag"].includes(day)) {
+                return [
+                    { id:"lezen-weekend", label:"Pagina's gelezen (30 vrij te verdelen over vr/za/zo)", type:"number", suffix:"blz", max:30 }
+                ];
+            }
+            return [
+                { id:"lezen-pages", label:"Pagina's gelezen (dagnorm 10, ook op trainingsdagen)", type:"number", suffix:"blz", max:20 },
+                { id:"lezen-tijd", label:"Gelezen tussen 22:30 en 23:00", type:"checkbox" }
+            ];
+        }
+    },
+    {
+        key:"voeding",
+        name:"Voeding",
+        icon:"apple",
+        items(day) {
+            return [
+                { id:"voeding-creatine", label:"1 scoop creatine", type:"checkbox" },
+                { id:"voeding-fruit", label:"1 stuk fruit", type:"checkbox" },
+                { id:"voeding-water", label:"Minimaal 2,5L water (beker 4× + fles 1×)", type:"checkbox" },
+                { id:"voeding-koekje", label:"Aantal koekjes (max. 1)", type:"number", suffix:"stuks", max:1 },
+                { id:"voeding-klaar", label:"Fles, fruit en creatine klaargezet voor 08:45", type:"checkbox" },
+                { id:"voeding-lidl", label:"Geen aankopen gedaan bij de Lidl", type:"checkbox" },
+                { id:"voeding-snack", label:"Snack gegeten in de kantine", type:"checkbox" },
+                { id:"voeding-chips", label:"Bakjes chips vandaag", type:"number", suffix:"bakjes", max:2 },
+                {
+                    id:"voeding-training",
+                    label:"Na training/wedstrijd: creatine direct, toegestane snack alleen dan",
+                    type:"checkbox",
+                    note:"Alleen van toepassing op trainings- of wedstrijddagen"
+                }
+            ];
+        }
+    },
+    {
+        key:"dashboard",
+        name:"Dashboard & agenda",
+        icon:"calendar",
+        items(day) {
+            const items = [
+                { id:"dash-invullen", label:"Dashboard om 22:30 gecontroleerd en ingevuld (binnen 5 min)", type:"checkbox" }
+            ];
+            if (day === "zondag") {
+                items.push({ id:"dash-terugblik", label:"Terugblik op de week gemaakt", type:"checkbox" });
+                items.push({ id:"dash-agenda", label:"Agenda voor komende week in één keer gevuld, klaar voor 22:30", type:"checkbox" });
+            }
+            return items;
+        }
+    }
+];
+
+
+/* =========================================================
+   DOELEN — DATUMHELPERS
+========================================================= */
+
+function getWeekdayKey(
+    dateString
+) {
+
+    const [
+        year,
+        month,
+        day
+    ] =
+        dateString.split("-").map(
+            Number
+        );
+
+    const date =
+        new Date(
+            year,
+            month - 1,
+            day
+        );
+
+    const map =
+        [
+            "zondag",
+            "maandag",
+            "dinsdag",
+            "woensdag",
+            "donderdag",
+            "vrijdag",
+            "zaterdag"
+        ];
+
+    return map[
+        date.getDay()
+    ];
+}
+
+
+function getWeekDates(
+    weekStart
+) {
+
+    const [
+        year,
+        month,
+        day
+    ] =
+        weekStart.split("-").map(
+            Number
+        );
+
+    const dates = [];
+
+    for (let i = 0; i < 7; i++) {
+
+        const date =
+            new Date(
+                year,
+                month - 1,
+                day + i
+            );
+
+        const y =
+            date.getFullYear();
+
+        const m =
+            String(
+                date.getMonth() + 1
+            ).padStart(2, "0");
+
+        const d =
+            String(
+                date.getDate()
+            ).padStart(2, "0");
+
+        dates.push(
+            `${y}-${m}-${d}`
+        );
+
+    }
+
+    return dates;
+}
+
+
+/* =========================================================
+   DOELEN — INITIALISATIE EN LADEN
+========================================================= */
+
+function initTracker() {
+
+    const currentWeekStart =
+        getWeekStart(
+            getToday()
+        );
+
+    if (!trackerWeekStart) {
+
+        trackerWeekStart =
+            currentWeekStart;
+
+        trackerSelectedDate =
+            getToday();
+
+    }
+
+    loadTrackerWeek();
+}
+
+
+async function loadTrackerWeek() {
+
+    const dates =
+        getWeekDates(
+            trackerWeekStart
+        );
+
+    const {
+        data: entryData,
+        error: entryError
+    } =
+        await supabaseClient
+            .from("tracker_entries")
+            .select("*")
+            .in(
+                "entry_date",
+                dates
+            );
+
+    if (entryError) {
+
+        console.error(
+            "Doelen laden:",
+            entryError
+        );
+
+        return;
+    }
+
+    trackerEntries = {};
+
+    dates.forEach(date => {
+        trackerEntries[date] = {};
+    });
+
+    (entryData || []).forEach(row => {
+        trackerEntries[row.entry_date] =
+            row.data || {};
+    });
+
+    const {
+        data: weekData,
+        error: weekError
+    } =
+        await supabaseClient
+            .from("tracker_weeks")
+            .select("*")
+            .eq(
+                "week_start",
+                trackerWeekStart
+            )
+            .maybeSingle();
+
+    if (weekError) {
+
+        console.error(
+            "Weekinstelling laden:",
+            weekError
+        );
+
+    }
+
+    trackerWeekSpecial =
+        weekData
+            ? weekData.special
+            : false;
+
+    renderTrackerWeekSelector();
+    renderTrackerDayTabs();
+    renderTrackerDayChecklist();
+    renderTrackerWeekOverview();
+}
+
+
+/* =========================================================
+   DOELEN — WEEKSELECTOR
+========================================================= */
+
+function renderTrackerWeekSelector() {
+
+    const dates =
+        getWeekDates(
+            trackerWeekStart
+        );
+
+    const startLabel =
+        formatDeadlineDate(
+            dates[0]
+        );
+
+    const endLabel =
+        formatDeadlineDate(
+            dates[6]
+        );
+
+    document.getElementById(
+        "weekLabel"
+    ).textContent =
+        "Week van " +
+        startLabel +
+        " t/m " +
+        endLabel;
+
+    const currentWeekStart =
+        getWeekStart(
+            getToday()
+        );
+
+    const isCurrentWeek =
+        trackerWeekStart ===
+        currentWeekStart;
+
+    document.getElementById(
+        "weekReadonly"
+    ).classList.toggle(
+        "show",
+        !isCurrentWeek
+    );
+
+    document.getElementById(
+        "weekNextButton"
+    ).disabled =
+        isCurrentWeek;
+
+    document.getElementById(
+        "weekSpecialCheckbox"
+    ).checked =
+        trackerWeekSpecial;
+}
+
+
+function trackerChangeWeek(
+    delta
+) {
+
+    const [
+        year,
+        month,
+        day
+    ] =
+        trackerWeekStart.split("-").map(
+            Number
+        );
+
+    const date =
+        new Date(
+            year,
+            month - 1,
+            day + (delta * 7)
+        );
+
+    const currentWeekStart =
+        getWeekStart(
+            getToday()
+        );
+
+    const y =
+        date.getFullYear();
+
+    const m =
+        String(
+            date.getMonth() + 1
+        ).padStart(2, "0");
+
+    const d =
+        String(
+            date.getDate()
+        ).padStart(2, "0");
+
+    const newWeekStart =
+        `${y}-${m}-${d}`;
+
+    if (newWeekStart > currentWeekStart) {
+        return;
+    }
+
+    trackerWeekStart =
+        newWeekStart;
+
+    trackerSelectedDate =
+        newWeekStart;
+
+    loadTrackerWeek();
+}
+
+
+async function toggleTrackerWeekSpecial() {
+
+    const checked =
+        document.getElementById(
+            "weekSpecialCheckbox"
+        ).checked;
+
+    const user =
+        await getCurrentUser();
+
+    if (!user) {
+        return;
+    }
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("tracker_weeks")
+            .upsert(
+                {
+                    user_id:user.id,
+                    week_start:trackerWeekStart,
+                    special:checked
+                },
+                {
+                    onConflict:"user_id,week_start"
+                }
+            );
+
+    if (error) {
+
+        console.error(
+            "Bijzondere week opslaan:",
+            error
+        );
+
+        return;
+    }
+
+    trackerWeekSpecial =
+        checked;
+
+    renderTrackerWeekOverview();
+}
+
+
+/* =========================================================
+   DOELEN — DAGTABS EN CHECKLIST
+========================================================= */
+
+function renderTrackerDayTabs() {
+
+    const dates =
+        getWeekDates(
+            trackerWeekStart
+        );
+
+    const shortLabels =
+        {
+            maandag:"Ma",
+            dinsdag:"Di",
+            woensdag:"Wo",
+            donderdag:"Do",
+            vrijdag:"Vr",
+            zaterdag:"Za",
+            zondag:"Zo"
+        };
+
+    const container =
+        document.getElementById(
+            "dayTabs"
+        );
+
+    container.innerHTML = "";
+
+    dates.forEach(date => {
+
+        const button =
+            document.createElement("button");
+
+        button.className =
+            "day-tab" +
+            (
+                date === trackerSelectedDate
+                    ? " active"
+                    : ""
+            );
+
+        button.textContent =
+            shortLabels[
+                getWeekdayKey(date)
+            ];
+
+        button.onclick =
+            () =>
+                selectTrackerDay(
+                    date
+                );
+
+        container.appendChild(
+            button
+        );
+
+    });
+}
+
+
+function selectTrackerDay(
+    date
+) {
+
+    trackerSelectedDate =
+        date;
+
+    renderTrackerDayTabs();
+    renderTrackerDayChecklist();
+}
+
+
+function renderTrackerDayChecklist() {
+
+    const date =
+        trackerSelectedDate;
+
+    const dayKey =
+        getWeekdayKey(date);
+
+    const currentWeekStart =
+        getWeekStart(
+            getToday()
+        );
+
+    const readonly =
+        trackerWeekStart !== currentWeekStart ||
+        date > getToday();
+
+    const titleEl =
+        document.getElementById(
+            "dayPanelTitle"
+        );
+
+    titleEl.innerHTML = "";
+
+    const titleText =
+        document.createElement("span");
+
+    titleText.textContent =
+        dayKey.charAt(0).toUpperCase() +
+        dayKey.slice(1) +
+        " " +
+        formatDeadlineDate(date);
+
+    titleEl.appendChild(
+        titleText
+    );
+
+    if (readonly) {
+
+        const badge =
+            document.createElement("span");
+
+        badge.className =
+            "day-panel-readonly";
+
+        badge.textContent =
+            date > getToday()
+                ? "Nog niet zover"
+                : "Alleen ter inzage";
+
+        titleEl.appendChild(
+            badge
+        );
+
+    }
+
+    const container =
+        document.getElementById(
+            "dayChecklist"
+        );
+
+    container.innerHTML = "";
+
+    const dayData =
+        trackerEntries[date] || {};
+
+    trackerCategories.forEach(category => {
+
+        const dayItems =
+            category.items(dayKey);
+
+        if (!dayItems.length) {
+            return;
+        }
+
+        const group =
+            document.createElement("div");
+
+        group.className =
+            "category-group";
+
+        const heading =
+            document.createElement("div");
+
+        heading.className =
+            "category-heading";
+
+        heading.innerHTML =
+            '<div class="category-icon"><svg fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#' +
+            category.icon +
+            '"></use></svg></div><h3>' +
+            category.name +
+            "</h3>";
+
+        group.appendChild(
+            heading
+        );
+
+        dayItems.forEach(item => {
+
+            const row =
+                document.createElement("div");
+
+            row.className =
+                "checklist-item";
+
+            const text =
+                document.createElement("div");
+
+            text.className =
+                "checklist-item-text";
+
+            const label =
+                document.createElement("div");
+
+            label.className =
+                "checklist-item-label";
+
+            label.textContent =
+                item.label;
+
+            text.appendChild(
+                label
+            );
+
+            if (item.note) {
+
+                const note =
+                    document.createElement("div");
+
+                note.className =
+                    "checklist-item-note";
+
+                note.textContent =
+                    item.note;
+
+                text.appendChild(
+                    note
+                );
+
+            }
+
+            row.appendChild(
+                text
+            );
+
+            if (item.type === "checkbox") {
+
+                const checkbox =
+                    document.createElement("input");
+
+                checkbox.type =
+                    "checkbox";
+
+                checkbox.className =
+                    "checklist-check";
+
+                checkbox.checked =
+                    dayData[item.id] === true;
+
+                checkbox.disabled =
+                    readonly;
+
+                checkbox.onchange =
+                    () =>
+                        saveTrackerEntry(
+                            date,
+                            item.id,
+                            checkbox.checked
+                        );
+
+                row.appendChild(
+                    checkbox
+                );
+
+            } else {
+
+                const wrap =
+                    document.createElement("div");
+
+                wrap.className =
+                    "checklist-number";
+
+                const input =
+                    document.createElement("input");
+
+                input.type =
+                    "number";
+
+                input.step =
+                    "0.5";
+
+                input.min =
+                    "0";
+
+                input.value =
+                    dayData[item.id] !== undefined
+                        ? dayData[item.id]
+                        : "";
+
+                input.disabled =
+                    readonly;
+
+                input.onchange =
+                    () =>
+                        saveTrackerEntry(
+                            date,
+                            item.id,
+                            parseFloat(
+                                input.value
+                            ) || 0
+                        );
+
+                const suffix =
+                    document.createElement("span");
+
+                suffix.textContent =
+                    item.suffix || "";
+
+                wrap.appendChild(
+                    input
+                );
+
+                wrap.appendChild(
+                    suffix
+                );
+
+                row.appendChild(
+                    wrap
+                );
+
+            }
+
+            group.appendChild(
+                row
+            );
+
+        });
+
+        container.appendChild(
+            group
+        );
+
+    });
+}
+
+
+async function saveTrackerEntry(
+    date,
+    itemId,
+    value
+) {
+
+    const user =
+        await getCurrentUser();
+
+    if (!user) {
+        return;
+    }
+
+    if (!trackerEntries[date]) {
+        trackerEntries[date] = {};
+    }
+
+    trackerEntries[date][itemId] =
+        value;
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("tracker_entries")
+            .upsert(
+                {
+                    user_id:user.id,
+                    entry_date:date,
+                    data:trackerEntries[date]
+                },
+                {
+                    onConflict:"user_id,entry_date"
+                }
+            );
+
+    if (error) {
+
+        console.error(
+            "Doel opslaan:",
+            error
+        );
+
+        return;
+    }
+
+    renderTrackerWeekOverview();
+}
+
+
+/* =========================================================
+   DOELEN — WEEKOVERZICHT
+========================================================= */
+
+function trackerProgressCard(
+    iconId,
+    name,
+    targetLabel,
+    current,
+    target,
+    unit
+) {
+
+    const percentage =
+        Math.min(
+            (current / target) * 100,
+            100
+        );
+
+    const reached =
+        current >= target;
+
+    return `
+        <div class="overview-card">
+            <div class="overview-card-header">
+                <div class="category-icon">
+                    <svg fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <use href="#${iconId}"></use>
+                    </svg>
+                </div>
+                <h3>${name}</h3>
+            </div>
+            <div class="overview-target">${targetLabel}</div>
+            <div class="overview-progress-row">
+                <span class="overview-progress-value">${current} / ${target} ${unit}</span>
+            </div>
+            <div class="overview-progress-track">
+                <div class="overview-progress-fill${reached ? " reached" : ""}" style="width:${percentage}%"></div>
+            </div>
+        </div>
+    `;
+}
+
+
+function renderTrackerWeekOverview() {
+
+    const dates =
+        getWeekDates(
+            trackerWeekStart
+        );
+
+    const dayData =
+        date =>
+            trackerEntries[date] || {};
+
+    const sportTarget =
+        trackerWeekSpecial
+            ? 5
+            : 6;
+
+    const sportDagen =
+        dates.filter(
+            date =>
+                dayData(date)["sport-gedaan"] === true
+        ).length;
+
+    const schoolUren =
+        dates.reduce(
+            (total, date) =>
+                total +
+                (
+                    Number(
+                        dayData(date)["school-uren"]
+                    ) || 0
+                ),
+            0
+        );
+
+    const slaapZoDo =
+        ["zondag","maandag","dinsdag","woensdag","donderdag"];
+
+    const slaapVrZa =
+        ["vrijdag","zaterdag"];
+
+    const slaapUrenVoor =
+        keys =>
+            dates
+                .filter(date => keys.includes(getWeekdayKey(date)))
+                .map(date => Number(dayData(date)["slaap-uren"]) || 0);
+
+    const slaapZoDoUren =
+        slaapUrenVoor(slaapZoDo);
+
+    const slaapVrZaUren =
+        slaapUrenVoor(slaapVrZa);
+
+    const avg =
+        arr =>
+            arr.length
+                ? Math.round((arr.reduce((a,b) => a+b, 0) / arr.length) * 10) / 10
+                : 0;
+
+    const slaapZoDoGem =
+        avg(slaapZoDoUren);
+
+    const slaapVrZaGem =
+        avg(slaapVrZaUren);
+
+    const lezenPaginas =
+        dates.reduce(
+            (total, date) => {
+
+                const key =
+                    getWeekdayKey(date);
+
+                const data =
+                    dayData(date);
+
+                if (["vrijdag","zaterdag","zondag"].includes(key)) {
+                    return total + (Number(data["lezen-weekend"]) || 0);
+                }
+
+                return total + (Number(data["lezen-pages"]) || 0);
+
+            },
+            0
+        );
+
+    const dashboardDagen =
+        dates.filter(
+            date =>
+                dayData(date)["dash-invullen"] === true
+        ).length;
+
+    const zondagDate =
+        dates.find(
+            date =>
+                getWeekdayKey(date) === "zondag"
+        );
+
+    const geldBinnenLimiet =
+        zondagDate
+            ? dayData(zondagDate)["geld-weeklimiet"] === true
+            : false;
+
+    const geldAgenda =
+        zondagDate
+            ? dayData(zondagDate)["geld-agenda"] === true
+            : false;
+
+    const geldWerkblokken =
+        dates.filter(
+            date =>
+                dayData(date)["geld-werkblok-afgerond"] === true
+        ).length;
+
+    const voedingSnacks =
+        dates.filter(
+            date =>
+                dayData(date)["voeding-snack"] === true
+        ).length;
+
+    const voedingLidlOvertreding =
+        dates.some(
+            date =>
+                dayData(date)["voeding-lidl"] === false
+        );
+
+    const voedingChips =
+        dates.reduce(
+            (total, date) =>
+                total +
+                (
+                    Number(
+                        dayData(date)["voeding-chips"]
+                    ) || 0
+                ),
+            0
+        );
+
+    const voedingKoekjeOvertreding =
+        dates.some(
+            date =>
+                (
+                    Number(
+                        dayData(date)["voeding-koekje"]
+                    ) || 0
+                ) > 1
+        );
+
+    const grid =
+        document.getElementById(
+            "overviewGrid"
+        );
+
+    grid.innerHTML =
+        trackerProgressCard("dumbbell", "Sport", "Minimaal " + sportTarget + " dagen deze week" + (trackerWeekSpecial ? " (bijzondere week)" : ""), sportDagen, sportTarget, "dagen") +
+        trackerProgressCard("book", "School / huiswerk", "Minimaal 10 uur per week, huiswerk altijd af", schoolUren, 10, "uur") +
+        `<div class="overview-card">
+            <div class="overview-card-header">
+                <div class="category-icon"><svg fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#euro"></use></svg></div>
+                <h3>Geld</h3>
+            </div>
+            <div class="overview-target">Geen uitgave buiten weeklimiet, min. 1 werkblok Wegkompas/LVH</div>
+            <div class="overview-mini-list">
+                <div class="overview-mini-item"><span>Binnen weeklimiet</span><span class="overview-pill ${geldBinnenLimiet ? "good" : "bad"}">${geldBinnenLimiet ? "Ja" : "Nog niet afgevinkt"}</span></div>
+                <div class="overview-mini-item"><span>Werkblokken afgerond</span><span class="overview-pill ${geldWerkblokken >= 1 ? "good" : "bad"}">${geldWerkblokken} / 1</span></div>
+                <div class="overview-mini-item"><span>Agenda volgende week gezet</span><span class="overview-pill ${geldAgenda ? "good" : "bad"}">${geldAgenda ? "Ja" : "Nog niet"}</span></div>
+            </div>
+        </div>` +
+        `<div class="overview-card">
+            <div class="overview-card-header">
+                <div class="category-icon"><svg fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#bed"></use></svg></div>
+                <h3>Slaap</h3>
+            </div>
+            <div class="overview-target">Min. 9u (zo–do), min. 7,5u (vr/za)</div>
+            <div class="overview-mini-list">
+                <div class="overview-mini-item"><span>Gemiddeld zo–do</span><span class="overview-pill ${slaapZoDoGem >= 9 ? "good" : "bad"}">${slaapZoDoGem}u / 9u</span></div>
+                <div class="overview-mini-item"><span>Gemiddeld vr/za</span><span class="overview-pill ${slaapVrZaGem >= 7.5 ? "good" : "bad"}">${slaapVrZaGem}u / 7,5u</span></div>
+            </div>
+        </div>` +
+        trackerProgressCard("pages", "Lezen", "Minimaal 70 pagina's per week", lezenPaginas, 70, "blz") +
+        `<div class="overview-card">
+            <div class="overview-card-header">
+                <div class="category-icon"><svg fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#apple"></use></svg></div>
+                <h3>Voeding</h3>
+            </div>
+            <div class="overview-target">Max. 1 snack, geen Lidl, max. 2 bakjes chips, max. 1 koekje/dag</div>
+            <div class="overview-mini-list">
+                <div class="overview-mini-item"><span>Snacks kantine</span><span class="overview-pill ${voedingSnacks <= 1 ? "good" : "bad"}">${voedingSnacks} / 1</span></div>
+                <div class="overview-mini-item"><span>Lidl bezocht</span><span class="overview-pill ${voedingLidlOvertreding ? "bad" : "good"}">${voedingLidlOvertreding ? "Ja" : "Nee"}</span></div>
+                <div class="overview-mini-item"><span>Bakjes chips</span><span class="overview-pill ${voedingChips <= 2 ? "good" : "bad"}">${voedingChips} / 2</span></div>
+                <div class="overview-mini-item"><span>Koekjesnorm (max/dag)</span><span class="overview-pill ${voedingKoekjeOvertreding ? "bad" : "good"}">${voedingKoekjeOvertreding ? "Overschreden" : "Voldaan"}</span></div>
+            </div>
+        </div>` +
+        trackerProgressCard("calendar", "Dashboard & agenda", "7/7 dagen ingevuld, agenda bijgewerkt voor zo 22:30", dashboardDagen, 7, "dagen");
+}
+
+
+/* =========================================================
+   SNELKOPPELINGEN
+========================================================= */
+
+async function loadShortcuts() {
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("shortcuts")
+            .select("*")
+            .order("created_at", {
+                ascending:true
+            });
+
+    if (error) {
+
+        console.error(
+            "Snelkoppelingen laden:",
+            error
+        );
+
+        return;
+    }
+
+    shortcuts =
+        data || [];
+
+    renderShortcuts();
+}
+
+
+function renderShortcuts() {
+
+    const list =
+        document.getElementById(
+            "shortcutsList"
+        );
+
+    list.innerHTML = "";
+
+    if (!shortcuts.length) {
+
+        list.innerHTML = `
+            <div class="empty-shortcuts">
+                Nog geen snelkoppelingen.
+                Gebruik + om een website toe te voegen.
+            </div>
+        `;
+
+        return;
+    }
+
+    shortcuts.forEach(shortcut => {
+
+        const item =
+            document.createElement("div");
+
+        item.className =
+            "shortcut-item";
+
+        const link =
+            document.createElement("a");
+
+        link.className =
+            "shortcut-link";
+
+        link.href =
+            shortcut.url;
+
+        link.target =
+            "_blank";
+
+        link.rel =
+            "noopener noreferrer";
+
+        const favicon =
+            document.createElement("img");
+
+        favicon.className =
+            "shortcut-favicon";
+
+        favicon.alt =
+            "";
+
+        favicon.onerror =
+            () => {
+
+                favicon.style.display =
+                    "none";
+
+            };
+
+        try {
+
+            const hostname =
+                new URL(
+                    shortcut.url
+                ).hostname;
+
+            favicon.src =
+                "https://www.google.com/s2/favicons?sz=64&domain=" +
+                hostname;
+
+        } catch (err) {
+
+            favicon.style.display =
+                "none";
+
+        }
+
+        const label =
+            document.createElement("span");
+
+        label.textContent =
+            shortcut.title;
+
+        link.appendChild(
+            favicon
+        );
+
+        link.appendChild(
+            label
+        );
+
+        const deleteButton =
+            document.createElement("button");
+
+        deleteButton.className =
+            "delete-shortcut";
+
+        deleteButton.title =
+            "Snelkoppeling verwijderen";
+
+        deleteButton.innerHTML = `
+            <svg fill="none"
+                 stroke="currentColor"
+                 stroke-width="1.8"
+                 stroke-linecap="round"
+                 stroke-linejoin="round">
+                <use href="#trash"></use>
+            </svg>
+        `;
+
+        deleteButton.onclick =
+            () =>
+                deleteShortcut(
+                    shortcut.id
+                );
+
+        item.appendChild(link);
+        item.appendChild(deleteButton);
+
+        list.appendChild(item);
+    });
+}
+
+
+function openShortcutModal() {
+
+    document
+        .getElementById(
+            "shortcutModal"
+        )
+        .classList.add("show");
+
+    document
+        .getElementById(
+            "shortcutTitle"
+        )
+        .focus();
+}
+
+
+function closeShortcutModal() {
+
+    document
+        .getElementById(
+            "shortcutModal"
+        )
+        .classList.remove("show");
+
+    document.getElementById(
+        "shortcutTitle"
+    ).value = "";
+
+    document.getElementById(
+        "shortcutUrl"
+    ).value = "";
+}
+
+
+async function addShortcut() {
+
+    const titleInput =
+        document.getElementById(
+            "shortcutTitle"
+        );
+
+    const urlInput =
+        document.getElementById(
+            "shortcutUrl"
+        );
+
+    const title =
+        titleInput.value.trim();
+
+    let url =
+        urlInput.value.trim();
+
+    if (!title || !url) {
+
+        alert(
+            "Vul zowel een naam als een website in."
+        );
+
+        return;
+    }
+
+    if (
+        !/^https?:\/\//i.test(url)
+    ) {
+
+        url =
+            "https://" + url;
+    }
+
+    try {
+
+        new URL(url);
+
+    } catch {
+
+        alert(
+            "Vul een geldige website in."
+        );
+
+        return;
+    }
+
+    const user =
+        await getCurrentUser();
+
+    if (!user) {
+
+        alert(
+            "Je bent niet ingelogd."
+        );
+
+        return;
+    }
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("shortcuts")
+            .insert({
+                user_id:user.id,
+                title:title,
+                url:url
+            });
+
+    if (error) {
+
+        console.error(
+            "Snelkoppeling toevoegen:",
+            error
+        );
+
+        alert(
+            "De snelkoppeling kon niet worden toegevoegd."
+        );
+
+        return;
+    }
+
+    closeShortcutModal();
+
+    await loadShortcuts();
+}
+
+
+async function deleteShortcut(id) {
+
+    if (
+        !confirm(
+            "Deze snelkoppeling verwijderen?"
+        )
+    ) {
+        return;
+    }
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("shortcuts")
+            .delete()
+            .eq(
+                "id",
+                id
+            );
+
+    if (error) {
+
+        console.error(
+            "Snelkoppeling verwijderen:",
+            error
+        );
+
+        return;
+    }
+
+    await loadShortcuts();
+}
+
+
+/* =========================================================
+   DATUMFUNCTIES
+========================================================= */
+
+function getToday() {
+
+    const now =
+        new Date();
+
+    const year =
+        now.getFullYear();
+
+    const month =
+        String(
+            now.getMonth() + 1
+        ).padStart(
+            2,
+            "0"
+        );
+
+    const day =
+        String(
+            now.getDate()
+        ).padStart(
+            2,
+            "0"
+        );
+
+    return `${year}-${month}-${day}`;
+}
+
+
+function formatDate(
+    dateString
+) {
+
+    if (!dateString) {
+        return "";
+    }
+
+    const date =
+        new Date(dateString);
+
+    return date.toLocaleDateString(
+        "nl-NL",
+        {
+            day:"2-digit",
+            month:"2-digit",
+            year:"numeric"
+        }
+    );
+}
+
+
+function formatDeadlineDate(
+    dateString
+) {
+
+    const [
+        year,
+        month,
+        day
+    ] =
+        dateString.split("-");
+
+    const date =
+        new Date(
+            Number(year),
+            Number(month) - 1,
+            Number(day)
+        );
+
+    return date.toLocaleDateString(
+        "nl-NL",
+        {
+            weekday:"short",
+            day:"2-digit",
+            month:"2-digit",
+            year:"numeric"
+        }
+    );
+}
+
+
+/* =========================================================
+   ENTER-TOETSEN
+========================================================= */
+
+document
+    .getElementById("emailInput")
+    .addEventListener(
+        "keydown",
+        event => {
+
+            if (
+                event.key === "Enter"
+            ) {
+                login();
+            }
+
+        }
+    );
+
+
+document
+    .getElementById("passwordInput")
+    .addEventListener(
+        "keydown",
+        event => {
+
+            if (
+                event.key === "Enter"
+            ) {
+                login();
+            }
+
+        }
+    );
+
+
+document
+    .getElementById(
+        "signupEmailInput"
+    )
+    .addEventListener(
+        "keydown",
+        event => {
+
+            if (
+                event.key === "Enter"
+            ) {
+                signUp();
+            }
+
+        }
+    );
+
+
+document
+    .getElementById(
+        "signupPasswordInput"
+    )
+    .addEventListener(
+        "keydown",
+        event => {
+
+            if (
+                event.key === "Enter"
+            ) {
+                signUp();
+            }
+
+        }
+    );
+
+
+document
+    .getElementById(
+        "signupConfirmInput"
+    )
+    .addEventListener(
+        "keydown",
+        event => {
+
+            if (
+                event.key === "Enter"
+            ) {
+                signUp();
+            }
+
+        }
+    );
+
+
+document
+    .getElementById("todoInput")
+    .addEventListener(
+        "keydown",
+        event => {
+
+            if (
+                event.key === "Enter"
+            ) {
+                addTodo();
+            }
+
+        }
+    );
+
+
+document
+    .getElementById(
+        "deadlineTitleInput"
+    )
+    .addEventListener(
+        "keydown",
+        event => {
+
+            if (
+                event.key === "Enter"
+            ) {
+                addDeadline();
+            }
+
+        }
+    );
+
+
+document
+    .getElementById(
+        "subjectNameInput"
+    )
+    .addEventListener(
+        "keydown",
+        event => {
+
+            if (
+                event.key === "Enter"
+            ) {
+                addSubject();
+            }
+
+        }
+    );
+
+
+document
+    .getElementById(
+        "calcTargetInput"
+    )
+    .addEventListener(
+        "keydown",
+        event => {
+
+            if (
+                event.key === "Enter"
+            ) {
+                calculateRequiredGrade();
+            }
+
+        }
+    );
+
+
+document
+    .getElementById(
+        "shortcutModal"
+    )
+    .addEventListener(
+        "click",
+        event => {
+
+            if (
+                event.target.id ===
+                "shortcutModal"
+            ) {
+
+                closeShortcutModal();
+
+            }
+
+        }
+    );
+
+
+document
+    .getElementById(
+        "huiswerkModal"
+    )
+    .addEventListener(
+        "click",
+        event => {
+
+            if (
+                event.target.id ===
+                "huiswerkModal"
+            ) {
+
+                closeHuiswerkModal();
+
+            }
+
+        }
+    );
+
+
+document
+    .getElementById(
+        "studyModal"
+    )
+    .addEventListener(
+        "click",
+        event => {
+
+            if (
+                event.target.id ===
+                "studyModal"
+            ) {
+
+                closeStudyModal();
+
+            }
+
+        }
+    );
+
+
+document
+    .getElementById(
+        "huiswerkTask"
+    )
+    .addEventListener(
+        "keydown",
+        event => {
+
+            if (
+                event.key === "Enter"
+            ) {
+                addHuiswerk();
+            }
+
+        }
+    );
+
+
+document
+    .getElementById(
+        "studyMinutes"
+    )
+    .addEventListener(
+        "keydown",
+        event => {
+
+            if (
+                event.key === "Enter"
+            ) {
+                addManualStudyTime();
+            }
+
+        }
+    );
+
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        if (
+            event.key === "Escape"
+        ) {
+
+            closeShortcutModal();
+            closeHuiswerkModal();
+            closeStudyModal();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   START
+========================================================= */
+
+checkSession();
+
+</script>
+
+</body>
+</html>
