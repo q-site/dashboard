@@ -5368,7 +5368,8 @@ const SUPABASE_KEY =
    uitsluitend in de Supabase-secrets (VAPID_KEYS).
    Zelfde waarde als bovenin sw.js. */
 const VAPID_PUBLIC_KEY =
-    "VUL_HIER_JE_PUBLIEKE_VAPID_SLEUTEL_IN";
+    "{"publicKey":{"crv":"P-256","ext":true,"key_ops":["verify"],"kty":"EC","x":"EZ63bcSF7kBdxGX4gu1jejK24uJknCv_EPpPEjBoZRI","y":"L2iJ2wsveMKA26UsSE9POJ5EwaaY0WrhwE8E-yU6PI8"},"privateKey":{"crv":"P-256","d":"9OUPxC5rkw9etGm338qQCiAUPgC_ay9efWMG1sszxKE","ext":true,"key_ops":["sign"],"kty":"EC","x":"EZ63bcSF7kBdxGX4gu1jejK24uJknCv_EPpPEjBoZRI","y":"L2iJ2wsveMKA26UsSE9POJ5EwaaY0WrhwE8E-yU6PI8"}}
+";
 
 const supabaseClient =
     supabase.createClient(
