@@ -5906,7 +5906,9 @@ async function loadAllData() {
         loadCijfers(),
         loadShortcuts(),
         loadAgendaEventsData(),
-        loadNotificationSettings()
+        loadNotificationSettings(),
+        loadTrackerCategories(),
+        loadTrackerGoals()
     ]);
 
     renderQuickStats();
@@ -11739,7 +11741,25 @@ function offsetLabel(offset) {
 }
 
 
-async function checkTodayGoalsFilled() {
+async function countIncompleteGoalsToday() {
+
+    const todayKey =
+        getWeekdayKey(
+            getToday()
+        );
+
+    const applicableGoals =
+        trackerGoals.filter(
+            goal =>
+                goalAppliesToDay(
+                    goal,
+                    todayKey
+                )
+        );
+
+    if (!applicableGoals.length) {
+        return 0;
+    }
 
     const {
         data,
@@ -11761,14 +11781,25 @@ async function checkTodayGoalsFilled() {
             error
         );
 
-        return true;
+        return 0;
     }
 
-    return !!(
-        data &&
-        data.data &&
-        Object.keys(data.data).length > 0
-    );
+    const entryData =
+        (data && data.data) || {};
+
+    return applicableGoals.filter(goal => {
+
+        if (goal.type === "checkbox") {
+            return entryData[goal.id] !== true;
+        }
+
+        return (
+            entryData[goal.id] === undefined ||
+            entryData[goal.id] === null ||
+            entryData[goal.id] === ""
+        );
+
+    }).length;
 }
 
 
@@ -11928,14 +11959,17 @@ async function computeDueReminders() {
 
         if (nowTime >= settings.goals_reminder_time.slice(0, 5)) {
 
-            const filled =
-                await checkTodayGoalsFilled();
+            const incompleteCount =
+                await countIncompleteGoalsToday();
 
-            if (!filled) {
+            if (incompleteCount > 0) {
 
                 reminders.push({
                     type:"goal",
-                    label:"Doelen van vandaag nog niet ingevuld",
+                    label:
+                        incompleteCount === 1
+                            ? "1 doel van vandaag nog niet afgevinkt"
+                            : incompleteCount + " doelen van vandaag nog niet afgevinkt",
                     meta:"Herinnering",
                     key:"goal-" + today
                 });
