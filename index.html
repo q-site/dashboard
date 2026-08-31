@@ -5933,6 +5933,23 @@ function startNotificationInterval() {
 }
 
 
+document.addEventListener(
+    "visibilitychange",
+    () => {
+
+        if (
+            document.visibilityState === "visible" &&
+            notificationCheckInterval
+        ) {
+
+            refreshDueReminders();
+
+        }
+
+    }
+);
+
+
 /* =========================================================
    SNELLE STATISTIEKEN
 ========================================================= */
@@ -12281,6 +12298,12 @@ async function toggleBrowserNotifications() {
             "Systeemmeldingen staan aan, zolang deze website ergens open staat.";
 
         notificationSettings.browser_notifications_enabled = true;
+
+        await saveNotificationSettings();
+
+        await refreshDueReminders();
+
+        return;
 
     } else {
 
