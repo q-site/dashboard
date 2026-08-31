@@ -350,6 +350,28 @@ button {
     height:17px;
 }
 
+.notification-bell-button {
+    position:relative;
+}
+
+.notification-badge {
+    position:absolute;
+    top:-4px;
+    right:-4px;
+    min-width:17px;
+    height:17px;
+    padding:0 4px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:9px;
+    background:var(--danger);
+    color:white;
+    font-size:10px;
+    font-weight:700;
+    line-height:1;
+}
+
 main {
     width:min(100% - 40px,1080px);
     margin:auto;
@@ -888,7 +910,7 @@ main {
 .todo-input-row,
 .deadline-input-row {
     display:grid;
-    grid-template-columns:1fr auto;
+    grid-template-columns:1fr 180px auto;
     gap:10px;
     margin-bottom:22px;
 }
@@ -1641,6 +1663,7 @@ main {
 
 .tracker-toolbar {
     display:flex;
+    justify-content:center;
     gap:10px;
     flex-wrap:wrap;
     margin-bottom:14px;
@@ -1696,6 +1719,7 @@ main {
 
 .category-chip-list {
     display:flex;
+    justify-content:center;
     flex-wrap:wrap;
     gap:8px;
     margin-bottom:22px;
@@ -2059,6 +2083,505 @@ main {
 }
 
 /* =========================================================
+   AGENDA
+========================================================= */
+
+.agenda-today-row {
+    display:flex;
+    justify-content:center;
+    margin-bottom:22px;
+}
+
+.agenda-grid {
+    display:grid;
+    grid-template-columns:repeat(7,minmax(0,1fr));
+    gap:6px;
+    margin-bottom:26px;
+}
+
+.agenda-weekday-label {
+    text-align:center;
+    font-size:11px;
+    font-weight:700;
+    color:var(--muted);
+    text-transform:uppercase;
+    letter-spacing:.3px;
+    padding-bottom:4px;
+}
+
+.agenda-day-cell {
+    min-height:66px;
+    padding:6px;
+    display:flex;
+    flex-direction:column;
+    gap:5px;
+    border:1px solid var(--border);
+    border-radius:8px;
+    background:var(--white);
+    text-align:left;
+}
+
+.agenda-day-cell:hover {
+    background:var(--light);
+}
+
+.agenda-day-cell.empty {
+    background:transparent;
+    border-color:transparent;
+    cursor:default;
+}
+
+.agenda-day-cell.today {
+    border-color:var(--olive);
+}
+
+.agenda-day-cell.selected {
+    background:var(--badge-bg);
+    border-color:var(--olive);
+}
+
+.agenda-day-number {
+    font-size:12.5px;
+    font-weight:700;
+}
+
+.agenda-day-cell.today .agenda-day-number {
+    color:var(--accent-text);
+}
+
+.agenda-day-dots {
+    display:flex;
+    flex-wrap:wrap;
+    gap:3px;
+}
+
+.agenda-dot {
+    width:6px;
+    height:6px;
+    border-radius:50%;
+    background:var(--olive);
+}
+
+.agenda-dot.deadline {
+    background:var(--danger);
+}
+
+.agenda-dot.huiswerk {
+    background:var(--warning);
+}
+
+.agenda-day-more {
+    font-size:10px;
+    font-weight:700;
+    color:var(--muted);
+}
+
+.agenda-detail-panel {
+    padding:24px;
+    background:var(--white);
+    border:1px solid var(--border);
+    border-radius:12px;
+    margin-bottom:22px;
+}
+
+.agenda-detail-title {
+    font-size:16px;
+    font-weight:700;
+    margin-bottom:16px;
+}
+
+.agenda-detail-list {
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    margin-bottom:20px;
+}
+
+.agenda-detail-item {
+    display:flex;
+    align-items:flex-start;
+    gap:10px;
+    padding:11px 13px;
+    border:1px solid var(--border);
+    border-radius:8px;
+}
+
+.agenda-detail-dot {
+    width:9px;
+    height:9px;
+    margin-top:4px;
+    border-radius:50%;
+    background:var(--olive);
+    flex-shrink:0;
+}
+
+.agenda-detail-dot.deadline {
+    background:var(--danger);
+}
+
+.agenda-detail-dot.huiswerk {
+    background:var(--warning);
+}
+
+.agenda-detail-dot.goal {
+    background:var(--accent-text);
+}
+
+.agenda-detail-text {
+    flex:1;
+    min-width:0;
+}
+
+.agenda-detail-label {
+    font-size:13.5px;
+    font-weight:600;
+    line-height:1.4;
+}
+
+.agenda-detail-label.completed {
+    color:var(--muted);
+    text-decoration:line-through;
+}
+
+.agenda-detail-meta {
+    margin-top:2px;
+    font-size:12px;
+    color:var(--muted);
+}
+
+.agenda-detail-time {
+    font-size:12px;
+    font-weight:700;
+    color:var(--muted);
+    flex-shrink:0;
+    white-space:nowrap;
+}
+
+.delete-agenda-event {
+    width:26px;
+    height:26px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border:none;
+    border-radius:6px;
+    background:transparent;
+    color:var(--muted);
+    flex-shrink:0;
+}
+
+.delete-agenda-event:hover {
+    background:var(--badge-bg);
+    color:var(--danger);
+}
+
+.delete-agenda-event svg {
+    width:13px;
+    height:13px;
+}
+
+.agenda-add-event-title {
+    font-size:13px;
+    font-weight:700;
+    margin-bottom:10px;
+}
+
+.agenda-add-event-row {
+    display:grid;
+    grid-template-columns:1fr 110px auto;
+    gap:8px;
+}
+
+.agenda-add-event-row input {
+    width:100%;
+    height:42px;
+    padding:0 12px;
+    border:1px solid var(--border);
+    border-radius:8px;
+    outline:none;
+}
+
+.agenda-add-button {
+    height:42px;
+    padding:0 16px;
+    border:none;
+    border-radius:8px;
+    background:var(--olive);
+    color:white;
+    font-weight:600;
+    font-size:13px;
+}
+
+.agenda-add-button:hover {
+    background:var(--olive-dark);
+}
+
+@media(max-width:620px) {
+
+    .agenda-day-cell {
+        min-height:50px;
+        padding:4px;
+    }
+
+    .agenda-day-number {
+        font-size:11px;
+    }
+
+    .agenda-add-event-row {
+        grid-template-columns:1fr;
+    }
+
+}
+
+/* =========================================================
+   SUGGESTIES
+========================================================= */
+
+.suggestion-textarea {
+    width:100%;
+    min-height:110px;
+    padding:12px 13px;
+    border:1px solid var(--border);
+    border-radius:8px;
+    outline:none;
+    font-family:inherit;
+    font-size:14px;
+    resize:vertical;
+    margin-bottom:12px;
+    background:var(--white);
+    color:var(--anthracite);
+}
+
+.suggestion-success {
+    display:none;
+    margin-top:10px;
+    padding:10px;
+    border-radius:7px;
+    background:var(--success-bg);
+    color:var(--success);
+    font-size:13px;
+    font-weight:600;
+}
+
+.suggestion-success.show {
+    display:block;
+}
+
+.suggestion-divider {
+    margin:30px 0;
+    border:none;
+    border-top:1px solid var(--border);
+}
+
+.suggestion-lock-panel {
+    padding:30px 24px;
+    background:var(--white);
+    border:1px solid var(--border);
+    border-radius:12px;
+    text-align:center;
+}
+
+.suggestion-lock-icon {
+    width:38px;
+    height:38px;
+    margin:0 auto 14px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:9px;
+    background:var(--badge-bg);
+    color:var(--olive);
+}
+
+.suggestion-lock-icon svg {
+    width:19px;
+    height:19px;
+}
+
+.suggestion-password-row {
+    display:flex;
+    gap:8px;
+    max-width:280px;
+    margin:16px auto 0;
+}
+
+.suggestion-password-row input {
+    flex:1;
+    height:42px;
+    padding:0 12px;
+    border:1px solid var(--border);
+    border-radius:8px;
+    outline:none;
+    text-align:center;
+    letter-spacing:3px;
+}
+
+.suggestion-unlock-button {
+    height:42px;
+    padding:0 16px;
+    border:none;
+    border-radius:8px;
+    background:var(--olive);
+    color:white;
+    font-weight:600;
+    font-size:13px;
+}
+
+.suggestion-unlock-button:hover {
+    background:var(--olive-dark);
+}
+
+.suggestion-error {
+    display:none;
+    margin-top:12px;
+    font-size:12.5px;
+    color:var(--danger);
+    font-weight:600;
+}
+
+.suggestion-error.show {
+    display:block;
+}
+
+.suggestion-list {
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+.suggestion-item {
+    padding:14px 16px;
+    border:1px solid var(--border);
+    border-radius:10px;
+}
+
+.suggestion-item-top {
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:10px;
+    margin-bottom:7px;
+}
+
+.suggestion-item-meta {
+    font-size:12px;
+    color:var(--muted);
+}
+
+.suggestion-item-message {
+    font-size:13.5px;
+    line-height:1.55;
+    white-space:pre-wrap;
+}
+
+.delete-suggestion-button {
+    width:26px;
+    height:26px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border:none;
+    border-radius:6px;
+    background:transparent;
+    color:var(--muted);
+    flex-shrink:0;
+}
+
+.delete-suggestion-button:hover {
+    background:var(--badge-bg);
+    color:var(--danger);
+}
+
+.delete-suggestion-button svg {
+    width:13px;
+    height:13px;
+}
+
+/* =========================================================
+   MELDINGEN
+========================================================= */
+
+.notif-setting-group {
+    margin-bottom:26px;
+    padding-bottom:26px;
+    border-bottom:1px solid var(--border);
+}
+
+.notif-setting-group:last-child {
+    margin-bottom:0;
+    padding-bottom:0;
+    border-bottom:none;
+}
+
+.notif-setting-group h3 {
+    font-size:15px;
+    margin-bottom:5px;
+}
+
+.notif-setting-group > p {
+    color:var(--muted);
+    font-size:13px;
+    margin-bottom:12px;
+    line-height:1.5;
+}
+
+.offset-chip-row {
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+}
+
+.offset-chip {
+    height:36px;
+    padding:0 14px;
+    border:1px solid var(--border);
+    border-radius:20px;
+    background:var(--white);
+    color:var(--anthracite);
+    font-size:12.5px;
+    font-weight:600;
+}
+
+.offset-chip:hover {
+    background:var(--light);
+}
+
+.offset-chip.selected {
+    background:var(--olive);
+    border-color:var(--olive);
+    color:white;
+}
+
+.notif-toggle-row {
+    display:flex;
+    align-items:center;
+    gap:9px;
+    font-size:13.5px;
+    font-weight:600;
+    margin-bottom:12px;
+}
+
+.notif-toggle-row input {
+    width:18px;
+    height:18px;
+    accent-color:var(--olive);
+}
+
+.notif-time-input {
+    height:42px;
+    padding:0 12px;
+    border:1px solid var(--border);
+    border-radius:8px;
+    outline:none;
+    background:var(--white);
+    color:var(--anthracite);
+}
+
+.notif-time-input:disabled {
+    opacity:.5;
+}
+
+/* =========================================================
    MODAL
 ========================================================= */
 
@@ -2080,6 +2603,8 @@ main {
 .modal-box {
     width:100%;
     max-width:440px;
+    max-height:88vh;
+    overflow-y:auto;
     padding:26px;
     background:var(--white);
     border-radius:12px;
@@ -2102,18 +2627,93 @@ main {
     font-weight:600;
 }
 
-.modal-field input {
+.modal-field input,
+.modal-field select {
     width:100%;
     height:44px;
     padding:0 12px;
     border:1px solid var(--border);
     border-radius:8px;
     outline:none;
+    background:var(--white);
+    color:var(--anthracite);
+    font-family:inherit;
+    font-size:14px;
 }
 
-.modal-field input:focus {
+.modal-field input:focus,
+.modal-field select:focus {
     border-color:var(--olive);
     box-shadow:0 0 0 3px rgba(86,99,68,.10);
+}
+
+.modal-radio-group {
+    display:flex;
+    gap:8px;
+}
+
+.modal-radio-option {
+    flex:1;
+    height:44px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    border:1px solid var(--border);
+    border-radius:8px;
+    font-size:13px;
+    font-weight:600;
+    color:var(--anthracite);
+    background:var(--white);
+    cursor:pointer;
+}
+
+.modal-radio-option:hover {
+    background:var(--light);
+}
+
+.modal-radio-option.selected {
+    background:var(--olive);
+    border-color:var(--olive);
+    color:white;
+}
+
+.day-picker-row {
+    display:flex;
+    gap:6px;
+    flex-wrap:wrap;
+}
+
+.day-picker-chip {
+    width:40px;
+    height:38px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border:1px solid var(--border);
+    border-radius:7px;
+    font-size:12.5px;
+    font-weight:600;
+    background:var(--white);
+    color:var(--anthracite);
+    cursor:pointer;
+}
+
+.day-picker-chip:hover {
+    background:var(--light);
+}
+
+.day-picker-chip.selected {
+    background:var(--olive);
+    border-color:var(--olive);
+    color:white;
+}
+
+.modal-hint {
+    margin-top:7px;
+    font-size:11.5px;
+    color:var(--muted);
+    line-height:1.45;
 }
 
 .modal-actions {
@@ -2430,6 +3030,22 @@ main {
     <circle cx="8" cy="8" r="1.3"></circle>
 </symbol>
 
+<symbol id="lightbulb" viewBox="0 0 24 24">
+    <path d="M9 18h6"></path>
+    <path d="M10 21h4"></path>
+    <path d="M12 3a6 6 0 0 0-3.5 10.9c.6.4 1 .8 1.1 1.4l.1.7h4.6l.1-.7c.1-.6.5-1 1.1-1.4A6 6 0 0 0 12 3z"></path>
+</symbol>
+
+<symbol id="lock" viewBox="0 0 24 24">
+    <rect x="4" y="10" width="16" height="10" rx="2"></rect>
+    <path d="M7 10V7a5 5 0 0 1 10 0v3"></path>
+</symbol>
+
+<symbol id="bell" viewBox="0 0 24 24">
+    <path d="M6 10a6 6 0 0 1 12 0c0 4 1.5 5.5 2 6H4c.5-.5 2-2 2-6z"></path>
+    <path d="M10 20a2 2 0 0 0 4 0"></path>
+</symbol>
+
 </svg>
 
 
@@ -2632,6 +3248,26 @@ Persoonlijk dashboard
 </div>
 
 <div class="topbar-actions">
+
+<button
+    id="notificationBellButton"
+    class="theme-toggle-button notification-bell-button"
+    onclick="openPage('meldingenPage')"
+    title="Meldingen"
+>
+<svg fill="none"
+     stroke="currentColor"
+     stroke-width="1.8"
+     stroke-linecap="round"
+     stroke-linejoin="round">
+    <use href="#bell"></use>
+</svg>
+<span
+    id="notificationBadge"
+    class="notification-badge"
+    style="display:none"
+></span>
+</button>
 
 <button
     id="themeToggleButton"
@@ -3035,6 +3671,114 @@ Dagelijkse, dagspecifieke en wekelijkse eisen per categorie bijhouden.
 
 </article>
 
+
+<article class="dashboard-card">
+
+<div class="card-icon">
+<svg fill="none"
+     stroke="currentColor"
+     stroke-width="1.8"
+     stroke-linecap="round"
+     stroke-linejoin="round">
+    <use href="#calendar"></use>
+</svg>
+</div>
+
+<h2>Agenda</h2>
+
+<p>
+Al je deadlines en huiswerk automatisch in kaart, plus ruimte voor eigen afspraken.
+</p>
+
+<button
+    class="card-button"
+    onclick="openPage('agendaPage')"
+>
+    Openen
+
+    <svg fill="none"
+         stroke="currentColor"
+         stroke-width="1.8"
+         stroke-linecap="round"
+         stroke-linejoin="round">
+        <use href="#arrow-right"></use>
+    </svg>
+</button>
+
+</article>
+
+
+<article class="dashboard-card">
+
+<div class="card-icon">
+<svg fill="none"
+     stroke="currentColor"
+     stroke-width="1.8"
+     stroke-linecap="round"
+     stroke-linejoin="round">
+    <use href="#lightbulb"></use>
+</svg>
+</div>
+
+<h2>Suggesties</h2>
+
+<p>
+Ideeën of verbeteringen voor deze website doorgeven.
+</p>
+
+<button
+    class="card-button"
+    onclick="openPage('suggestiesPage')"
+>
+    Openen
+
+    <svg fill="none"
+         stroke="currentColor"
+         stroke-width="1.8"
+         stroke-linecap="round"
+         stroke-linejoin="round">
+        <use href="#arrow-right"></use>
+    </svg>
+</button>
+
+</article>
+
+
+<article class="dashboard-card">
+
+<div class="card-icon">
+<svg fill="none"
+     stroke="currentColor"
+     stroke-width="1.8"
+     stroke-linecap="round"
+     stroke-linejoin="round">
+    <use href="#bell"></use>
+</svg>
+</div>
+
+<h2>Meldingen</h2>
+
+<p>
+Herinneringen voor deadlines, huiswerk, agenda en doelen instellen.
+</p>
+
+<button
+    class="card-button"
+    onclick="openPage('meldingenPage')"
+>
+    Openen
+
+    <svg fill="none"
+         stroke="currentColor"
+         stroke-width="1.8"
+         stroke-linecap="round"
+         stroke-linejoin="round">
+        <use href="#arrow-right"></use>
+    </svg>
+</button>
+
+</article>
+
 </div>
 
 
@@ -3285,6 +4029,12 @@ Dagelijkse, dagspecifieke en wekelijkse eisen per categorie bijhouden.
     type="text"
     placeholder="Nieuwe deadline..."
     maxlength="200"
+>
+
+<input
+    id="deadlineDateInput"
+    class="deadline-input"
+    type="date"
 >
 
 <button
@@ -3612,7 +4362,7 @@ Kies een vak en het gemiddelde dat je wilt halen. Dan wordt berekend welk cijfer
     type="checkbox"
     onchange="toggleTrackerWeekSpecial()"
 >
-Bijzondere week (feestdag, verjaardag, familiegelegenheid of proefwerkperiode) — dagelijkse afvinkdoelen krijgen deze week 1 dag minder als eis
+Bijzondere week - De door jou aangegeven doelen passen automatisch aan
 </label>
 
 <div class="tracker-toolbar">
@@ -3670,6 +4420,345 @@ Maak eerst een categorie aan voordat je een doel toevoegt.
 <h2>Week overzicht</h2>
 <p>Wordt automatisch opgebouwd uit de doelen die je hierboven aanmaakt.</p>
 <div id="overviewGrid" class="overview-grid"></div>
+</div>
+
+</section>
+
+
+<!-- =========================================================
+     AGENDA
+========================================================= -->
+
+<section id="agendaPage" class="page">
+
+<button
+    class="back-button"
+    onclick="openPage('homePage')"
+>
+    <svg fill="none"
+         stroke="currentColor"
+         stroke-width="1.8"
+         stroke-linecap="round"
+         stroke-linejoin="round">
+        <use href="#arrow-left"></use>
+    </svg>
+
+    Terug naar overzicht
+</button>
+
+<div class="page-header">
+<h1>Agenda</h1>
+<p>Al je deadlines en huiswerk staan hier automatisch, met ruimte voor eigen afspraken.</p>
+</div>
+
+<div class="week-selector">
+
+<button
+    id="agendaPrevButton"
+    class="week-nav-button"
+    onclick="changeAgendaMonth(-1)"
+>
+<svg fill="none"
+     stroke="currentColor"
+     stroke-width="1.8"
+     stroke-linecap="round"
+     stroke-linejoin="round">
+    <use href="#chevron-left"></use>
+</svg>
+</button>
+
+<div class="week-label-box">
+<div id="agendaMonthLabel" class="week-label"></div>
+</div>
+
+<button
+    id="agendaNextButton"
+    class="week-nav-button"
+    onclick="changeAgendaMonth(1)"
+>
+<svg fill="none"
+     stroke="currentColor"
+     stroke-width="1.8"
+     stroke-linecap="round"
+     stroke-linejoin="round">
+    <use href="#chevron-right"></use>
+</svg>
+</button>
+
+</div>
+
+<div class="agenda-today-row">
+<button
+    class="toolbar-button secondary"
+    onclick="goToAgendaToday()"
+>
+    Vandaag
+</button>
+</div>
+
+<div
+    id="agendaGrid"
+    class="agenda-grid"
+></div>
+
+<div class="agenda-detail-panel">
+
+<div
+    id="agendaDetailTitle"
+    class="agenda-detail-title"
+></div>
+
+<div
+    id="agendaDetailList"
+    class="agenda-detail-list"
+></div>
+
+<div class="agenda-add-event-title">Eigen afspraak toevoegen</div>
+
+<div class="agenda-add-event-row">
+
+<input
+    id="agendaEventTitleInput"
+    type="text"
+    maxlength="120"
+    placeholder="Bijv. Tandarts"
+>
+
+<input
+    id="agendaEventTimeInput"
+    type="time"
+>
+
+<button
+    class="agenda-add-button"
+    onclick="addAgendaEvent()"
+>
+    Toevoegen
+</button>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =========================================================
+     SUGGESTIES
+========================================================= -->
+
+<section id="suggestiesPage" class="page">
+
+<button
+    class="back-button"
+    onclick="openPage('homePage')"
+>
+    <svg fill="none"
+         stroke="currentColor"
+         stroke-width="1.8"
+         stroke-linecap="round"
+         stroke-linejoin="round">
+        <use href="#arrow-left"></use>
+    </svg>
+
+    Terug naar overzicht
+</button>
+
+<div class="page-header">
+<h1>Suggesties</h1>
+<p>Heb je een idee of verbetering voor deze website? Laat het weten.</p>
+</div>
+
+<div class="content-panel">
+
+<textarea
+    id="suggestionTextarea"
+    class="suggestion-textarea"
+    maxlength="1000"
+    placeholder="Wat zou je aan deze website willen toevoegen of veranderen?"
+></textarea>
+
+<button
+    class="primary-button"
+    onclick="submitSuggestion()"
+>
+    Suggestie versturen
+</button>
+
+<div
+    id="suggestionSuccess"
+    class="suggestion-success"
+>
+    Bedankt voor je suggestie!
+</div>
+
+</div>
+
+<hr class="suggestion-divider">
+
+<div id="suggestionLockPanel" class="suggestion-lock-panel">
+
+<div class="suggestion-lock-icon">
+<svg fill="none"
+     stroke="currentColor"
+     stroke-width="1.8"
+     stroke-linecap="round"
+     stroke-linejoin="round">
+    <use href="#lock"></use>
+</svg>
+</div>
+
+<div class="day-panel-title" style="justify-content:center">Suggesties bekijken</div>
+<p style="color:var(--muted);font-size:13px">Alleen voor de eigenaar. Voer het wachtwoord in.</p>
+
+<div class="suggestion-password-row">
+
+<input
+    id="suggestionPasswordInput"
+    type="password"
+    maxlength="10"
+    placeholder="Wachtwoord"
+>
+
+<button
+    class="suggestion-unlock-button"
+    onclick="unlockSuggestions()"
+>
+    Ontgrendelen
+</button>
+
+</div>
+
+<div
+    id="suggestionError"
+    class="suggestion-error"
+>
+    Onjuist wachtwoord.
+</div>
+
+</div>
+
+<div
+    id="suggestionContentPanel"
+    class="content-panel"
+    style="display:none"
+>
+
+<div
+    id="suggestionList"
+    class="suggestion-list"
+></div>
+
+</div>
+
+</section>
+
+
+<!-- =========================================================
+     MELDINGEN
+========================================================= -->
+
+<section id="meldingenPage" class="page">
+
+<button
+    class="back-button"
+    onclick="openPage('homePage')"
+>
+    <svg fill="none"
+         stroke="currentColor"
+         stroke-width="1.8"
+         stroke-linecap="round"
+         stroke-linejoin="round">
+        <use href="#arrow-left"></use>
+    </svg>
+
+    Terug naar overzicht
+</button>
+
+<div class="page-header">
+<h1>Meldingen</h1>
+<p>Herinneringen voor deadlines, huiswerk, agenda-afspraken en doelen.</p>
+</div>
+
+<div class="content-panel">
+<h2 style="font-size:16px;margin-bottom:14px">Op dit moment actueel</h2>
+<div
+    id="dueRemindersList"
+    class="agenda-detail-list"
+></div>
+</div>
+
+<div class="content-panel">
+<h2 style="font-size:16px;margin-bottom:18px">Instellingen</h2>
+
+<div class="notif-setting-group">
+<h3>Deadlines</h3>
+<p>Wanneer wil je hieraan herinnerd worden?</p>
+<div
+    id="deadlineOffsetChips"
+    class="offset-chip-row"
+></div>
+</div>
+
+<div class="notif-setting-group">
+<h3>Huiswerk</h3>
+<p>Wanneer wil je hieraan herinnerd worden?</p>
+<div
+    id="huiswerkOffsetChips"
+    class="offset-chip-row"
+></div>
+</div>
+
+<div class="notif-setting-group">
+<h3>Agenda-afspraken</h3>
+<p>Wanneer wil je hieraan herinnerd worden?</p>
+<div
+    id="agendaOffsetChips"
+    class="offset-chip-row"
+></div>
+</div>
+
+<div class="notif-setting-group">
+<h3>Doelen</h3>
+<p>Dagelijkse herinnering als je die dag je doelen nog niet hebt ingevuld.</p>
+
+<label class="notif-toggle-row">
+<input
+    id="goalsReminderEnabled"
+    type="checkbox"
+    onchange="toggleGoalsReminderEnabled()"
+>
+Dagelijkse herinnering aan
+</label>
+
+<input
+    id="goalsReminderTimeInput"
+    class="notif-time-input"
+    type="time"
+    onchange="saveGoalsReminderTime()"
+    disabled
+>
+</div>
+
+<div class="notif-setting-group">
+<h3>Systeemmeldingen</h3>
+<p>Toon meldingen ook als systeemmelding, zolang deze website ergens open staat (ook op de achtergrond). Dit werkt niet wanneer de browser volledig gesloten is — dat is een beperking van wat in een website mogelijk is, niet iets wat hier aan te passen valt.</p>
+
+<label class="notif-toggle-row">
+<input
+    id="browserNotificationsEnabled"
+    type="checkbox"
+    onchange="toggleBrowserNotifications()"
+>
+Systeemmeldingen inschakelen
+</label>
+
+<div
+    id="browserNotificationStatus"
+    class="modal-hint"
+></div>
+</div>
+
 </div>
 
 </section>
@@ -3830,6 +4919,52 @@ Maak eerst een categorie aan voordat je een doel toevoegt.
     class="modal-hint"
     id="goalTargetHint"
 ></div>
+</div>
+
+<div class="modal-field">
+<label>Bij een bijzondere week</label>
+<div class="modal-radio-group">
+<div
+    class="modal-radio-option selected"
+    id="goalSpecialSameOption"
+    onclick="setGoalSpecialBehavior('same')"
+>
+    Blijft gelijk
+</div>
+<div
+    class="modal-radio-option"
+    id="goalSpecialSkipOption"
+    onclick="setGoalSpecialBehavior('skip')"
+>
+    Vervalt
+</div>
+<div
+    class="modal-radio-option"
+    id="goalSpecialDifferentOption"
+    onclick="setGoalSpecialBehavior('different')"
+>
+    Anders
+</div>
+</div>
+</div>
+
+<div
+    class="modal-field"
+    id="goalSpecialTargetField"
+    style="display:none"
+>
+<label
+    for="goalSpecialTargetInput"
+    id="goalSpecialTargetLabel"
+>
+    Aangepaste eis tijdens een bijzondere week
+</label>
+<input
+    id="goalSpecialTargetInput"
+    type="number"
+    min="0"
+    step="1"
+>
 </div>
 
 <div class="modal-actions">
@@ -4257,6 +5392,27 @@ let trackerGoals = [];
 let goalType = "checkbox";
 let goalFrequency = "daily";
 let goalSelectedDays = new Set();
+let goalSpecialBehavior = "same";
+
+let agendaViewMonth = null;
+let agendaSelectedDate = null;
+let agendaEvents = [];
+
+let suggestions = [];
+
+let notificationSettings = null;
+let dueReminders = [];
+let notificationCheckInterval = null;
+
+const offsetOptions =
+    [
+        { value:0, label:"Op de dag zelf" },
+        { value:1, label:"1 dag van tevoren" },
+        { value:3, label:"3 dagen van tevoren" },
+        { value:7, label:"1 week van tevoren" },
+        { value:14, label:"2 weken van tevoren" }
+    ];
+
 
 
 /* =========================================================
@@ -4603,6 +5759,11 @@ async function logout() {
         .getElementById("passwordInput")
         .value = "";
 
+    if (notificationCheckInterval) {
+        clearInterval(notificationCheckInterval);
+        notificationCheckInterval = null;
+    }
+
     showLoginForm();
 
     openPage("homePage");
@@ -4733,6 +5894,18 @@ function openPage(pageId) {
         initTracker();
     }
 
+    if (pageId === "agendaPage") {
+        initAgenda();
+    }
+
+    if (pageId === "suggestiesPage") {
+        resetSuggestionsView();
+    }
+
+    if (pageId === "meldingenPage") {
+        initMeldingen();
+    }
+
     if (pageId === "homePage") {
         loadShortcuts();
         renderQuickStats();
@@ -4779,10 +5952,30 @@ async function loadAllData() {
         loadHuiswerk(),
         loadStudySessions(),
         loadCijfers(),
-        loadShortcuts()
+        loadShortcuts(),
+        loadAgendaEventsData(),
+        loadNotificationSettings()
     ]);
 
     renderQuickStats();
+
+    await refreshDueReminders();
+
+    startNotificationInterval();
+}
+
+
+function startNotificationInterval() {
+
+    if (notificationCheckInterval) {
+        clearInterval(notificationCheckInterval);
+    }
+
+    notificationCheckInterval =
+        setInterval(
+            refreshDueReminders,
+            5 * 60 * 1000
+        );
 }
 
 
@@ -5662,32 +6855,21 @@ async function addDeadline() {
             "deadlineTitleInput"
         );
 
+    const dateInput =
+        document.getElementById(
+            "deadlineDateInput"
+        );
+
     const title =
         titleInput.value.trim();
 
-    if (!title) {
-
-        titleInput.focus();
-
-        return;
-    }
-
     const date =
-        prompt(
-            "Voer de deadline in als YYYY-MM-DD",
-            getToday()
-        );
+        dateInput.value;
 
-    if (!date) {
-        return;
-    }
-
-    if (
-        !/^\d{4}-\d{2}-\d{2}$/.test(date)
-    ) {
+    if (!title || !date) {
 
         alert(
-            "Gebruik het formaat YYYY-MM-DD."
+            "Vul een titel en een datum voor de deadline in."
         );
 
         return;
@@ -5733,6 +6915,7 @@ async function addDeadline() {
     }
 
     titleInput.value = "";
+    dateInput.value = "";
 
     await loadDeadlines();
 
@@ -7917,7 +9100,14 @@ async function loadTrackerGoals() {
             unit:row.unit,
             weeklyTarget:Number(
                 row.weekly_target
-            )
+            ),
+            specialWeekBehavior:
+                row.special_week_behavior || "same",
+            specialWeekTarget:
+                row.special_week_target === null ||
+                row.special_week_target === undefined
+                    ? null
+                    : Number(row.special_week_target)
         }));
 }
 
@@ -8522,8 +9712,13 @@ function openGoalModal() {
     targetInput.value = "";
     targetInput.dataset.touched = "";
 
+    document.getElementById(
+        "goalSpecialTargetInput"
+    ).value = "";
+
     setGoalType("checkbox");
     setGoalFrequency("daily");
+    setGoalSpecialBehavior("same");
 
     goalSelectedDays =
         new Set();
@@ -8581,6 +9776,13 @@ function setGoalType(type) {
             ? "Totaal doel per week"
             : "Aantal dagen per week (eis)";
 
+    document.getElementById(
+        "goalSpecialTargetLabel"
+    ).textContent =
+        type === "number"
+            ? "Aangepast totaal tijdens een bijzondere week"
+            : "Aangepast aantal dagen tijdens een bijzondere week";
+
     updateGoalTargetDefault();
 }
 
@@ -8611,6 +9813,40 @@ function setGoalFrequency(freq) {
             : "none";
 
     updateGoalTargetDefault();
+}
+
+
+function setGoalSpecialBehavior(behavior) {
+
+    goalSpecialBehavior = behavior;
+
+    document.getElementById(
+        "goalSpecialSameOption"
+    ).classList.toggle(
+        "selected",
+        behavior === "same"
+    );
+
+    document.getElementById(
+        "goalSpecialSkipOption"
+    ).classList.toggle(
+        "selected",
+        behavior === "skip"
+    );
+
+    document.getElementById(
+        "goalSpecialDifferentOption"
+    ).classList.toggle(
+        "selected",
+        behavior === "different"
+    );
+
+    document.getElementById(
+        "goalSpecialTargetField"
+    ).style.display =
+        behavior === "different"
+            ? "block"
+            : "none";
 }
 
 
@@ -8727,6 +9963,13 @@ async function saveGoal() {
             ).value
         );
 
+    const specialWeekTargetRaw =
+        document.getElementById(
+            "goalSpecialTargetInput"
+        ).value;
+
+    let specialWeekTarget = null;
+
     if (!label) {
 
         alert(
@@ -8754,6 +9997,24 @@ async function saveGoal() {
         return;
     }
 
+    if (goalSpecialBehavior === "different") {
+
+        specialWeekTarget =
+            parseFloat(
+                specialWeekTargetRaw
+            );
+
+        if (isNaN(specialWeekTarget) || specialWeekTarget < 0) {
+
+            alert(
+                "Vul een geldige aangepaste eis in voor een bijzondere week."
+            );
+
+            return;
+        }
+
+    }
+
     const user =
         await getCurrentUser();
 
@@ -8774,7 +10035,9 @@ async function saveGoal() {
                 frequency:goalFrequency,
                 days:Array.from(goalSelectedDays),
                 unit:unit || null,
-                weekly_target:weeklyTarget
+                weekly_target:weeklyTarget,
+                special_week_behavior:goalSpecialBehavior,
+                special_week_target:specialWeekTarget
             });
 
     if (error) {
@@ -8965,6 +10228,7 @@ function renderTrackerDayChecklist() {
     const dayData =
         trackerEntries[date] || {};
 
+    let anyApplicable = false;
     let anyRendered = false;
 
     trackerCategories.forEach(category => {
@@ -8976,7 +10240,20 @@ function renderTrackerDayChecklist() {
                     goalAppliesToDay(g, dayKey)
             );
 
-        if (!categoryGoals.length) {
+        if (categoryGoals.length) {
+            anyApplicable = true;
+        }
+
+        const visibleGoals =
+            categoryGoals.filter(
+                g =>
+                    !(
+                        trackerWeekSpecial &&
+                        g.specialWeekBehavior === "skip"
+                    )
+            );
+
+        if (!visibleGoals.length) {
             return;
         }
 
@@ -9005,7 +10282,7 @@ function renderTrackerDayChecklist() {
             heading
         );
 
-        categoryGoals.forEach(goal => {
+        visibleGoals.forEach(goal => {
 
             const row =
                 document.createElement("div");
@@ -9031,6 +10308,30 @@ function renderTrackerDayChecklist() {
             text.appendChild(
                 label
             );
+
+            if (trackerWeekSpecial && goal.specialWeekBehavior === "different") {
+
+                const note =
+                    document.createElement("div");
+
+                note.className =
+                    "checklist-item-note";
+
+                note.textContent =
+                    "Bijzondere week: aangepaste eis (" +
+                    goal.specialWeekTarget +
+                    (
+                        goal.type === "checkbox"
+                            ? " dagen"
+                            : (goal.unit ? " " + goal.unit : "")
+                    ) +
+                    ")";
+
+                text.appendChild(
+                    note
+                );
+
+            }
 
             row.appendChild(
                 text
@@ -9167,13 +10468,28 @@ function renderTrackerDayChecklist() {
 
     if (!anyRendered) {
 
+        let message;
+
+        if (!trackerCategories.length) {
+
+            message =
+                "Nog geen doelen. Maak eerst een categorie aan, en voeg daarna je eerste doel toe met de knoppen hierboven.";
+
+        } else if (anyApplicable && trackerWeekSpecial) {
+
+            message =
+                "De doelen voor deze dag vervallen deze week, omdat dit een bijzondere week is.";
+
+        } else {
+
+            message =
+                "Voor deze dag zijn nog geen doelen ingesteld.";
+
+        }
+
         container.innerHTML =
             '<div class="empty-state">' +
-            (
-                trackerCategories.length
-                    ? "Voor deze dag zijn nog geen doelen ingesteld."
-                    : "Nog geen doelen. Maak eerst een categorie aan, en voeg daarna je eerste doel toe met de knoppen hierboven."
-            ) +
+            message +
             "</div>";
 
     }
@@ -9256,10 +10572,6 @@ function renderTrackerWeekOverview() {
     grid.innerHTML = "";
 
     if (!trackerCategories.length || !trackerGoals.length) {
-
-        grid.innerHTML =
-            '<div class="empty-state" style="grid-column:1/-1">Zodra je doelen toevoegt, verschijnt hier automatisch per categorie de voortgang van deze week.</div>';
-
         return;
     }
 
@@ -9267,7 +10579,12 @@ function renderTrackerWeekOverview() {
 
         const categoryGoals =
             trackerGoals.filter(
-                g => g.categoryId === category.id
+                g =>
+                    g.categoryId === category.id &&
+                    !(
+                        special &&
+                        g.specialWeekBehavior === "skip"
+                    )
             );
 
         if (!categoryGoals.length) {
@@ -9308,6 +10625,11 @@ function renderTrackerWeekOverview() {
                         )
                 );
 
+            const usesSpecialTarget =
+                special &&
+                goal.specialWeekBehavior === "different" &&
+                goal.specialWeekTarget !== null;
+
             let current, target;
 
             if (goal.type === "checkbox") {
@@ -9319,11 +10641,9 @@ function renderTrackerWeekOverview() {
                     ).length;
 
                 target =
-                    goal.weeklyTarget;
-
-                if (special && goal.frequency === "daily") {
-                    target = Math.max(target - 1, 0);
-                }
+                    usesSpecialTarget
+                        ? goal.specialWeekTarget
+                        : goal.weeklyTarget;
 
             } else {
 
@@ -9340,7 +10660,9 @@ function renderTrackerWeekOverview() {
                     );
 
                 target =
-                    goal.weeklyTarget;
+                    usesSpecialTarget
+                        ? goal.specialWeekTarget
+                        : goal.weeklyTarget;
 
             }
 
@@ -9366,6 +10688,7 @@ function renderTrackerWeekOverview() {
             row.innerHTML =
                 '<div class="overview-goal-top"><span class="overview-goal-label">' +
                 goal.label +
+                (usesSpecialTarget ? " (bijzondere week)" : "") +
                 '</span><span class="overview-goal-value">' +
                 current + " / " + target + " " + unit +
                 '</span></div><div class="overview-progress-track"><div class="overview-progress-fill' +
@@ -9383,6 +10706,1678 @@ function renderTrackerWeekOverview() {
         );
 
     });
+}
+
+
+/* =========================================================
+   AGENDA — HELPERS
+========================================================= */
+
+const agendaWeekdayLabels =
+    ["Ma", "Di", "Wo", "Do", "Vr", "Za", "Zo"];
+
+function getMonthLabel(
+    yearMonth
+) {
+
+    const [
+        year,
+        month
+    ] =
+        yearMonth.split("-").map(
+            Number
+        );
+
+    const date =
+        new Date(
+            year,
+            month - 1,
+            1
+        );
+
+    const label =
+        date.toLocaleDateString(
+            "nl-NL",
+            {
+                month:"long",
+                year:"numeric"
+            }
+        );
+
+    return label.charAt(0).toUpperCase() + label.slice(1);
+}
+
+
+function getMonthDates(
+    yearMonth
+) {
+
+    const [
+        year,
+        month
+    ] =
+        yearMonth.split("-").map(
+            Number
+        );
+
+    const daysInMonth =
+        new Date(
+            year,
+            month,
+            0
+        ).getDate();
+
+    const dates = [];
+
+    for (let day = 1; day <= daysInMonth; day++) {
+
+        const y = year;
+
+        const m =
+            String(month).padStart(2, "0");
+
+        const d =
+            String(day).padStart(2, "0");
+
+        dates.push(
+            `${y}-${m}-${d}`
+        );
+
+    }
+
+    return dates;
+}
+
+
+function getAgendaItemsForDate(
+    dateString
+) {
+
+    const items = [];
+
+    deadlines
+        .filter(
+            deadline =>
+                deadline.deadline_date === dateString
+        )
+        .forEach(deadline => {
+
+            items.push({
+                type:"deadline",
+                label:deadline.title,
+                completed:deadline.completed,
+                meta:"Deadline"
+            });
+
+        });
+
+    huiswerk
+        .filter(
+            item =>
+                item.deadline_date === dateString
+        )
+        .forEach(item => {
+
+            items.push({
+                type:"huiswerk",
+                label:item.subject + " — " + item.task,
+                completed:item.completed,
+                meta:"Huiswerk"
+            });
+
+        });
+
+    agendaEvents
+        .filter(
+            event =>
+                event.event_date === dateString
+        )
+        .forEach(event => {
+
+            items.push({
+                type:"event",
+                label:event.title,
+                completed:false,
+                meta:"Eigen afspraak",
+                time:event.event_time,
+                id:event.id
+            });
+
+        });
+
+    items.sort((a, b) => {
+
+        if (a.type === "event" && b.type === "event") {
+            return (a.time || "").localeCompare(b.time || "");
+        }
+
+        return 0;
+
+    });
+
+    return items;
+}
+
+
+/* =========================================================
+   AGENDA — INITIALISATIE EN LADEN
+========================================================= */
+
+function initAgenda() {
+
+    if (!agendaViewMonth) {
+
+        agendaViewMonth =
+            getToday().slice(0, 7);
+
+        agendaSelectedDate =
+            getToday();
+
+    }
+
+    loadAgendaEvents();
+}
+
+
+async function loadAgendaEventsData() {
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("agenda_events")
+            .select("*")
+            .order("event_date", {
+                ascending:true
+            });
+
+    if (error) {
+
+        console.error(
+            "Agenda-afspraken laden:",
+            error
+        );
+
+        return;
+    }
+
+    agendaEvents =
+        data || [];
+}
+
+
+async function loadAgendaEvents() {
+
+    await loadAgendaEventsData();
+
+    renderAgendaAll();
+}
+
+
+function renderAgendaAll() {
+    renderAgendaGrid();
+    renderAgendaDetail();
+}
+
+
+/* =========================================================
+   AGENDA — MAANDNAVIGATIE
+========================================================= */
+
+function changeAgendaMonth(
+    delta
+) {
+
+    const [
+        year,
+        month
+    ] =
+        agendaViewMonth.split("-").map(
+            Number
+        );
+
+    const date =
+        new Date(
+            year,
+            month - 1 + delta,
+            1
+        );
+
+    const y =
+        date.getFullYear();
+
+    const m =
+        String(
+            date.getMonth() + 1
+        ).padStart(2, "0");
+
+    agendaViewMonth =
+        `${y}-${m}`;
+
+    agendaSelectedDate =
+        `${y}-${m}-01`;
+
+    renderAgendaAll();
+}
+
+
+function goToAgendaToday() {
+
+    agendaViewMonth =
+        getToday().slice(0, 7);
+
+    agendaSelectedDate =
+        getToday();
+
+    renderAgendaAll();
+}
+
+
+function selectAgendaDate(
+    dateString
+) {
+
+    agendaSelectedDate =
+        dateString;
+
+    renderAgendaAll();
+}
+
+
+/* =========================================================
+   AGENDA — RENDEREN
+========================================================= */
+
+function renderAgendaGrid() {
+
+    document.getElementById(
+        "agendaMonthLabel"
+    ).textContent =
+        getMonthLabel(
+            agendaViewMonth
+        );
+
+    const container =
+        document.getElementById(
+            "agendaGrid"
+        );
+
+    container.innerHTML = "";
+
+    agendaWeekdayLabels.forEach(label => {
+
+        const headerCell =
+            document.createElement("div");
+
+        headerCell.className =
+            "agenda-weekday-label";
+
+        headerCell.textContent =
+            label;
+
+        container.appendChild(
+            headerCell
+        );
+
+    });
+
+    const monthDates =
+        getMonthDates(
+            agendaViewMonth
+        );
+
+    const firstWeekday =
+        getWeekdayKey(
+            monthDates[0]
+        );
+
+    const weekdayOrder =
+        {
+            maandag:0,
+            dinsdag:1,
+            woensdag:2,
+            donderdag:3,
+            vrijdag:4,
+            zaterdag:5,
+            zondag:6
+        };
+
+    const leadingEmpty =
+        weekdayOrder[firstWeekday];
+
+    for (let i = 0; i < leadingEmpty; i++) {
+
+        const emptyCell =
+            document.createElement("div");
+
+        emptyCell.className =
+            "agenda-day-cell empty";
+
+        container.appendChild(
+            emptyCell
+        );
+
+    }
+
+    monthDates.forEach(date => {
+
+        const items =
+            getAgendaItemsForDate(date);
+
+        const cell =
+            document.createElement("button");
+
+        cell.type = "button";
+
+        cell.className =
+            "agenda-day-cell" +
+            (
+                date === getToday()
+                    ? " today"
+                    : ""
+            ) +
+            (
+                date === agendaSelectedDate
+                    ? " selected"
+                    : ""
+            );
+
+        cell.onclick =
+            () =>
+                selectAgendaDate(
+                    date
+                );
+
+        const number =
+            document.createElement("div");
+
+        number.className =
+            "agenda-day-number";
+
+        number.textContent =
+            String(
+                Number(
+                    date.slice(8, 10)
+                )
+            );
+
+        cell.appendChild(
+            number
+        );
+
+        const types =
+            [
+                ...new Set(
+                    items.map(item => item.type)
+                )
+            ];
+
+        if (types.length) {
+
+            const dots =
+                document.createElement("div");
+
+            dots.className =
+                "agenda-day-dots";
+
+            types.forEach(type => {
+
+                const dot =
+                    document.createElement("span");
+
+                dot.className =
+                    "agenda-dot " + type;
+
+                dots.appendChild(
+                    dot
+                );
+
+            });
+
+            cell.appendChild(
+                dots
+            );
+
+        }
+
+        container.appendChild(
+            cell
+        );
+
+    });
+}
+
+
+function renderAgendaDetail() {
+
+    const titleEl =
+        document.getElementById(
+            "agendaDetailTitle"
+        );
+
+    if (!agendaSelectedDate) {
+
+        titleEl.textContent =
+            "Kies een dag in de agenda";
+
+        document.getElementById(
+            "agendaDetailList"
+        ).innerHTML = "";
+
+        return;
+    }
+
+    const dayKey =
+        getWeekdayKey(
+            agendaSelectedDate
+        );
+
+    titleEl.textContent =
+        dayKey.charAt(0).toUpperCase() +
+        dayKey.slice(1) +
+        " " +
+        formatDeadlineDate(
+            agendaSelectedDate
+        );
+
+    const list =
+        document.getElementById(
+            "agendaDetailList"
+        );
+
+    list.innerHTML = "";
+
+    const items =
+        getAgendaItemsForDate(
+            agendaSelectedDate
+        );
+
+    if (!items.length) {
+
+        list.innerHTML =
+            '<div class="empty-state">Niets gepland op deze dag.</div>';
+
+        return;
+    }
+
+    items.forEach(item => {
+
+        const row =
+            document.createElement("div");
+
+        row.className =
+            "agenda-detail-item";
+
+        const dot =
+            document.createElement("div");
+
+        dot.className =
+            "agenda-detail-dot " + item.type;
+
+        row.appendChild(
+            dot
+        );
+
+        const text =
+            document.createElement("div");
+
+        text.className =
+            "agenda-detail-text";
+
+        const label =
+            document.createElement("div");
+
+        label.className =
+            "agenda-detail-label" +
+            (
+                item.completed
+                    ? " completed"
+                    : ""
+            );
+
+        label.textContent =
+            item.label;
+
+        text.appendChild(
+            label
+        );
+
+        const meta =
+            document.createElement("div");
+
+        meta.className =
+            "agenda-detail-meta";
+
+        meta.textContent =
+            item.meta;
+
+        text.appendChild(
+            meta
+        );
+
+        row.appendChild(
+            text
+        );
+
+        if (item.type === "event" && item.time) {
+
+            const time =
+                document.createElement("div");
+
+            time.className =
+                "agenda-detail-time";
+
+            time.textContent =
+                item.time.slice(0, 5);
+
+            row.appendChild(
+                time
+            );
+
+        }
+
+        if (item.type === "event") {
+
+            const deleteButton =
+                document.createElement("button");
+
+            deleteButton.className =
+                "delete-agenda-event";
+
+            deleteButton.title =
+                "Afspraak verwijderen";
+
+            deleteButton.innerHTML =
+                '<svg fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#trash"></use></svg>';
+
+            deleteButton.onclick =
+                () =>
+                    deleteAgendaEvent(
+                        item.id
+                    );
+
+            row.appendChild(
+                deleteButton
+            );
+
+        }
+
+        list.appendChild(
+            row
+        );
+
+    });
+}
+
+
+/* =========================================================
+   AGENDA — EIGEN AFSPRAKEN
+========================================================= */
+
+async function addAgendaEvent() {
+
+    if (!agendaSelectedDate) {
+
+        alert(
+            "Kies eerst een dag in de agenda."
+        );
+
+        return;
+    }
+
+    const titleInput =
+        document.getElementById(
+            "agendaEventTitleInput"
+        );
+
+    const timeInput =
+        document.getElementById(
+            "agendaEventTimeInput"
+        );
+
+    const title =
+        titleInput.value.trim();
+
+    if (!title) {
+
+        titleInput.focus();
+
+        return;
+    }
+
+    const user =
+        await getCurrentUser();
+
+    if (!user) {
+
+        alert(
+            "Je bent niet ingelogd."
+        );
+
+        return;
+    }
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("agenda_events")
+            .insert({
+                user_id:user.id,
+                title:title,
+                event_date:agendaSelectedDate,
+                event_time:timeInput.value || null
+            });
+
+    if (error) {
+
+        console.error(
+            "Afspraak toevoegen:",
+            error
+        );
+
+        alert(
+            "De afspraak kon niet worden toegevoegd."
+        );
+
+        return;
+    }
+
+    titleInput.value = "";
+    timeInput.value = "";
+
+    await loadAgendaEvents();
+}
+
+
+async function deleteAgendaEvent(id) {
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("agenda_events")
+            .delete()
+            .eq(
+                "id",
+                id
+            );
+
+    if (error) {
+
+        console.error(
+            "Afspraak verwijderen:",
+            error
+        );
+
+        return;
+    }
+
+    await loadAgendaEvents();
+}
+
+
+/* =========================================================
+   SUGGESTIES
+========================================================= */
+
+function resetSuggestionsView() {
+
+    document.getElementById(
+        "suggestionLockPanel"
+    ).style.display = "block";
+
+    document.getElementById(
+        "suggestionContentPanel"
+    ).style.display = "none";
+
+    document.getElementById(
+        "suggestionPasswordInput"
+    ).value = "";
+
+    document.getElementById(
+        "suggestionError"
+    ).classList.remove("show");
+
+    document.getElementById(
+        "suggestionSuccess"
+    ).classList.remove("show");
+}
+
+
+async function submitSuggestion() {
+
+    const textarea =
+        document.getElementById(
+            "suggestionTextarea"
+        );
+
+    const message =
+        textarea.value.trim();
+
+    if (!message) {
+
+        textarea.focus();
+
+        return;
+    }
+
+    const user =
+        await getCurrentUser();
+
+    if (!user) {
+
+        alert(
+            "Je bent niet ingelogd."
+        );
+
+        return;
+    }
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("suggestions")
+            .insert({
+                user_id:user.id,
+                user_email:user.email,
+                message:message
+            });
+
+    if (error) {
+
+        console.error(
+            "Suggestie versturen:",
+            error
+        );
+
+        alert(
+            "De suggestie kon niet worden verstuurd."
+        );
+
+        return;
+    }
+
+    textarea.value = "";
+
+    const success =
+        document.getElementById(
+            "suggestionSuccess"
+        );
+
+    success.classList.add(
+        "show"
+    );
+
+    setTimeout(
+        () =>
+            success.classList.remove("show"),
+        4000
+    );
+}
+
+
+function unlockSuggestions() {
+
+    const passwordInput =
+        document.getElementById(
+            "suggestionPasswordInput"
+        );
+
+    const error =
+        document.getElementById(
+            "suggestionError"
+        );
+
+    if (passwordInput.value !== "2791") {
+
+        error.classList.add(
+            "show"
+        );
+
+        passwordInput.value = "";
+        passwordInput.focus();
+
+        return;
+    }
+
+    error.classList.remove(
+        "show"
+    );
+
+    document.getElementById(
+        "suggestionLockPanel"
+    ).style.display = "none";
+
+    document.getElementById(
+        "suggestionContentPanel"
+    ).style.display = "block";
+
+    loadSuggestions();
+}
+
+
+async function loadSuggestions() {
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("suggestions")
+            .select("*")
+            .order("created_at", {
+                ascending:false
+            });
+
+    if (error) {
+
+        console.error(
+            "Suggesties laden:",
+            error
+        );
+
+        return;
+    }
+
+    suggestions =
+        data || [];
+
+    renderSuggestionList();
+}
+
+
+function renderSuggestionList() {
+
+    const list =
+        document.getElementById(
+            "suggestionList"
+        );
+
+    list.innerHTML = "";
+
+    if (!suggestions.length) {
+
+        list.innerHTML =
+            '<div class="empty-state">Nog geen suggesties binnengekomen.</div>';
+
+        return;
+    }
+
+    suggestions.forEach(suggestion => {
+
+        const item =
+            document.createElement("div");
+
+        item.className =
+            "suggestion-item";
+
+        const top =
+            document.createElement("div");
+
+        top.className =
+            "suggestion-item-top";
+
+        const meta =
+            document.createElement("div");
+
+        meta.className =
+            "suggestion-item-meta";
+
+        meta.textContent =
+            (suggestion.user_email || "Onbekend account") +
+            " — " +
+            formatDeadlineDate(
+                suggestion.created_at.slice(0, 10)
+            );
+
+        top.appendChild(
+            meta
+        );
+
+        const deleteButton =
+            document.createElement("button");
+
+        deleteButton.className =
+            "delete-suggestion-button";
+
+        deleteButton.title =
+            "Suggestie verwijderen";
+
+        deleteButton.innerHTML =
+            '<svg fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#trash"></use></svg>';
+
+        deleteButton.onclick =
+            () =>
+                deleteSuggestion(
+                    suggestion.id
+                );
+
+        top.appendChild(
+            deleteButton
+        );
+
+        item.appendChild(
+            top
+        );
+
+        const message =
+            document.createElement("div");
+
+        message.className =
+            "suggestion-item-message";
+
+        message.textContent =
+            suggestion.message;
+
+        item.appendChild(
+            message
+        );
+
+        list.appendChild(
+            item
+        );
+
+    });
+}
+
+
+async function deleteSuggestion(id) {
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("suggestions")
+            .delete()
+            .eq(
+                "id",
+                id
+            );
+
+    if (error) {
+
+        console.error(
+            "Suggestie verwijderen:",
+            error
+        );
+
+        return;
+    }
+
+    await loadSuggestions();
+}
+
+
+/* =========================================================
+   MELDINGEN — HELPERS
+========================================================= */
+
+function defaultNotificationSettings() {
+
+    return {
+        deadline_offsets:[7, 1, 0],
+        huiswerk_offsets:[3, 1, 0],
+        agenda_offsets:[1, 0],
+        goals_reminder_time:null,
+        browser_notifications_enabled:false
+    };
+}
+
+
+function addDaysToDate(
+    dateString,
+    delta
+) {
+
+    const [
+        year,
+        month,
+        day
+    ] =
+        dateString.split("-").map(
+            Number
+        );
+
+    const date =
+        new Date(
+            year,
+            month - 1,
+            day + delta
+        );
+
+    const y =
+        date.getFullYear();
+
+    const m =
+        String(
+            date.getMonth() + 1
+        ).padStart(2, "0");
+
+    const d =
+        String(
+            date.getDate()
+        ).padStart(2, "0");
+
+    return `${y}-${m}-${d}`;
+}
+
+
+function offsetLabel(offset) {
+
+    if (offset === 0) {
+        return "Vandaag";
+    }
+
+    if (offset === 1) {
+        return "Morgen";
+    }
+
+    if (offset === 7) {
+        return "Over 1 week";
+    }
+
+    if (offset === 14) {
+        return "Over 2 weken";
+    }
+
+    return "Over " + offset + " dagen";
+}
+
+
+async function checkTodayGoalsFilled() {
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("tracker_entries")
+            .select("data")
+            .eq(
+                "entry_date",
+                getToday()
+            )
+            .maybeSingle();
+
+    if (error) {
+
+        console.error(
+            "Doelen-check mislukt:",
+            error
+        );
+
+        return true;
+    }
+
+    return !!(
+        data &&
+        data.data &&
+        Object.keys(data.data).length > 0
+    );
+}
+
+
+/* =========================================================
+   MELDINGEN — LADEN EN BEREKENEN
+========================================================= */
+
+async function loadNotificationSettings() {
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("notification_settings")
+            .select("*")
+            .maybeSingle();
+
+    if (error) {
+
+        console.error(
+            "Meldingsinstellingen laden:",
+            error
+        );
+
+    }
+
+    notificationSettings =
+        data || defaultNotificationSettings();
+}
+
+
+async function saveNotificationSettings() {
+
+    const user =
+        await getCurrentUser();
+
+    if (!user) {
+        return;
+    }
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("notification_settings")
+            .upsert(
+                {
+                    user_id:user.id,
+                    deadline_offsets:notificationSettings.deadline_offsets,
+                    huiswerk_offsets:notificationSettings.huiswerk_offsets,
+                    agenda_offsets:notificationSettings.agenda_offsets,
+                    goals_reminder_time:notificationSettings.goals_reminder_time,
+                    browser_notifications_enabled:notificationSettings.browser_notifications_enabled
+                },
+                {
+                    onConflict:"user_id"
+                }
+            );
+
+    if (error) {
+
+        console.error(
+            "Meldingsinstellingen opslaan:",
+            error
+        );
+
+    }
+}
+
+
+async function computeDueReminders() {
+
+    const today =
+        getToday();
+
+    const settings =
+        notificationSettings ||
+        defaultNotificationSettings();
+
+    const reminders = [];
+
+    deadlines
+        .filter(deadline => !deadline.completed)
+        .forEach(deadline => {
+
+            (settings.deadline_offsets || []).forEach(offset => {
+
+                if (
+                    addDaysToDate(deadline.deadline_date, -offset) ===
+                    today
+                ) {
+
+                    reminders.push({
+                        type:"deadline",
+                        label:deadline.title,
+                        meta:offsetLabel(offset),
+                        key:"deadline-" + deadline.id + "-" + offset
+                    });
+
+                }
+
+            });
+
+        });
+
+    huiswerk
+        .filter(item => !item.completed)
+        .forEach(item => {
+
+            (settings.huiswerk_offsets || []).forEach(offset => {
+
+                if (
+                    addDaysToDate(item.deadline_date, -offset) ===
+                    today
+                ) {
+
+                    reminders.push({
+                        type:"huiswerk",
+                        label:item.subject + " — " + item.task,
+                        meta:offsetLabel(offset),
+                        key:"huiswerk-" + item.id + "-" + offset
+                    });
+
+                }
+
+            });
+
+        });
+
+    agendaEvents.forEach(event => {
+
+        (settings.agenda_offsets || []).forEach(offset => {
+
+            if (
+                addDaysToDate(event.event_date, -offset) ===
+                today
+            ) {
+
+                reminders.push({
+                    type:"event",
+                    label:event.title,
+                    meta:offsetLabel(offset),
+                    key:"event-" + event.id + "-" + offset
+                });
+
+            }
+
+        });
+
+    });
+
+    if (settings.goals_reminder_time) {
+
+        const nowTime =
+            new Date().toTimeString().slice(0, 5);
+
+        if (nowTime >= settings.goals_reminder_time.slice(0, 5)) {
+
+            const filled =
+                await checkTodayGoalsFilled();
+
+            if (!filled) {
+
+                reminders.push({
+                    type:"goal",
+                    label:"Doelen van vandaag nog niet ingevuld",
+                    meta:"Herinnering",
+                    key:"goal-" + today
+                });
+
+            }
+
+        }
+
+    }
+
+    dueReminders =
+        reminders;
+}
+
+
+async function refreshDueReminders() {
+
+    await computeDueReminders();
+
+    renderDueReminders();
+
+    fireBrowserNotificationsIfNeeded();
+}
+
+
+/* =========================================================
+   MELDINGEN — RENDEREN
+========================================================= */
+
+function updateNotificationBadge(count) {
+
+    const badge =
+        document.getElementById(
+            "notificationBadge"
+        );
+
+    if (count > 0) {
+
+        badge.textContent =
+            count > 9
+                ? "9+"
+                : String(count);
+
+        badge.style.display = "flex";
+
+    } else {
+
+        badge.style.display = "none";
+
+    }
+}
+
+
+function renderDueReminders() {
+
+    const list =
+        document.getElementById(
+            "dueRemindersList"
+        );
+
+    list.innerHTML = "";
+
+    if (!dueReminders.length) {
+
+        list.innerHTML =
+            '<div class="empty-state">Niets dat nu aandacht nodig heeft.</div>';
+
+        updateNotificationBadge(0);
+
+        return;
+    }
+
+    dueReminders.forEach(reminder => {
+
+        const row =
+            document.createElement("div");
+
+        row.className =
+            "agenda-detail-item";
+
+        const dot =
+            document.createElement("div");
+
+        dot.className =
+            "agenda-detail-dot " + reminder.type;
+
+        row.appendChild(
+            dot
+        );
+
+        const text =
+            document.createElement("div");
+
+        text.className =
+            "agenda-detail-text";
+
+        const label =
+            document.createElement("div");
+
+        label.className =
+            "agenda-detail-label";
+
+        label.textContent =
+            reminder.label;
+
+        text.appendChild(
+            label
+        );
+
+        const meta =
+            document.createElement("div");
+
+        meta.className =
+            "agenda-detail-meta";
+
+        meta.textContent =
+            reminder.meta;
+
+        text.appendChild(
+            meta
+        );
+
+        row.appendChild(
+            text
+        );
+
+        list.appendChild(
+            row
+        );
+
+    });
+
+    updateNotificationBadge(
+        dueReminders.length
+    );
+}
+
+
+function renderOffsetChips(category) {
+
+    const container =
+        document.getElementById(
+            category + "OffsetChips"
+        );
+
+    container.innerHTML = "";
+
+    const selected =
+        notificationSettings[category + "_offsets"] || [];
+
+    offsetOptions.forEach(option => {
+
+        const chip =
+            document.createElement("button");
+
+        chip.type = "button";
+
+        chip.className =
+            "offset-chip" +
+            (
+                selected.includes(option.value)
+                    ? " selected"
+                    : ""
+            );
+
+        chip.textContent =
+            option.label;
+
+        chip.onclick =
+            () =>
+                toggleOffset(
+                    category,
+                    option.value
+                );
+
+        container.appendChild(
+            chip
+        );
+
+    });
+}
+
+
+async function toggleOffset(
+    category,
+    offset
+) {
+
+    const key =
+        category + "_offsets";
+
+    const current =
+        notificationSettings[key] || [];
+
+    const index =
+        current.indexOf(offset);
+
+    if (index === -1) {
+        current.push(offset);
+    } else {
+        current.splice(index, 1);
+    }
+
+    current.sort((a, b) => a - b);
+
+    notificationSettings[key] =
+        current;
+
+    await saveNotificationSettings();
+
+    renderOffsetChips(category);
+
+    await refreshDueReminders();
+}
+
+
+/* =========================================================
+   MELDINGEN — DOELEN EN SYSTEEMMELDINGEN
+========================================================= */
+
+async function toggleGoalsReminderEnabled() {
+
+    const enabled =
+        document.getElementById(
+            "goalsReminderEnabled"
+        ).checked;
+
+    const timeInput =
+        document.getElementById(
+            "goalsReminderTimeInput"
+        );
+
+    timeInput.disabled = !enabled;
+
+    if (!enabled) {
+
+        notificationSettings.goals_reminder_time = null;
+
+    } else {
+
+        if (!timeInput.value) {
+            timeInput.value = "20:00";
+        }
+
+        notificationSettings.goals_reminder_time =
+            timeInput.value;
+
+    }
+
+    await saveNotificationSettings();
+    await refreshDueReminders();
+}
+
+
+async function saveGoalsReminderTime() {
+
+    notificationSettings.goals_reminder_time =
+        document.getElementById(
+            "goalsReminderTimeInput"
+        ).value;
+
+    await saveNotificationSettings();
+    await refreshDueReminders();
+}
+
+
+async function toggleBrowserNotifications() {
+
+    const checkbox =
+        document.getElementById(
+            "browserNotificationsEnabled"
+        );
+
+    const status =
+        document.getElementById(
+            "browserNotificationStatus"
+        );
+
+    if (checkbox.checked) {
+
+        if (!("Notification" in window)) {
+
+            status.textContent =
+                "Je browser ondersteunt geen systeemmeldingen.";
+
+            checkbox.checked = false;
+
+            return;
+        }
+
+        const permission =
+            await Notification.requestPermission();
+
+        if (permission !== "granted") {
+
+            status.textContent =
+                "Toestemming niet gegeven. Je kunt dit later opnieuw proberen, of aanzetten via de browserinstellingen van deze site.";
+
+            checkbox.checked = false;
+
+            notificationSettings.browser_notifications_enabled = false;
+
+            await saveNotificationSettings();
+
+            return;
+        }
+
+        status.textContent =
+            "Systeemmeldingen staan aan, zolang deze website ergens open staat.";
+
+        notificationSettings.browser_notifications_enabled = true;
+
+    } else {
+
+        status.textContent = "";
+
+        notificationSettings.browser_notifications_enabled = false;
+
+    }
+
+    await saveNotificationSettings();
+}
+
+
+function fireBrowserNotificationsIfNeeded() {
+
+    if (!notificationSettings || !notificationSettings.browser_notifications_enabled) {
+        return;
+    }
+
+    if (!("Notification" in window) || Notification.permission !== "granted") {
+        return;
+    }
+
+    dueReminders.forEach(reminder => {
+
+        const storageKey =
+            "notified_" + reminder.key;
+
+        if (localStorage.getItem(storageKey) === getToday()) {
+            return;
+        }
+
+        new Notification(
+            "Persoonlijk dashboard",
+            {
+                body:reminder.label + " — " + reminder.meta
+            }
+        );
+
+        localStorage.setItem(
+            storageKey,
+            getToday()
+        );
+
+    });
+}
+
+
+/* =========================================================
+   MELDINGEN — INITIALISATIE
+========================================================= */
+
+async function initMeldingen() {
+
+    if (!notificationSettings) {
+        await loadNotificationSettings();
+    }
+
+    renderOffsetChips("deadline");
+    renderOffsetChips("huiswerk");
+    renderOffsetChips("agenda");
+
+    document.getElementById(
+        "goalsReminderEnabled"
+    ).checked =
+        !!notificationSettings.goals_reminder_time;
+
+    document.getElementById(
+        "goalsReminderTimeInput"
+    ).value =
+        notificationSettings.goals_reminder_time || "20:00";
+
+    document.getElementById(
+        "goalsReminderTimeInput"
+    ).disabled =
+        !notificationSettings.goals_reminder_time;
+
+    document.getElementById(
+        "browserNotificationsEnabled"
+    ).checked =
+        !!notificationSettings.browser_notifications_enabled;
+
+    await refreshDueReminders();
 }
 
 
@@ -9795,6 +12790,42 @@ function formatDeadlineDate(
 ========================================================= */
 
 document
+    .getElementById(
+        "agendaEventTitleInput"
+    )
+    .addEventListener(
+        "keydown",
+        event => {
+
+            if (
+                event.key === "Enter"
+            ) {
+                addAgendaEvent();
+            }
+
+        }
+    );
+
+
+document
+    .getElementById(
+        "suggestionPasswordInput"
+    )
+    .addEventListener(
+        "keydown",
+        event => {
+
+            if (
+                event.key === "Enter"
+            ) {
+                unlockSuggestions();
+            }
+
+        }
+    );
+
+
+document
     .getElementById("emailInput")
     .addEventListener(
         "keydown",
@@ -9899,6 +12930,24 @@ document
 document
     .getElementById(
         "deadlineTitleInput"
+    )
+    .addEventListener(
+        "keydown",
+        event => {
+
+            if (
+                event.key === "Enter"
+            ) {
+                addDeadline();
+            }
+
+        }
+    );
+
+
+document
+    .getElementById(
+        "deadlineDateInput"
     )
     .addEventListener(
         "keydown",
@@ -10112,6 +13161,24 @@ document
 document
     .getElementById(
         "goalLabelInput"
+    )
+    .addEventListener(
+        "keydown",
+        event => {
+
+            if (
+                event.key === "Enter"
+            ) {
+                saveGoal();
+            }
+
+        }
+    );
+
+
+document
+    .getElementById(
+        "goalSpecialTargetInput"
     )
     .addEventListener(
         "keydown",
