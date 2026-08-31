@@ -1,0 +1,26 @@
+{
+  "name": "Persoonlijk Dashboard",
+  "short_name": "Dashboard",
+  "description": "Persoonlijk dashboard voor notities, deadlines, huiswerk, cijfers en doelen",
+  "lang": "nl",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#343833",
+  "theme_color": "#343833",
+  "icons": [
+    {
+      "src": "favicon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "favicon-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
