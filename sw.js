@@ -8,7 +8,7 @@
 /* Zelfde publieke VAPID-sleutel als in index.html.
    Alleen nodig om opnieuw te kunnen abonneren als de browser
    het abonnement vernieuwt. */
-const VAPID_PUBLIC_KEY = "VUL_HIER_JE_PUBLIEKE_VAPID_SLEUTEL_IN";
+const VAPID_PUBLIC_KEY = "BBGet23Ehe5AXcRl-ILtY3oytuLiZJwr_xD6TxIwaGUSL2iJ2wsveMKA26UsSE9POJ5EwaaY0WrhwE8E-yU6PI8";
 
 
 self.addEventListener("install", () => {
