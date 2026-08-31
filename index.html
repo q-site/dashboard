@@ -3743,42 +3743,6 @@ Ideeën of verbeteringen voor deze website doorgeven.
 
 </article>
 
-
-<article class="dashboard-card">
-
-<div class="card-icon">
-<svg fill="none"
-     stroke="currentColor"
-     stroke-width="1.8"
-     stroke-linecap="round"
-     stroke-linejoin="round">
-    <use href="#bell"></use>
-</svg>
-</div>
-
-<h2>Meldingen</h2>
-
-<p>
-Herinneringen voor deadlines, huiswerk, agenda en doelen instellen.
-</p>
-
-<button
-    class="card-button"
-    onclick="openPage('meldingenPage')"
->
-    Openen
-
-    <svg fill="none"
-         stroke="currentColor"
-         stroke-width="1.8"
-         stroke-linecap="round"
-         stroke-linejoin="round">
-        <use href="#arrow-right"></use>
-    </svg>
-</button>
-
-</article>
-
 </div>
 
 
@@ -5326,20 +5290,8 @@ function toggleTheme() {
             "theme"
         );
 
-    if (savedTheme) {
-
-        applyTheme(savedTheme);
-
-        return;
-    }
-
-    const prefersDark =
-        window.matchMedia(
-            "(prefers-color-scheme: dark)"
-        ).matches;
-
     applyTheme(
-        prefersDark
+        savedTheme === "dark"
             ? "dark"
             : "light"
     );
