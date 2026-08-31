@@ -6,6 +6,7 @@
 <meta name="theme-color" content="#343833">
 <link rel="icon" type="image/png" sizes="512x512" href="favicon.png">
 <link rel="apple-touch-icon" href="favicon.png">
+<link rel="manifest" href="manifest.json">
 <title>Persoonlijk Dashboard</title>
 
 <style>
@@ -2581,6 +2582,37 @@ main {
     opacity:.5;
 }
 
+/* TIJDELIJK — testknop pushnotificaties */
+.notif-test-button {
+    height:40px;
+    margin-top:12px;
+    padding:0 16px;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    border:1px solid var(--border);
+    border-radius:8px;
+    background:var(--white);
+    color:var(--anthracite);
+    font-size:13px;
+    font-weight:600;
+}
+
+.notif-test-button:hover:not(:disabled) {
+    background:var(--light);
+}
+
+.notif-test-button:disabled {
+    opacity:.55;
+    cursor:wait;
+}
+
+.notif-test-button svg {
+    width:15px;
+    height:15px;
+    color:var(--olive);
+}
+
 /* =========================================================
    MODAL
 ========================================================= */
@@ -4705,8 +4737,8 @@ Dagelijkse herinnering aan
 </div>
 
 <div class="notif-setting-group">
-<h3>Systeemmeldingen</h3>
-<p>Toon meldingen ook als systeemmelding, zolang deze website ergens open staat (ook op de achtergrond). Dit werkt niet wanneer de browser volledig gesloten is — dat is een beperking van wat in een website mogelijk is, niet iets wat hier aan te passen valt.</p>
+<h3>Pushnotificaties</h3>
+<p>Ontvang je herinneringen als echte pushnotificatie op dit apparaat, ook wanneer deze website dicht is. Je zet dit per apparaat apart aan. Op iPhone en iPad moet je de site eerst via het deelmenu aan je beginscherm toevoegen en hem daarna vanaf dat icoon openen.</p>
 
 <label class="notif-toggle-row">
 <input
@@ -4714,13 +4746,35 @@ Dagelijkse herinnering aan
     type="checkbox"
     onchange="toggleBrowserNotifications()"
 >
-Systeemmeldingen inschakelen
+Pushnotificaties inschakelen op dit apparaat
 </label>
 
 <div
     id="browserNotificationStatus"
     class="modal-hint"
 ></div>
+
+<!-- TIJDELIJK: testknop. Verwijder dit blok, de functie
+     sendTestNotification, de .notif-test-button-stijlen en de
+     Edge Function send-test-push zodra alles werkt. -->
+<button
+    id="pushTestButton"
+    class="notif-test-button"
+    type="button"
+    onclick="sendTestNotification()"
+>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+<path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+</svg>
+<span id="pushTestButtonLabel">Testmelding sturen</span>
+</button>
+
+<div
+    id="pushTestStatus"
+    class="modal-hint"
+></div>
+<!-- EINDE TIJDELIJK -->
 </div>
 
 </div>
@@ -5309,6 +5363,13 @@ const SUPABASE_URL =
 const SUPABASE_KEY =
     "sb_publishable_2-C21qtuPZbxawIAu2liyg_kT2ua_Ac";
 
+/* Publieke VAPID-sleutel voor pushnotificaties.
+   Deze mag in de broncode staan. De private sleutel hoort
+   uitsluitend in de Supabase-secrets (VAPID_KEYS).
+   Zelfde waarde als bovenin sw.js. */
+const VAPID_PUBLIC_KEY =
+    "VUL_HIER_JE_PUBLIEKE_VAPID_SLEUTEL_IN";
+
 const supabaseClient =
     supabase.createClient(
         SUPABASE_URL,
@@ -5684,6 +5745,10 @@ async function showWebsite() {
 
 async function logout() {
 
+    /* Dit apparaat afmelden voor push, zodat er geen
+       meldingen meer binnenkomen na het uitloggen. */
+    await removePushSubscription();
+
     const {
         error
     } =
@@ -5914,6 +5979,8 @@ async function loadAllData() {
     renderQuickStats();
 
     await refreshDueReminders();
+
+    await syncPushSubscription();
 
     startNotificationInterval();
 }
@@ -12002,13 +12069,14 @@ async function computeDueReminders() {
 }
 
 
+/* Berekent alleen nog het belletje en het lijstje in de app.
+   Het versturen van meldingen gebeurt serverkant, in de
+   Edge Function send-reminders. */
 async function refreshDueReminders() {
 
     await computeDueReminders();
 
     renderDueReminders();
-
-    fireBrowserNotificationsIfNeeded();
 }
 
 
@@ -12253,6 +12321,265 @@ async function saveGoalsReminderTime() {
 }
 
 
+/* ---------------------------------------------------------
+   PUSH — HULPFUNCTIES
+--------------------------------------------------------- */
+
+function urlBase64ToUint8Array(base64String) {
+
+    const padding =
+        "=".repeat((4 - (base64String.length % 4)) % 4);
+
+    const base64 =
+        (base64String + padding)
+            .replace(/-/g, "+")
+            .replace(/_/g, "/");
+
+    const raw =
+        atob(base64);
+
+    const output =
+        new Uint8Array(raw.length);
+
+    for (let i = 0; i < raw.length; i++) {
+        output[i] = raw.charCodeAt(i);
+    }
+
+    return output;
+}
+
+
+function pushIsSupported() {
+
+    return (
+        "serviceWorker" in navigator &&
+        "PushManager" in window &&
+        "Notification" in window
+    );
+}
+
+
+/* Op iPhone en iPad bestaat PushManager alleen in een vanaf
+   het beginscherm geopende PWA, niet in een Safari-tabblad. */
+function isIosWithoutHomescreen() {
+
+    const isIos =
+        /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+        (
+            navigator.platform === "MacIntel" &&
+            navigator.maxTouchPoints > 1
+        );
+
+    const isStandalone =
+        window.matchMedia("(display-mode: standalone)").matches ||
+        window.navigator.standalone === true;
+
+    return isIos && !isStandalone;
+}
+
+
+async function registerServiceWorker() {
+
+    const registration =
+        await navigator.serviceWorker.register(
+            "sw.js"
+        );
+
+    await navigator.serviceWorker.ready;
+
+    return registration;
+}
+
+
+async function ensurePushSubscription() {
+
+    const registration =
+        await registerServiceWorker();
+
+    let subscription =
+        await registration.pushManager.getSubscription();
+
+    if (!subscription) {
+
+        subscription =
+            await registration.pushManager.subscribe({
+                userVisibleOnly:true,
+                applicationServerKey:
+                    urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
+            });
+
+    }
+
+    return subscription;
+}
+
+
+async function storePushSubscription(subscription) {
+
+    const user =
+        await getCurrentUser();
+
+    if (!user) {
+        return;
+    }
+
+    const json =
+        subscription.toJSON();
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("push_subscriptions")
+            .upsert(
+                {
+                    user_id:user.id,
+                    endpoint:json.endpoint,
+                    p256dh:json.keys.p256dh,
+                    auth:json.keys.auth,
+                    user_agent:navigator.userAgent,
+                    last_seen_at:new Date().toISOString()
+                },
+                {
+                    onConflict:"endpoint"
+                }
+            );
+
+    if (error) {
+
+        console.error(
+            "Push-abonnement opslaan:",
+            error
+        );
+
+    }
+}
+
+
+async function removePushSubscription() {
+
+    if (!("serviceWorker" in navigator)) {
+        return;
+    }
+
+    try {
+
+        const registration =
+            await navigator.serviceWorker.getRegistration();
+
+        if (!registration) {
+            return;
+        }
+
+        const subscription =
+            await registration.pushManager.getSubscription();
+
+        if (!subscription) {
+            return;
+        }
+
+        await supabaseClient
+            .from("push_subscriptions")
+            .delete()
+            .eq(
+                "endpoint",
+                subscription.endpoint
+            );
+
+        await subscription.unsubscribe();
+
+    } catch (error) {
+
+        console.error(
+            "Afmelden voor push mislukt:",
+            error
+        );
+
+    }
+}
+
+
+/* Draait bij elke keer laden: vangt een door de browser
+   vernieuwd abonnement op en houdt de rij in de database
+   actueel, ook op een nieuw apparaat. */
+async function syncPushSubscription() {
+
+    if (
+        !notificationSettings ||
+        !notificationSettings.browser_notifications_enabled
+    ) {
+        return;
+    }
+
+    if (
+        !pushIsSupported() ||
+        Notification.permission !== "granted"
+    ) {
+        return;
+    }
+
+    try {
+
+        const subscription =
+            await ensurePushSubscription();
+
+        await storePushSubscription(
+            subscription
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Push-abonnement synchroniseren mislukt:",
+            error
+        );
+
+    }
+}
+
+
+function renderPushStatus() {
+
+    const status =
+        document.getElementById(
+            "browserNotificationStatus"
+        );
+
+    if (!notificationSettings.browser_notifications_enabled) {
+
+        status.textContent = "";
+
+        return;
+    }
+
+    if (isIosWithoutHomescreen()) {
+
+        status.textContent =
+            "Voeg deze site op je iPhone of iPad eerst toe aan je beginscherm en open hem vanaf dat icoon om pushnotificaties te ontvangen.";
+
+        return;
+    }
+
+    if (
+        !pushIsSupported() ||
+        Notification.permission !== "granted"
+    ) {
+
+        status.textContent =
+            "Meldingen staan aan in je instellingen, maar dit apparaat heeft nog geen toestemming gegeven. Zet de schakelaar uit en weer aan.";
+
+        return;
+    }
+
+    status.textContent =
+        "Pushnotificaties staan aan op dit apparaat. Je krijgt ze ook als de site dicht is.";
+}
+
+
+/* ---------------------------------------------------------
+   PUSH — AAN- EN UITZETTEN
+--------------------------------------------------------- */
+
 async function toggleBrowserNotifications() {
 
     const checkbox =
@@ -12265,90 +12592,210 @@ async function toggleBrowserNotifications() {
             "browserNotificationStatus"
         );
 
-    if (checkbox.checked) {
-
-        if (!("Notification" in window)) {
-
-            status.textContent =
-                "Je browser ondersteunt geen systeemmeldingen.";
-
-            checkbox.checked = false;
-
-            return;
-        }
-
-        const permission =
-            await Notification.requestPermission();
-
-        if (permission !== "granted") {
-
-            status.textContent =
-                "Toestemming niet gegeven. Je kunt dit later opnieuw proberen, of aanzetten via de browserinstellingen van deze site.";
-
-            checkbox.checked = false;
-
-            notificationSettings.browser_notifications_enabled = false;
-
-            await saveNotificationSettings();
-
-            return;
-        }
-
-        status.textContent =
-            "Systeemmeldingen staan aan, zolang deze website ergens open staat.";
-
-        notificationSettings.browser_notifications_enabled = true;
-
-        await saveNotificationSettings();
-
-        await refreshDueReminders();
-
-        return;
-
-    } else {
+    if (!checkbox.checked) {
 
         status.textContent = "";
 
         notificationSettings.browser_notifications_enabled = false;
 
+        await saveNotificationSettings();
+        await removePushSubscription();
+
+        return;
     }
+
+    if (isIosWithoutHomescreen()) {
+
+        status.textContent =
+            "Op iPhone en iPad werken pushnotificaties alleen als je deze site eerst via het deelmenu aan je beginscherm toevoegt en hem daarna vanaf dat icoon opent.";
+
+        checkbox.checked = false;
+
+        return;
+    }
+
+    if (!pushIsSupported()) {
+
+        status.textContent =
+            "Je browser ondersteunt geen pushnotificaties.";
+
+        checkbox.checked = false;
+
+        return;
+    }
+
+    const permission =
+        await Notification.requestPermission();
+
+    if (permission !== "granted") {
+
+        status.textContent =
+            "Toestemming niet gegeven. Je kunt dit later opnieuw proberen, of aanzetten via de browserinstellingen van deze site.";
+
+        checkbox.checked = false;
+
+        notificationSettings.browser_notifications_enabled = false;
+
+        await saveNotificationSettings();
+
+        return;
+    }
+
+    try {
+
+        const subscription =
+            await ensurePushSubscription();
+
+        await storePushSubscription(
+            subscription
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Aanmelden voor push mislukt:",
+            error
+        );
+
+        status.textContent =
+            "Aanmelden voor pushnotificaties is mislukt. Herlaad de pagina en probeer het opnieuw.";
+
+        checkbox.checked = false;
+
+        return;
+    }
+
+    status.textContent =
+        "Pushnotificaties staan aan op dit apparaat. Je krijgt ze ook als de site dicht is.";
+
+    notificationSettings.browser_notifications_enabled = true;
 
     await saveNotificationSettings();
 }
 
 
-function fireBrowserNotificationsIfNeeded() {
+/* ---------------------------------------------------------
+   TIJDELIJK — TESTMELDING
 
-    if (!notificationSettings || !notificationSettings.browser_notifications_enabled) {
+   Roept de Edge Function send-test-push aan, die één melding
+   naar alle apparaten van deze gebruiker stuurt. Verwijder
+   deze functie samen met de knop in het meldingenscherm zodra
+   alles werkt.
+--------------------------------------------------------- */
+
+async function sendTestNotification() {
+
+    const button =
+        document.getElementById(
+            "pushTestButton"
+        );
+
+    const label =
+        document.getElementById(
+            "pushTestButtonLabel"
+        );
+
+    const status =
+        document.getElementById(
+            "pushTestStatus"
+        );
+
+    status.textContent = "";
+
+    if (
+        !notificationSettings ||
+        !notificationSettings.browser_notifications_enabled
+    ) {
+
+        status.textContent =
+            "Zet pushnotificaties eerst aan met de schakelaar hierboven.";
+
         return;
     }
 
-    if (!("Notification" in window) || Notification.permission !== "granted") {
+    if (
+        !pushIsSupported() ||
+        Notification.permission !== "granted"
+    ) {
+
+        status.textContent =
+            "Dit apparaat heeft geen toestemming gegeven voor meldingen.";
+
         return;
     }
 
-    dueReminders.forEach(reminder => {
+    button.disabled = true;
+    label.textContent = "Bezig met versturen...";
 
-        const storageKey =
-            "notified_" + reminder.key;
+    try {
 
-        if (localStorage.getItem(storageKey) === getToday()) {
-            return;
+        /* Zorg dat het abonnement van dit apparaat zeker in de
+           database staat voordat we de functie aanroepen. */
+        const subscription =
+            await ensurePushSubscription();
+
+        await storePushSubscription(
+            subscription
+        );
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient.functions.invoke(
+                "send-test-push"
+            );
+
+        if (error) {
+            throw error;
         }
 
-        new Notification(
-            "Persoonlijk dashboard",
-            {
-                body:reminder.label + " — " + reminder.meta
-            }
+        if (!data || data.subscriptions === 0) {
+
+            status.textContent =
+                "Er staat nog geen apparaat geregistreerd. Zet de schakelaar uit en weer aan.";
+
+        } else if (data.sent === 0) {
+
+            status.textContent =
+                "Versturen is mislukt bij alle " + data.subscriptions +
+                " geregistreerde apparaten. Kijk in de logs van de Edge Function wat er misging.";
+
+        } else {
+
+            status.textContent =
+                "Testmelding verstuurd naar " + data.sent +
+                (
+                    data.sent === 1
+                        ? " apparaat."
+                        : " apparaten."
+                ) +
+                (
+                    data.removed > 0
+                        ? " " + data.removed + " verlopen abonnement(en) opgeruimd."
+                        : ""
+                ) +
+                " Zie je niets, controleer dan of meldingen voor je browser aanstaan in je systeeminstellingen.";
+
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Testmelding mislukt:",
+            error
         );
 
-        localStorage.setItem(
-            storageKey,
-            getToday()
-        );
+        status.textContent =
+            "Testmelding mislukt: " +
+            (error.message || "onbekende fout") + ".";
 
-    });
+    } finally {
+
+        button.disabled = false;
+        label.textContent = "Testmelding sturen";
+
+    }
 }
 
 
@@ -12385,6 +12832,8 @@ async function initMeldingen() {
         "browserNotificationsEnabled"
     ).checked =
         !!notificationSettings.browser_notifications_enabled;
+
+    renderPushStatus();
 
     await refreshDueReminders();
 }
