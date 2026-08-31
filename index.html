@@ -1626,15 +1626,120 @@ main {
     align-items:center;
     justify-content:center;
     gap:8px;
-    margin-bottom:20px;
+    margin-bottom:22px;
     font-size:13px;
     color:var(--muted);
+    text-align:center;
 }
 
 .week-special-toggle input {
     width:17px;
     height:17px;
     accent-color:var(--olive);
+    flex-shrink:0;
+}
+
+.tracker-toolbar {
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-bottom:14px;
+}
+
+.toolbar-button {
+    height:42px;
+    padding:0 17px;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    border:none;
+    border-radius:8px;
+    background:var(--olive);
+    color:white;
+    font-weight:600;
+    font-size:13.5px;
+}
+
+.toolbar-button:hover {
+    background:var(--olive-dark);
+}
+
+.toolbar-button.secondary {
+    background:var(--white);
+    color:var(--anthracite);
+    border:1px solid var(--border);
+}
+
+.toolbar-button.secondary:hover {
+    background:var(--light);
+}
+
+.toolbar-button svg {
+    width:15px;
+    height:15px;
+}
+
+.toolbar-warning {
+    display:none;
+    margin-bottom:14px;
+    padding:10px 14px;
+    border-radius:8px;
+    background:var(--badge-bg);
+    color:var(--warning);
+    font-size:13px;
+    font-weight:600;
+}
+
+.toolbar-warning.show {
+    display:block;
+}
+
+.category-chip-list {
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-bottom:22px;
+}
+
+.category-chip {
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    padding:6px 8px 6px 12px;
+    border-radius:20px;
+    background:var(--white);
+    border:1px solid var(--border);
+    font-size:12.5px;
+    font-weight:600;
+}
+
+.category-chip svg {
+    width:13px;
+    height:13px;
+    color:var(--olive);
+}
+
+.category-chip-delete {
+    width:19px;
+    height:19px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border:none;
+    border-radius:50%;
+    background:transparent;
+    color:var(--muted);
+}
+
+.category-chip-delete:hover {
+    background:var(--badge-bg);
+    color:var(--danger);
+}
+
+.category-chip-delete svg {
+    width:11px;
+    height:11px;
+    color:inherit;
 }
 
 .day-tabs {
@@ -1676,6 +1781,7 @@ main {
     border:1px solid var(--border);
     border-radius:12px;
     margin-bottom:28px;
+    min-height:120px;
 }
 
 .day-panel-title {
@@ -1705,8 +1811,15 @@ main {
 .category-heading {
     display:flex;
     align-items:center;
+    justify-content:space-between;
     gap:9px;
     margin-bottom:9px;
+}
+
+.category-heading-left {
+    display:flex;
+    align-items:center;
+    gap:9px;
 }
 
 .category-icon {
@@ -1731,11 +1844,33 @@ main {
     font-weight:700;
 }
 
+.delete-category-button {
+    width:26px;
+    height:26px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border:none;
+    border-radius:6px;
+    background:transparent;
+    color:var(--muted);
+}
+
+.delete-category-button:hover {
+    background:var(--badge-bg);
+    color:var(--danger);
+}
+
+.delete-category-button svg {
+    width:14px;
+    height:14px;
+}
+
 .checklist-item {
     display:flex;
     align-items:flex-start;
     justify-content:space-between;
-    gap:14px;
+    gap:12px;
     padding:9px 0;
     border-bottom:1px solid var(--border);
 }
@@ -1761,19 +1896,23 @@ main {
     color:var(--muted);
 }
 
+.checklist-item-controls {
+    display:flex;
+    align-items:center;
+    gap:10px;
+    flex-shrink:0;
+}
+
 .checklist-check {
     width:19px;
     height:19px;
-    margin-top:1px;
     accent-color:var(--olive);
-    flex-shrink:0;
 }
 
 .checklist-number {
     display:flex;
     align-items:center;
     gap:6px;
-    flex-shrink:0;
 }
 
 .checklist-number input {
@@ -1789,6 +1928,36 @@ main {
 .checklist-number span {
     font-size:12px;
     color:var(--muted);
+}
+
+.delete-goal-button {
+    width:26px;
+    height:26px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border:none;
+    border-radius:6px;
+    background:transparent;
+    color:var(--muted);
+}
+
+.delete-goal-button:hover {
+    background:var(--badge-bg);
+    color:var(--danger);
+}
+
+.delete-goal-button svg {
+    width:13px;
+    height:13px;
+}
+
+.empty-state {
+    padding:30px;
+    text-align:center;
+    color:var(--muted);
+    font-size:13.5px;
+    line-height:1.6;
 }
 
 .week-overview h2 {
@@ -1819,7 +1988,7 @@ main {
     display:flex;
     align-items:center;
     gap:9px;
-    margin-bottom:12px;
+    margin-bottom:14px;
 }
 
 .overview-card-header h3 {
@@ -1827,28 +1996,36 @@ main {
     font-weight:700;
 }
 
-.overview-target {
-    font-size:12px;
-    color:var(--muted);
-    margin-bottom:10px;
-    line-height:1.4;
+.overview-goal-row {
+    margin-bottom:12px;
 }
 
-.overview-progress-row {
+.overview-goal-row:last-child {
+    margin-bottom:0;
+}
+
+.overview-goal-top {
     display:flex;
     align-items:baseline;
     justify-content:space-between;
-    margin-bottom:6px;
+    margin-bottom:5px;
+    gap:8px;
 }
 
-.overview-progress-value {
-    font-size:15px;
+.overview-goal-label {
+    font-size:12.5px;
+    color:var(--muted);
+}
+
+.overview-goal-value {
+    font-size:13px;
     font-weight:700;
+    white-space:nowrap;
 }
 
 .overview-progress-track {
     width:100%;
-    height:7px;
+    height:6px;
     border-radius:4px;
     background:var(--light);
     overflow:hidden;
@@ -1865,43 +2042,6 @@ main {
     background:var(--success);
 }
 
-.overview-pill {
-    display:inline-flex;
-    align-items:center;
-    gap:5px;
-    padding:4px 10px;
-    border-radius:20px;
-    font-size:12px;
-    font-weight:700;
-}
-
-.overview-pill.good {
-    background:var(--badge-bg);
-    color:var(--success);
-}
-
-.overview-pill.bad {
-    background:var(--badge-bg);
-    color:var(--danger);
-}
-
-.overview-mini-list {
-    display:flex;
-    flex-direction:column;
-    gap:6px;
-}
-
-.overview-mini-item {
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    font-size:12.5px;
-}
-
-.overview-mini-item span:first-child {
-    color:var(--muted);
-}
-
 @media(max-width:620px) {
     .overview-grid {
         grid-template-columns:1fr;
@@ -1910,6 +2050,11 @@ main {
     .day-tab {
         padding:0 12px;
         font-size:12.5px;
+    }
+
+    .toolbar-button {
+        flex:1;
+        justify-content:center;
     }
 }
 
@@ -2269,18 +2414,20 @@ main {
     <path d="M12 8c0-1.7 1-3 2.5-3.4"></path>
 </symbol>
 
-<symbol id="scroll" viewBox="0 0 24 24">
-    <path d="M6 4h11a2.5 2.5 0 0 1 2.5 2.5V18"></path>
-    <path d="M6 4a2.5 2.5 0 0 0-2.5 2.5v11A2.5 2.5 0 0 0 6 20h12"></path>
-    <path d="M18 20a2.5 2.5 0 0 1-2.5-2.5V18h5"></path>
-    <path d="M8 9h7"></path>
-    <path d="M8 12.5h7"></path>
+<symbol id="people" viewBox="0 0 24 24">
+    <circle cx="8.5" cy="8" r="3"></circle>
+    <circle cx="16" cy="9" r="2.4"></circle>
+    <path d="M3 19c0-3 2.5-5 5.5-5s5.5 2 5.5 5"></path>
+    <path d="M14.5 14.3c2.4.3 4.5 2 4.5 4.7"></path>
 </symbol>
 
-<symbol id="external-link" viewBox="0 0 24 24">
-    <path d="M14 4h6v6"></path>
-    <path d="M20 4 10 14"></path>
-    <path d="M18 13v5a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h5"></path>
+<symbol id="heart" viewBox="0 0 24 24">
+    <path d="M12 20.5C7 16.8 3.5 13.6 3.5 9.9 3.5 7.2 5.6 5 8.2 5c1.5 0 2.9.8 3.8 2 .9-1.2 2.3-2 3.8-2 2.6 0 4.7 2.2 4.7 4.9 0 3.7-3.5 6.9-8.5 10.6z"></path>
+</symbol>
+
+<symbol id="tag" viewBox="0 0 24 24">
+    <path d="M3 11.5V4.8A1.8 1.8 0 0 1 4.8 3h6.7c.5 0 1 .2 1.3.6l8 8a1.8 1.8 0 0 1 0 2.6l-6.8 6.8a1.8 1.8 0 0 1-2.6 0l-8-8A1.8 1.8 0 0 1 3 11.5z"></path>
+    <circle cx="8" cy="8" r="1.3"></circle>
 </symbol>
 
 </svg>
@@ -2888,44 +3035,6 @@ Dagelijkse, dagspecifieke en wekelijkse eisen per categorie bijhouden.
 
 </article>
 
-
-<article class="dashboard-card">
-
-<div class="card-icon">
-<svg fill="none"
-     stroke="currentColor"
-     stroke-width="1.8"
-     stroke-linecap="round"
-     stroke-linejoin="round">
-    <use href="#scroll"></use>
-</svg>
-</div>
-
-<h2>Contract</h2>
-
-<p>
-Het contract met jezelf voor schooljaar 2026/2027.
-</p>
-
-<a
-    class="card-button"
-    href="Contract.pdf"
-    target="_blank"
-    rel="noopener noreferrer"
->
-    Openen
-
-    <svg fill="none"
-         stroke="currentColor"
-         stroke-width="1.8"
-         stroke-linecap="round"
-         stroke-linejoin="round">
-        <use href="#external-link"></use>
-    </svg>
-</a>
-
-</article>
-
 </div>
 
 
@@ -3457,7 +3566,7 @@ Kies een vak en het gemiddelde dat je wilt halen. Dan wordt berekend welk cijfer
 
 <div class="page-header">
 <h1>Doelen</h1>
-<p>Dagelijkse, dagspecifieke en wekelijkse eisen per categorie.</p>
+<p>Maak zelf je categorieën en doelen aan. Het weekoverzicht wordt automatisch opgebouwd.</p>
 </div>
 
 <div class="week-selector">
@@ -3503,8 +3612,52 @@ Kies een vak en het gemiddelde dat je wilt halen. Dan wordt berekend welk cijfer
     type="checkbox"
     onchange="toggleTrackerWeekSpecial()"
 >
-Bijzondere week (feestdag, verjaardag, familiegelegenheid of proefwerkperiode) — sportnorm wordt dan 5 dagen
+Bijzondere week (feestdag, verjaardag, familiegelegenheid of proefwerkperiode) — dagelijkse afvinkdoelen krijgen deze week 1 dag minder als eis
 </label>
+
+<div class="tracker-toolbar">
+
+<button
+    class="toolbar-button"
+    onclick="openGoalModal()"
+>
+<svg fill="none"
+     stroke="currentColor"
+     stroke-width="1.8"
+     stroke-linecap="round"
+     stroke-linejoin="round">
+    <use href="#plus"></use>
+</svg>
+Nieuw doel
+</button>
+
+<button
+    class="toolbar-button secondary"
+    onclick="openCategoryModal()"
+>
+<svg fill="none"
+     stroke="currentColor"
+     stroke-width="1.8"
+     stroke-linecap="round"
+     stroke-linejoin="round">
+    <use href="#plus"></use>
+</svg>
+Nieuwe categorie
+</button>
+
+</div>
+
+<div
+    id="toolbarWarning"
+    class="toolbar-warning"
+>
+Maak eerst een categorie aan voordat je een doel toevoegt.
+</div>
+
+<div
+    id="categoryChipList"
+    class="category-chip-list"
+></div>
 
 <div id="dayTabs" class="day-tabs"></div>
 
@@ -3515,11 +3668,188 @@ Bijzondere week (feestdag, verjaardag, familiegelegenheid of proefwerkperiode) �
 
 <div class="week-overview">
 <h2>Week overzicht</h2>
-<p>Status van de wekelijkse eisen voor de geselecteerde week.</p>
+<p>Wordt automatisch opgebouwd uit de doelen die je hierboven aanmaakt.</p>
 <div id="overviewGrid" class="overview-grid"></div>
 </div>
 
 </section>
+
+
+<!-- =========================================================
+     CATEGORIE MODAL
+========================================================= -->
+
+<div id="categoryModal" class="modal">
+<div class="modal-box">
+<h2>Nieuwe categorie</h2>
+
+<div class="modal-field">
+<label for="categoryNameSelect">Naam</label>
+<select
+    id="categoryNameSelect"
+    onchange="onCategoryNameChange()"
+></select>
+</div>
+
+<div
+    class="modal-field"
+    id="categoryCustomNameField"
+    style="display:none"
+>
+<label for="categoryCustomNameInput">Naam van de categorie</label>
+<input
+    id="categoryCustomNameInput"
+    type="text"
+    maxlength="40"
+    placeholder="Bijv. Bijbaan"
+>
+</div>
+
+<div class="modal-actions">
+<button
+    class="modal-cancel"
+    onclick="closeCategoryModal()"
+>
+    Annuleren
+</button>
+<button
+    class="modal-save"
+    onclick="saveCategory()"
+>
+    Toevoegen
+</button>
+</div>
+
+</div>
+</div>
+
+
+<!-- =========================================================
+     DOEL MODAL
+========================================================= -->
+
+<div id="goalModal" class="modal">
+<div class="modal-box">
+<h2>Nieuw doel</h2>
+
+<div class="modal-field">
+<label for="goalCategorySelect">Categorie</label>
+<select id="goalCategorySelect"></select>
+</div>
+
+<div class="modal-field">
+<label for="goalLabelInput">Naam van het doel</label>
+<input
+    id="goalLabelInput"
+    type="text"
+    maxlength="80"
+    placeholder="Bijv. Elke dag sporten"
+>
+</div>
+
+<div class="modal-field">
+<label>Type</label>
+<div class="modal-radio-group">
+<div
+    class="modal-radio-option selected"
+    id="goalTypeCheckboxOption"
+    onclick="setGoalType('checkbox')"
+>
+    Afvinkbaar
+</div>
+<div
+    class="modal-radio-option"
+    id="goalTypeNumberOption"
+    onclick="setGoalType('number')"
+>
+    Invulbaar
+</div>
+</div>
+</div>
+
+<div
+    class="modal-field"
+    id="goalUnitField"
+    style="display:none"
+>
+<label for="goalUnitInput">Eenheid</label>
+<input
+    id="goalUnitInput"
+    type="text"
+    maxlength="20"
+    placeholder="Bijv. uur, bladzijden, liter"
+>
+</div>
+
+<div class="modal-field">
+<label>Wanneer</label>
+<div class="modal-radio-group">
+<div
+    class="modal-radio-option selected"
+    id="goalFreqDailyOption"
+    onclick="setGoalFrequency('daily')"
+>
+    Elke dag
+</div>
+<div
+    class="modal-radio-option"
+    id="goalFreqSpecificOption"
+    onclick="setGoalFrequency('specific')"
+>
+    Specifieke dagen
+</div>
+</div>
+</div>
+
+<div
+    class="modal-field"
+    id="goalDaysField"
+    style="display:none"
+>
+<label>Kies dagen</label>
+<div
+    class="day-picker-row"
+    id="goalDaysPicker"
+></div>
+</div>
+
+<div class="modal-field">
+<label
+    for="goalTargetInput"
+    id="goalTargetLabel"
+>
+    Aantal dagen per week (eis)
+</label>
+<input
+    id="goalTargetInput"
+    type="number"
+    min="0"
+    step="1"
+>
+<div
+    class="modal-hint"
+    id="goalTargetHint"
+></div>
+</div>
+
+<div class="modal-actions">
+<button
+    class="modal-cancel"
+    onclick="closeGoalModal()"
+>
+    Annuleren
+</button>
+<button
+    class="modal-save"
+    onclick="saveGoal()"
+>
+    Toevoegen
+</button>
+</div>
+
+</div>
+</div>
+
 
 
 </main>
@@ -3921,6 +4251,12 @@ let trackerWeekStart = null;
 let trackerSelectedDate = null;
 let trackerEntries = {};
 let trackerWeekSpecial = false;
+let trackerCategories = [];
+let trackerGoals = [];
+
+let goalType = "checkbox";
+let goalFrequency = "daily";
+let goalSelectedDays = new Set();
 
 
 /* =========================================================
@@ -7374,131 +7710,31 @@ function getAverage(gradeArray) {
 
 
 /* =========================================================
-   DOELEN — CATEGORIEËN
+   DOELEN — STANDAARDCATEGORIEËN
 ========================================================= */
 
-const trackerCategories = [
-    {
-        key:"sport",
-        name:"Sport",
-        icon:"dumbbell",
-        items(day) {
-            return [
-                { id:"sport-gedaan", label:"Vandaag gesport", type:"checkbox" }
-            ];
-        }
-    },
-    {
-        key:"school",
-        name:"School / huiswerk",
-        icon:"book",
-        items(day) {
-            const items = [
-                { id:"school-uren", label:"Uren huiswerk/school vandaag", type:"number", suffix:"u", max:6 },
-                { id:"school-af", label:"Huiswerk af", type:"checkbox" }
-            ];
-            if (day === "vrijdag") {
-                items.push({
-                    id:"school-vrijstelling",
-                    label:"Vrijstelling vanaf 17:00 (mits huiswerk af)",
-                    type:"checkbox",
-                    note:"Geldt niet in de week van of vóór de proefwerkweek"
-                });
-            }
-            return items;
-        }
-    },
-    {
-        key:"geld",
-        name:"Geld",
-        icon:"euro",
-        items(day) {
-            const items = [];
-            if (["maandag","dinsdag","woensdag","donderdag","vrijdag"].includes(day)) {
-                items.push({ id:"geld-geen-pin", label:"Geen betaalmiddel bij me, behalve voor toegestane consumptie", type:"checkbox" });
-            }
-            items.push({ id:"geld-werkblok-afgerond", label:"Werkblok Wegkompas of LVH afgerond vandaag", type:"checkbox" });
-            if (day === "maandag") {
-                items.push({ id:"geld-evaluatie", label:"21:30 — uitgaven van afgelopen week bekeken en geëvalueerd", type:"checkbox", note:"Na de voetbaltraining" });
-            }
-            if (day === "zondag") {
-                items.push({ id:"geld-weeklimiet", label:"Deze week binnen het weeklimiet gebleven", type:"checkbox" });
-                items.push({ id:"geld-agenda", label:"Werkblokken Wegkompas en LVH in de agenda gezet voor volgende week", type:"checkbox" });
-            }
-            return items;
-        }
-    },
-    {
-        key:"slaap",
-        name:"Slaap",
-        icon:"bed",
-        items(day) {
-            const items = [
-                { id:"slaap-lezen", label:"Laatste halfuur voor het slapen lezen zonder scherm", type:"checkbox" },
-                { id:"slaap-uren", label:"Geslapen uren ingevuld (voor 07:15)", type:"number", suffix:"u", max:11 }
-            ];
-            if (["zondag","maandag","dinsdag","woensdag","donderdag"].includes(day)) {
-                items.push({ id:"slaap-telefoon", label:"Telefoon om 22:30 buiten de slaapkamer", type:"checkbox" });
-                items.push({ id:"slaap-bed", label:"23:00 in bed, 08:00 op", type:"checkbox" });
-                items.push({ id:"slaap-klaar", label:"Tas, sportkleding en kleding klaar voor 22:30", type:"checkbox" });
-            }
-            return items;
-        }
-    },
-    {
-        key:"lezen",
-        name:"Lezen",
-        icon:"pages",
-        items(day) {
-            if (["vrijdag","zaterdag","zondag"].includes(day)) {
-                return [
-                    { id:"lezen-weekend", label:"Pagina's gelezen (30 vrij te verdelen over vr/za/zo)", type:"number", suffix:"blz", max:30 }
-                ];
-            }
-            return [
-                { id:"lezen-pages", label:"Pagina's gelezen (dagnorm 10, ook op trainingsdagen)", type:"number", suffix:"blz", max:20 },
-                { id:"lezen-tijd", label:"Gelezen tussen 22:30 en 23:00", type:"checkbox" }
-            ];
-        }
-    },
-    {
-        key:"voeding",
-        name:"Voeding",
-        icon:"apple",
-        items(day) {
-            return [
-                { id:"voeding-creatine", label:"1 scoop creatine", type:"checkbox" },
-                { id:"voeding-fruit", label:"1 stuk fruit", type:"checkbox" },
-                { id:"voeding-water", label:"Minimaal 2,5L water (beker 4× + fles 1×)", type:"checkbox" },
-                { id:"voeding-koekje", label:"Aantal koekjes (max. 1)", type:"number", suffix:"stuks", max:1 },
-                { id:"voeding-klaar", label:"Fles, fruit en creatine klaargezet voor 08:45", type:"checkbox" },
-                { id:"voeding-lidl", label:"Geen aankopen gedaan bij de Lidl", type:"checkbox" },
-                { id:"voeding-snack", label:"Snack gegeten in de kantine", type:"checkbox" },
-                { id:"voeding-chips", label:"Bakjes chips vandaag", type:"number", suffix:"bakjes", max:2 },
-                {
-                    id:"voeding-training",
-                    label:"Na training/wedstrijd: creatine direct, toegestane snack alleen dan",
-                    type:"checkbox",
-                    note:"Alleen van toepassing op trainings- of wedstrijddagen"
-                }
-            ];
-        }
-    },
-    {
-        key:"dashboard",
-        name:"Dashboard & agenda",
-        icon:"calendar",
-        items(day) {
-            const items = [
-                { id:"dash-invullen", label:"Dashboard om 22:30 gecontroleerd en ingevuld (binnen 5 min)", type:"checkbox" }
-            ];
-            if (day === "zondag") {
-                items.push({ id:"dash-terugblik", label:"Terugblik op de week gemaakt", type:"checkbox" });
-                items.push({ id:"dash-agenda", label:"Agenda voor komende week in één keer gevuld, klaar voor 22:30", type:"checkbox" });
-            }
-            return items;
-        }
-    }
+const standardCategoryOptions = [
+    { name:"Sport", icon:"dumbbell" },
+    { name:"School", icon:"book" },
+    { name:"Geld", icon:"euro" },
+    { name:"Slaap", icon:"bed" },
+    { name:"Voeding", icon:"apple" },
+    { name:"Planning", icon:"calendar" },
+    { name:"Lezen", icon:"pages" },
+    { name:"Sociaal", icon:"people" },
+    { name:"Gezondheid", icon:"heart" }
+];
+
+const CUSTOM_CATEGORY_ICON = "tag";
+
+const trackerDays = [
+    { key:"maandag", short:"Ma" },
+    { key:"dinsdag", short:"Di" },
+    { key:"woensdag", short:"Wo" },
+    { key:"donderdag", short:"Do" },
+    { key:"vrijdag", short:"Vr" },
+    { key:"zaterdag", short:"Za" },
+    { key:"zondag", short:"Zo" }
 ];
 
 
@@ -7594,7 +7830,7 @@ function getWeekDates(
    DOELEN — INITIALISATIE EN LADEN
 ========================================================= */
 
-function initTracker() {
+async function initTracker() {
 
     const currentWeekStart =
         getWeekStart(
@@ -7611,11 +7847,82 @@ function initTracker() {
 
     }
 
-    loadTrackerWeek();
+    await loadTrackerCategories();
+    await loadTrackerGoals();
+    await loadTrackerWeekEntries();
+
+    renderTrackerAll();
 }
 
 
-async function loadTrackerWeek() {
+async function loadTrackerCategories() {
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("tracker_categories")
+            .select("*")
+            .order("created_at", {
+                ascending:true
+            });
+
+    if (error) {
+
+        console.error(
+            "Categorieën laden:",
+            error
+        );
+
+        return;
+    }
+
+    trackerCategories =
+        data || [];
+}
+
+
+async function loadTrackerGoals() {
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("tracker_goals")
+            .select("*")
+            .order("created_at", {
+                ascending:true
+            });
+
+    if (error) {
+
+        console.error(
+            "Doelen laden:",
+            error
+        );
+
+        return;
+    }
+
+    trackerGoals =
+        (data || []).map(row => ({
+            id:row.id,
+            categoryId:row.category_id,
+            label:row.label,
+            type:row.type,
+            frequency:row.frequency,
+            days:row.days || [],
+            unit:row.unit,
+            weeklyTarget:Number(
+                row.weekly_target
+            )
+        }));
+}
+
+
+async function loadTrackerWeekEntries() {
 
     const dates =
         getWeekDates(
@@ -7681,8 +7988,12 @@ async function loadTrackerWeek() {
         weekData
             ? weekData.special
             : false;
+}
 
+
+function renderTrackerAll() {
     renderTrackerWeekSelector();
+    renderTrackerCategoryChips();
     renderTrackerDayTabs();
     renderTrackerDayChecklist();
     renderTrackerWeekOverview();
@@ -7746,7 +8057,7 @@ function renderTrackerWeekSelector() {
 }
 
 
-function trackerChangeWeek(
+async function trackerChangeWeek(
     delta
 ) {
 
@@ -7797,7 +8108,9 @@ function trackerChangeWeek(
     trackerSelectedDate =
         newWeekStart;
 
-    loadTrackerWeek();
+    await loadTrackerWeekEntries();
+
+    renderTrackerAll();
 }
 
 
@@ -7849,6 +8162,682 @@ async function toggleTrackerWeekSpecial() {
 
 
 /* =========================================================
+   DOELEN — CATEGORIEËN BEHEREN
+========================================================= */
+
+function renderTrackerCategoryChips() {
+
+    const container =
+        document.getElementById(
+            "categoryChipList"
+        );
+
+    container.innerHTML = "";
+
+    trackerCategories.forEach(category => {
+
+        const chip =
+            document.createElement("div");
+
+        chip.className =
+            "category-chip";
+
+        chip.innerHTML =
+            '<svg fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#' +
+            category.icon +
+            '"></use></svg><span>' +
+            category.name +
+            "</span>";
+
+        const deleteButton =
+            document.createElement("button");
+
+        deleteButton.className =
+            "category-chip-delete";
+
+        deleteButton.title =
+            "Categorie verwijderen";
+
+        deleteButton.innerHTML =
+            '<svg fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#trash"></use></svg>';
+
+        deleteButton.onclick =
+            () =>
+                deleteTrackerCategory(
+                    category.id
+                );
+
+        chip.appendChild(
+            deleteButton
+        );
+
+        container.appendChild(
+            chip
+        );
+
+    });
+}
+
+
+function openCategoryModal() {
+
+    const select =
+        document.getElementById(
+            "categoryNameSelect"
+        );
+
+    select.innerHTML = "";
+
+    const usedNames =
+        trackerCategories.map(
+            c => c.name.toLowerCase()
+        );
+
+    standardCategoryOptions
+        .filter(
+            opt =>
+                !usedNames.includes(
+                    opt.name.toLowerCase()
+                )
+        )
+        .forEach(opt => {
+
+            const el =
+                document.createElement("option");
+
+            el.value =
+                opt.name;
+
+            el.textContent =
+                opt.name;
+
+            select.appendChild(
+                el
+            );
+
+        });
+
+    const customOpt =
+        document.createElement("option");
+
+    customOpt.value =
+        "__anders__";
+
+    customOpt.textContent =
+        "Anders, namelijk...";
+
+    select.appendChild(
+        customOpt
+    );
+
+    select.selectedIndex = 0;
+
+    document.getElementById(
+        "categoryCustomNameInput"
+    ).value = "";
+
+    document.getElementById(
+        "categoryCustomNameField"
+    ).style.display = "none";
+
+    onCategoryNameChange();
+
+    document
+        .getElementById(
+            "categoryModal"
+        )
+        .classList.add("show");
+}
+
+
+function onCategoryNameChange() {
+
+    const isCustom =
+        document.getElementById(
+            "categoryNameSelect"
+        ).value === "__anders__";
+
+    document.getElementById(
+        "categoryCustomNameField"
+    ).style.display =
+        isCustom
+            ? "block"
+            : "none";
+}
+
+
+function closeCategoryModal() {
+
+    document
+        .getElementById(
+            "categoryModal"
+        )
+        .classList.remove("show");
+}
+
+
+async function saveCategory() {
+
+    const select =
+        document.getElementById(
+            "categoryNameSelect"
+        );
+
+    const isCustom =
+        select.value === "__anders__";
+
+    let name, icon;
+
+    if (isCustom) {
+
+        name =
+            document.getElementById(
+                "categoryCustomNameInput"
+            ).value.trim();
+
+        icon =
+            CUSTOM_CATEGORY_ICON;
+
+        if (!name) {
+
+            alert(
+                "Vul een naam voor de categorie in."
+            );
+
+            return;
+        }
+
+    } else {
+
+        name =
+            select.value;
+
+        icon =
+            standardCategoryOptions.find(
+                o => o.name === name
+            ).icon;
+
+    }
+
+    if (
+        trackerCategories.some(
+            c =>
+                c.name.toLowerCase() ===
+                name.toLowerCase()
+        )
+    ) {
+
+        alert(
+            "Er bestaat al een categorie met deze naam."
+        );
+
+        return;
+    }
+
+    const user =
+        await getCurrentUser();
+
+    if (!user) {
+        return;
+    }
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("tracker_categories")
+            .insert({
+                user_id:user.id,
+                name:name,
+                icon:icon
+            });
+
+    if (error) {
+
+        console.error(
+            "Categorie toevoegen:",
+            error
+        );
+
+        alert(
+            "De categorie kon niet worden toegevoegd."
+        );
+
+        return;
+    }
+
+    closeCategoryModal();
+
+    await loadTrackerCategories();
+
+    renderTrackerAll();
+}
+
+
+async function deleteTrackerCategory(id) {
+
+    if (
+        !confirm(
+            "Deze categorie verwijderen? Bijbehorende doelen worden ook verwijderd."
+        )
+    ) {
+        return;
+    }
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("tracker_categories")
+            .delete()
+            .eq(
+                "id",
+                id
+            );
+
+    if (error) {
+
+        console.error(
+            "Categorie verwijderen:",
+            error
+        );
+
+        return;
+    }
+
+    await loadTrackerCategories();
+    await loadTrackerGoals();
+
+    renderTrackerAll();
+}
+
+
+/* =========================================================
+   DOELEN — DOELEN BEHEREN
+========================================================= */
+
+function openGoalModal() {
+
+    if (!trackerCategories.length) {
+
+        const warning =
+            document.getElementById(
+                "toolbarWarning"
+            );
+
+        warning.classList.add(
+            "show"
+        );
+
+        setTimeout(
+            () =>
+                warning.classList.remove(
+                    "show"
+                ),
+            3000
+        );
+
+        return;
+    }
+
+    const select =
+        document.getElementById(
+            "goalCategorySelect"
+        );
+
+    select.innerHTML = "";
+
+    trackerCategories.forEach(cat => {
+
+        const el =
+            document.createElement("option");
+
+        el.value =
+            cat.id;
+
+        el.textContent =
+            cat.name;
+
+        select.appendChild(
+            el
+        );
+
+    });
+
+    select.selectedIndex = 0;
+
+    document.getElementById(
+        "goalLabelInput"
+    ).value = "";
+
+    document.getElementById(
+        "goalUnitInput"
+    ).value = "";
+
+    const targetInput =
+        document.getElementById(
+            "goalTargetInput"
+        );
+
+    targetInput.value = "";
+    targetInput.dataset.touched = "";
+
+    setGoalType("checkbox");
+    setGoalFrequency("daily");
+
+    goalSelectedDays =
+        new Set();
+
+    renderGoalDayPicker();
+    updateGoalTargetDefault();
+
+    document
+        .getElementById(
+            "goalModal"
+        )
+        .classList.add("show");
+}
+
+
+function closeGoalModal() {
+
+    document
+        .getElementById(
+            "goalModal"
+        )
+        .classList.remove("show");
+}
+
+
+function setGoalType(type) {
+
+    goalType = type;
+
+    document.getElementById(
+        "goalTypeCheckboxOption"
+    ).classList.toggle(
+        "selected",
+        type === "checkbox"
+    );
+
+    document.getElementById(
+        "goalTypeNumberOption"
+    ).classList.toggle(
+        "selected",
+        type === "number"
+    );
+
+    document.getElementById(
+        "goalUnitField"
+    ).style.display =
+        type === "number"
+            ? "block"
+            : "none";
+
+    document.getElementById(
+        "goalTargetLabel"
+    ).textContent =
+        type === "number"
+            ? "Totaal doel per week"
+            : "Aantal dagen per week (eis)";
+
+    updateGoalTargetDefault();
+}
+
+
+function setGoalFrequency(freq) {
+
+    goalFrequency = freq;
+
+    document.getElementById(
+        "goalFreqDailyOption"
+    ).classList.toggle(
+        "selected",
+        freq === "daily"
+    );
+
+    document.getElementById(
+        "goalFreqSpecificOption"
+    ).classList.toggle(
+        "selected",
+        freq === "specific"
+    );
+
+    document.getElementById(
+        "goalDaysField"
+    ).style.display =
+        freq === "specific"
+            ? "block"
+            : "none";
+
+    updateGoalTargetDefault();
+}
+
+
+function renderGoalDayPicker() {
+
+    const container =
+        document.getElementById(
+            "goalDaysPicker"
+        );
+
+    container.innerHTML = "";
+
+    trackerDays.forEach(day => {
+
+        const chip =
+            document.createElement("div");
+
+        chip.className =
+            "day-picker-chip" +
+            (
+                goalSelectedDays.has(day.key)
+                    ? " selected"
+                    : ""
+            );
+
+        chip.textContent =
+            day.short;
+
+        chip.onclick =
+            () => {
+
+                if (goalSelectedDays.has(day.key)) {
+                    goalSelectedDays.delete(day.key);
+                } else {
+                    goalSelectedDays.add(day.key);
+                }
+
+                renderGoalDayPicker();
+                updateGoalTargetDefault();
+
+            };
+
+        container.appendChild(
+            chip
+        );
+
+    });
+}
+
+
+function updateGoalTargetDefault() {
+
+    const hint =
+        document.getElementById(
+            "goalTargetHint"
+        );
+
+    const targetInput =
+        document.getElementById(
+            "goalTargetInput"
+        );
+
+    if (goalType === "number") {
+
+        hint.textContent =
+            "Het totaal dat je deze doelwaarde per week wilt halen, bijv. 70 (bladzijden) of 10 (uur).";
+
+        return;
+    }
+
+    const applicableCount =
+        goalFrequency === "daily"
+            ? 7
+            : goalSelectedDays.size;
+
+    hint.textContent =
+        "Van toepassing op " +
+        applicableCount +
+        " dag" +
+        (applicableCount === 1 ? "" : "en") +
+        " deze week. Standaard moet het dan die " +
+        applicableCount +
+        " dag" +
+        (applicableCount === 1 ? "" : "en") +
+        " gehaald zijn — pas het aan als dat lager mag (zoals sport: 6 van de 7).";
+
+    if (!targetInput.dataset.touched) {
+        targetInput.value = applicableCount;
+    }
+}
+
+
+async function saveGoal() {
+
+    const categoryId =
+        document.getElementById(
+            "goalCategorySelect"
+        ).value;
+
+    const label =
+        document.getElementById(
+            "goalLabelInput"
+        ).value.trim();
+
+    const unit =
+        document.getElementById(
+            "goalUnitInput"
+        ).value.trim();
+
+    const weeklyTarget =
+        parseFloat(
+            document.getElementById(
+                "goalTargetInput"
+            ).value
+        );
+
+    if (!label) {
+
+        alert(
+            "Vul een naam voor het doel in."
+        );
+
+        return;
+    }
+
+    if (goalFrequency === "specific" && goalSelectedDays.size === 0) {
+
+        alert(
+            "Kies minstens één dag."
+        );
+
+        return;
+    }
+
+    if (isNaN(weeklyTarget) || weeklyTarget < 0) {
+
+        alert(
+            "Vul een geldige wekelijkse eis in."
+        );
+
+        return;
+    }
+
+    const user =
+        await getCurrentUser();
+
+    if (!user) {
+        return;
+    }
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("tracker_goals")
+            .insert({
+                user_id:user.id,
+                category_id:categoryId,
+                label:label,
+                type:goalType,
+                frequency:goalFrequency,
+                days:Array.from(goalSelectedDays),
+                unit:unit || null,
+                weekly_target:weeklyTarget
+            });
+
+    if (error) {
+
+        console.error(
+            "Doel toevoegen:",
+            error
+        );
+
+        alert(
+            "Het doel kon niet worden toegevoegd."
+        );
+
+        return;
+    }
+
+    document.getElementById(
+        "goalTargetInput"
+    ).dataset.touched = "";
+
+    closeGoalModal();
+
+    await loadTrackerGoals();
+
+    renderTrackerAll();
+}
+
+
+async function deleteTrackerGoal(id) {
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("tracker_goals")
+            .delete()
+            .eq(
+                "id",
+                id
+            );
+
+    if (error) {
+
+        console.error(
+            "Doel verwijderen:",
+            error
+        );
+
+        return;
+    }
+
+    await loadTrackerGoals();
+
+    renderTrackerAll();
+}
+
+
+function goalAppliesToDay(goal, dayKey) {
+    return goal.frequency === "daily" || goal.days.includes(dayKey);
+}
+
+
+/* =========================================================
    DOELEN — DAGTABS EN CHECKLIST
 ========================================================= */
 
@@ -7858,17 +8847,6 @@ function renderTrackerDayTabs() {
         getWeekDates(
             trackerWeekStart
         );
-
-    const shortLabels =
-        {
-            maandag:"Ma",
-            dinsdag:"Di",
-            woensdag:"Wo",
-            donderdag:"Do",
-            vrijdag:"Vr",
-            zaterdag:"Za",
-            zondag:"Zo"
-        };
 
     const container =
         document.getElementById(
@@ -7891,9 +8869,9 @@ function renderTrackerDayTabs() {
             );
 
         button.textContent =
-            shortLabels[
-                getWeekdayKey(date)
-            ];
+            trackerDays.find(
+                d => d.key === getWeekdayKey(date)
+            ).short;
 
         button.onclick =
             () =>
@@ -7987,14 +8965,22 @@ function renderTrackerDayChecklist() {
     const dayData =
         trackerEntries[date] || {};
 
+    let anyRendered = false;
+
     trackerCategories.forEach(category => {
 
-        const dayItems =
-            category.items(dayKey);
+        const categoryGoals =
+            trackerGoals.filter(
+                g =>
+                    g.categoryId === category.id &&
+                    goalAppliesToDay(g, dayKey)
+            );
 
-        if (!dayItems.length) {
+        if (!categoryGoals.length) {
             return;
         }
+
+        anyRendered = true;
 
         const group =
             document.createElement("div");
@@ -8009,17 +8995,17 @@ function renderTrackerDayChecklist() {
             "category-heading";
 
         heading.innerHTML =
-            '<div class="category-icon"><svg fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#' +
+            '<div class="category-heading-left"><div class="category-icon"><svg fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#' +
             category.icon +
             '"></use></svg></div><h3>' +
             category.name +
-            "</h3>";
+            "</h3></div>";
 
         group.appendChild(
             heading
         );
 
-        dayItems.forEach(item => {
+        categoryGoals.forEach(goal => {
 
             const row =
                 document.createElement("div");
@@ -8040,34 +9026,23 @@ function renderTrackerDayChecklist() {
                 "checklist-item-label";
 
             label.textContent =
-                item.label;
+                goal.label;
 
             text.appendChild(
                 label
             );
 
-            if (item.note) {
-
-                const note =
-                    document.createElement("div");
-
-                note.className =
-                    "checklist-item-note";
-
-                note.textContent =
-                    item.note;
-
-                text.appendChild(
-                    note
-                );
-
-            }
-
             row.appendChild(
                 text
             );
 
-            if (item.type === "checkbox") {
+            const controls =
+                document.createElement("div");
+
+            controls.className =
+                "checklist-item-controls";
+
+            if (goal.type === "checkbox") {
 
                 const checkbox =
                     document.createElement("input");
@@ -8079,7 +9054,7 @@ function renderTrackerDayChecklist() {
                     "checklist-check";
 
                 checkbox.checked =
-                    dayData[item.id] === true;
+                    dayData[goal.id] === true;
 
                 checkbox.disabled =
                     readonly;
@@ -8088,11 +9063,11 @@ function renderTrackerDayChecklist() {
                     () =>
                         saveTrackerEntry(
                             date,
-                            item.id,
+                            goal.id,
                             checkbox.checked
                         );
 
-                row.appendChild(
+                controls.appendChild(
                     checkbox
                 );
 
@@ -8117,8 +9092,8 @@ function renderTrackerDayChecklist() {
                     "0";
 
                 input.value =
-                    dayData[item.id] !== undefined
-                        ? dayData[item.id]
+                    dayData[goal.id] !== undefined
+                        ? dayData[goal.id]
                         : "";
 
                 input.disabled =
@@ -8128,17 +9103,15 @@ function renderTrackerDayChecklist() {
                     () =>
                         saveTrackerEntry(
                             date,
-                            item.id,
-                            parseFloat(
-                                input.value
-                            ) || 0
+                            goal.id,
+                            parseFloat(input.value) || 0
                         );
 
                 const suffix =
                     document.createElement("span");
 
                 suffix.textContent =
-                    item.suffix || "";
+                    goal.unit || "";
 
                 wrap.appendChild(
                     input
@@ -8148,11 +9121,37 @@ function renderTrackerDayChecklist() {
                     suffix
                 );
 
-                row.appendChild(
+                controls.appendChild(
                     wrap
                 );
 
             }
+
+            const deleteButton =
+                document.createElement("button");
+
+            deleteButton.className =
+                "delete-goal-button";
+
+            deleteButton.title =
+                "Doel verwijderen";
+
+            deleteButton.innerHTML =
+                '<svg fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#trash"></use></svg>';
+
+            deleteButton.onclick =
+                () =>
+                    deleteTrackerGoal(
+                        goal.id
+                    );
+
+            controls.appendChild(
+                deleteButton
+            );
+
+            row.appendChild(
+                controls
+            );
 
             group.appendChild(
                 row
@@ -8165,12 +9164,25 @@ function renderTrackerDayChecklist() {
         );
 
     });
+
+    if (!anyRendered) {
+
+        container.innerHTML =
+            '<div class="empty-state">' +
+            (
+                trackerCategories.length
+                    ? "Voor deze dag zijn nog geen doelen ingesteld."
+                    : "Nog geen doelen. Maak eerst een categorie aan, en voeg daarna je eerste doel toe met de knoppen hierboven."
+            ) +
+            "</div>";
+
+    }
 }
 
 
 async function saveTrackerEntry(
     date,
-    itemId,
+    goalId,
     value
 ) {
 
@@ -8185,7 +9197,7 @@ async function saveTrackerEntry(
         trackerEntries[date] = {};
     }
 
-    trackerEntries[date][itemId] =
+    trackerEntries[date][goalId] =
         value;
 
     const {
@@ -8222,46 +9234,6 @@ async function saveTrackerEntry(
    DOELEN — WEEKOVERZICHT
 ========================================================= */
 
-function trackerProgressCard(
-    iconId,
-    name,
-    targetLabel,
-    current,
-    target,
-    unit
-) {
-
-    const percentage =
-        Math.min(
-            (current / target) * 100,
-            100
-        );
-
-    const reached =
-        current >= target;
-
-    return `
-        <div class="overview-card">
-            <div class="overview-card-header">
-                <div class="category-icon">
-                    <svg fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                        <use href="#${iconId}"></use>
-                    </svg>
-                </div>
-                <h3>${name}</h3>
-            </div>
-            <div class="overview-target">${targetLabel}</div>
-            <div class="overview-progress-row">
-                <span class="overview-progress-value">${current} / ${target} ${unit}</span>
-            </div>
-            <div class="overview-progress-track">
-                <div class="overview-progress-fill${reached ? " reached" : ""}" style="width:${percentage}%"></div>
-            </div>
-        </div>
-    `;
-}
-
-
 function renderTrackerWeekOverview() {
 
     const dates =
@@ -8273,187 +9245,144 @@ function renderTrackerWeekOverview() {
         date =>
             trackerEntries[date] || {};
 
-    const sportTarget =
-        trackerWeekSpecial
-            ? 5
-            : 6;
-
-    const sportDagen =
-        dates.filter(
-            date =>
-                dayData(date)["sport-gedaan"] === true
-        ).length;
-
-    const schoolUren =
-        dates.reduce(
-            (total, date) =>
-                total +
-                (
-                    Number(
-                        dayData(date)["school-uren"]
-                    ) || 0
-                ),
-            0
-        );
-
-    const slaapZoDo =
-        ["zondag","maandag","dinsdag","woensdag","donderdag"];
-
-    const slaapVrZa =
-        ["vrijdag","zaterdag"];
-
-    const slaapUrenVoor =
-        keys =>
-            dates
-                .filter(date => keys.includes(getWeekdayKey(date)))
-                .map(date => Number(dayData(date)["slaap-uren"]) || 0);
-
-    const slaapZoDoUren =
-        slaapUrenVoor(slaapZoDo);
-
-    const slaapVrZaUren =
-        slaapUrenVoor(slaapVrZa);
-
-    const avg =
-        arr =>
-            arr.length
-                ? Math.round((arr.reduce((a,b) => a+b, 0) / arr.length) * 10) / 10
-                : 0;
-
-    const slaapZoDoGem =
-        avg(slaapZoDoUren);
-
-    const slaapVrZaGem =
-        avg(slaapVrZaUren);
-
-    const lezenPaginas =
-        dates.reduce(
-            (total, date) => {
-
-                const key =
-                    getWeekdayKey(date);
-
-                const data =
-                    dayData(date);
-
-                if (["vrijdag","zaterdag","zondag"].includes(key)) {
-                    return total + (Number(data["lezen-weekend"]) || 0);
-                }
-
-                return total + (Number(data["lezen-pages"]) || 0);
-
-            },
-            0
-        );
-
-    const dashboardDagen =
-        dates.filter(
-            date =>
-                dayData(date)["dash-invullen"] === true
-        ).length;
-
-    const zondagDate =
-        dates.find(
-            date =>
-                getWeekdayKey(date) === "zondag"
-        );
-
-    const geldBinnenLimiet =
-        zondagDate
-            ? dayData(zondagDate)["geld-weeklimiet"] === true
-            : false;
-
-    const geldAgenda =
-        zondagDate
-            ? dayData(zondagDate)["geld-agenda"] === true
-            : false;
-
-    const geldWerkblokken =
-        dates.filter(
-            date =>
-                dayData(date)["geld-werkblok-afgerond"] === true
-        ).length;
-
-    const voedingSnacks =
-        dates.filter(
-            date =>
-                dayData(date)["voeding-snack"] === true
-        ).length;
-
-    const voedingLidlOvertreding =
-        dates.some(
-            date =>
-                dayData(date)["voeding-lidl"] === false
-        );
-
-    const voedingChips =
-        dates.reduce(
-            (total, date) =>
-                total +
-                (
-                    Number(
-                        dayData(date)["voeding-chips"]
-                    ) || 0
-                ),
-            0
-        );
-
-    const voedingKoekjeOvertreding =
-        dates.some(
-            date =>
-                (
-                    Number(
-                        dayData(date)["voeding-koekje"]
-                    ) || 0
-                ) > 1
-        );
+    const special =
+        trackerWeekSpecial;
 
     const grid =
         document.getElementById(
             "overviewGrid"
         );
 
-    grid.innerHTML =
-        trackerProgressCard("dumbbell", "Sport", "Minimaal " + sportTarget + " dagen deze week" + (trackerWeekSpecial ? " (bijzondere week)" : ""), sportDagen, sportTarget, "dagen") +
-        trackerProgressCard("book", "School / huiswerk", "Minimaal 10 uur per week, huiswerk altijd af", schoolUren, 10, "uur") +
-        `<div class="overview-card">
-            <div class="overview-card-header">
-                <div class="category-icon"><svg fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#euro"></use></svg></div>
-                <h3>Geld</h3>
-            </div>
-            <div class="overview-target">Geen uitgave buiten weeklimiet, min. 1 werkblok Wegkompas/LVH</div>
-            <div class="overview-mini-list">
-                <div class="overview-mini-item"><span>Binnen weeklimiet</span><span class="overview-pill ${geldBinnenLimiet ? "good" : "bad"}">${geldBinnenLimiet ? "Ja" : "Nog niet afgevinkt"}</span></div>
-                <div class="overview-mini-item"><span>Werkblokken afgerond</span><span class="overview-pill ${geldWerkblokken >= 1 ? "good" : "bad"}">${geldWerkblokken} / 1</span></div>
-                <div class="overview-mini-item"><span>Agenda volgende week gezet</span><span class="overview-pill ${geldAgenda ? "good" : "bad"}">${geldAgenda ? "Ja" : "Nog niet"}</span></div>
-            </div>
-        </div>` +
-        `<div class="overview-card">
-            <div class="overview-card-header">
-                <div class="category-icon"><svg fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#bed"></use></svg></div>
-                <h3>Slaap</h3>
-            </div>
-            <div class="overview-target">Min. 9u (zo–do), min. 7,5u (vr/za)</div>
-            <div class="overview-mini-list">
-                <div class="overview-mini-item"><span>Gemiddeld zo–do</span><span class="overview-pill ${slaapZoDoGem >= 9 ? "good" : "bad"}">${slaapZoDoGem}u / 9u</span></div>
-                <div class="overview-mini-item"><span>Gemiddeld vr/za</span><span class="overview-pill ${slaapVrZaGem >= 7.5 ? "good" : "bad"}">${slaapVrZaGem}u / 7,5u</span></div>
-            </div>
-        </div>` +
-        trackerProgressCard("pages", "Lezen", "Minimaal 70 pagina's per week", lezenPaginas, 70, "blz") +
-        `<div class="overview-card">
-            <div class="overview-card-header">
-                <div class="category-icon"><svg fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#apple"></use></svg></div>
-                <h3>Voeding</h3>
-            </div>
-            <div class="overview-target">Max. 1 snack, geen Lidl, max. 2 bakjes chips, max. 1 koekje/dag</div>
-            <div class="overview-mini-list">
-                <div class="overview-mini-item"><span>Snacks kantine</span><span class="overview-pill ${voedingSnacks <= 1 ? "good" : "bad"}">${voedingSnacks} / 1</span></div>
-                <div class="overview-mini-item"><span>Lidl bezocht</span><span class="overview-pill ${voedingLidlOvertreding ? "bad" : "good"}">${voedingLidlOvertreding ? "Ja" : "Nee"}</span></div>
-                <div class="overview-mini-item"><span>Bakjes chips</span><span class="overview-pill ${voedingChips <= 2 ? "good" : "bad"}">${voedingChips} / 2</span></div>
-                <div class="overview-mini-item"><span>Koekjesnorm (max/dag)</span><span class="overview-pill ${voedingKoekjeOvertreding ? "bad" : "good"}">${voedingKoekjeOvertreding ? "Overschreden" : "Voldaan"}</span></div>
-            </div>
-        </div>` +
-        trackerProgressCard("calendar", "Dashboard & agenda", "7/7 dagen ingevuld, agenda bijgewerkt voor zo 22:30", dashboardDagen, 7, "dagen");
+    grid.innerHTML = "";
+
+    if (!trackerCategories.length || !trackerGoals.length) {
+
+        grid.innerHTML =
+            '<div class="empty-state" style="grid-column:1/-1">Zodra je doelen toevoegt, verschijnt hier automatisch per categorie de voortgang van deze week.</div>';
+
+        return;
+    }
+
+    trackerCategories.forEach(category => {
+
+        const categoryGoals =
+            trackerGoals.filter(
+                g => g.categoryId === category.id
+            );
+
+        if (!categoryGoals.length) {
+            return;
+        }
+
+        const card =
+            document.createElement("div");
+
+        card.className =
+            "overview-card";
+
+        const header =
+            document.createElement("div");
+
+        header.className =
+            "overview-card-header";
+
+        header.innerHTML =
+            '<div class="category-icon"><svg fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#' +
+            category.icon +
+            '"></use></svg></div><h3>' +
+            category.name +
+            "</h3>";
+
+        card.appendChild(
+            header
+        );
+
+        categoryGoals.forEach(goal => {
+
+            const applicableDates =
+                dates.filter(
+                    date =>
+                        goalAppliesToDay(
+                            goal,
+                            getWeekdayKey(date)
+                        )
+                );
+
+            let current, target;
+
+            if (goal.type === "checkbox") {
+
+                current =
+                    applicableDates.filter(
+                        date =>
+                            dayData(date)[goal.id] === true
+                    ).length;
+
+                target =
+                    goal.weeklyTarget;
+
+                if (special && goal.frequency === "daily") {
+                    target = Math.max(target - 1, 0);
+                }
+
+            } else {
+
+                current =
+                    applicableDates.reduce(
+                        (sum, date) =>
+                            sum +
+                            (
+                                Number(
+                                    dayData(date)[goal.id]
+                                ) || 0
+                            ),
+                        0
+                    );
+
+                target =
+                    goal.weeklyTarget;
+
+            }
+
+            const percentage =
+                target > 0
+                    ? Math.min((current / target) * 100, 100)
+                    : 100;
+
+            const reached =
+                current >= target;
+
+            const unit =
+                goal.type === "checkbox"
+                    ? "dagen"
+                    : (goal.unit || "");
+
+            const row =
+                document.createElement("div");
+
+            row.className =
+                "overview-goal-row";
+
+            row.innerHTML =
+                '<div class="overview-goal-top"><span class="overview-goal-label">' +
+                goal.label +
+                '</span><span class="overview-goal-value">' +
+                current + " / " + target + " " + unit +
+                '</span></div><div class="overview-progress-track"><div class="overview-progress-fill' +
+                (reached ? " reached" : "") +
+                '" style="width:' + percentage + '%"></div></div>';
+
+            card.appendChild(
+                row
+            );
+
+        });
+
+        grid.appendChild(
+            card
+        );
+
+    });
 }
 
 
@@ -9086,6 +10015,48 @@ document
 
 document
     .getElementById(
+        "categoryModal"
+    )
+    .addEventListener(
+        "click",
+        event => {
+
+            if (
+                event.target.id ===
+                "categoryModal"
+            ) {
+
+                closeCategoryModal();
+
+            }
+
+        }
+    );
+
+
+document
+    .getElementById(
+        "goalModal"
+    )
+    .addEventListener(
+        "click",
+        event => {
+
+            if (
+                event.target.id ===
+                "goalModal"
+            ) {
+
+                closeGoalModal();
+
+            }
+
+        }
+    );
+
+
+document
+    .getElementById(
         "huiswerkTask"
     )
     .addEventListener(
@@ -9120,6 +10091,42 @@ document
     );
 
 
+document
+    .getElementById(
+        "categoryCustomNameInput"
+    )
+    .addEventListener(
+        "keydown",
+        event => {
+
+            if (
+                event.key === "Enter"
+            ) {
+                saveCategory();
+            }
+
+        }
+    );
+
+
+document
+    .getElementById(
+        "goalLabelInput"
+    )
+    .addEventListener(
+        "keydown",
+        event => {
+
+            if (
+                event.key === "Enter"
+            ) {
+                saveGoal();
+            }
+
+        }
+    );
+
+
 document.addEventListener(
     "keydown",
     event => {
@@ -9131,6 +10138,8 @@ document.addEventListener(
             closeShortcutModal();
             closeHuiswerkModal();
             closeStudyModal();
+            closeCategoryModal();
+            closeGoalModal();
 
         }
 
