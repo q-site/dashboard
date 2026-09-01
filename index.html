@@ -6055,7 +6055,7 @@ Maak eerst een categorie aan voordat je een doel toevoegt.
 <div class="content-panel rooster-panel">
 
 <h2 style="font-size:16px;margin-bottom:6px">Somtoday-rooster</h2>
-<p class="modal-hint" style="margin-bottom:16px">Koppel je rooster uit Somtoday, dan staan je lessen automatisch in deze agenda. Je vindt de link in Somtoday onder Instellingen, Agenda.</p>
+<p class="modal-hint" style="margin-bottom:16px">Koppel je rooster uit Somtoday, dan staan je lessen automatisch in deze agenda. Je vindt de link in Somtoday onder Instellingen, Agenda. Behandel hem als een wachtwoord: wie hem heeft, kan je rooster zien.</p>
 
 <div id="roosterConnected" style="display:none">
 
@@ -6105,7 +6105,7 @@ Ontkoppelen
     class="rooster-input"
     type="url"
     inputmode="url"
-    placeholder="Plak hier je iCalendar-link van Somtoday"
+    placeholder="https://api.somtoday.nl/rest/v1/icalendar/stream/..."
 >
 
 <button
@@ -15137,11 +15137,14 @@ async function syncRooster(quiet) {
             "sync-rooster"
         );
 
-    if (error || (data && data.error)) {
+    /* Geen antwoord telt ook als fout. Dat gebeurt als de
+       Edge Function nog niet is uitgerold. */
+
+    if (error || !data || data.error) {
 
         console.error(
             "Rooster verversen:",
-            error || data.error
+            error || (data && data.error) || "geen antwoord"
         );
 
         if (!quiet) {
@@ -15190,8 +15193,15 @@ async function connectRooster() {
             "roosterUrlInput"
         );
 
+    /* Sommige agenda-apps geven de link als webcal://, en
+       soms wordt hij als http:// geplakt. Het is dezelfde
+       link, dus die zetten we stil om. */
+
     const url =
-        input.value.trim();
+        input.value
+            .trim()
+            .replace(/^webcal:\/\//i, "https://")
+            .replace(/^http:\/\//i, "https://");
 
     if (!url) {
 
@@ -15200,15 +15210,16 @@ async function connectRooster() {
         return;
     }
 
-    /* Zelfde controle als in de Edge Function, zodat je
-       hier meteen ziet dat je de verkeerde link plakt. */
+    /* Zelfde controle als in de Edge Function, zodat je hier
+       meteen ziet dat je de verkeerde link plakt. Een echte
+       link ziet er zo uit:
+       https://api.somtoday.nl/rest/v1/icalendar/stream/... */
 
-    let host = "";
+    let parsed = null;
 
     try {
 
-        host =
-            new URL(url).hostname.toLowerCase();
+        parsed = new URL(url);
 
     } catch (error) {
 
@@ -15220,13 +15231,29 @@ async function connectRooster() {
         return;
     }
 
-    if (
-        host !== "somtoday.nl" &&
-        !host.endsWith(".somtoday.nl")
-    ) {
+    const host =
+        parsed.hostname.toLowerCase();
+
+    const hostOk =
+        host === "somtoday.nl" ||
+        host.endsWith(".somtoday.nl");
+
+    if (!hostOk) {
 
         setRoosterMessage(
             "Deze link hoort niet bij Somtoday. Kopieer hem in Somtoday onder Instellingen, Agenda.",
+            "error"
+        );
+
+        return;
+    }
+
+    if (
+        !parsed.pathname.startsWith("/rest/v1/icalendar/")
+    ) {
+
+        setRoosterMessage(
+            "Dit is wel een Somtoday-adres, maar niet je agendalink. Die begint met api.somtoday.nl/rest/v1/icalendar/.",
             "error"
         );
 
