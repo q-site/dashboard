@@ -15089,6 +15089,73 @@ function setRoosterMessage(text, kind) {
 }
 
 
+/* Als een Edge Function een foutcode teruggeeft, stopt de
+   Supabase-bibliotheek het antwoord niet in data maar in
+   error.context. Zonder dit uit te pakken zie je alleen
+   "Edge Function returned a non-2xx status code" en weet je
+   nog niets. */
+
+async function describeFunctionError(error, data) {
+
+    if (data && data.error) {
+        return data.error;
+    }
+
+    const response =
+        error && error.context;
+
+    if (
+        response &&
+        typeof response.json === "function"
+    ) {
+
+        try {
+
+            const body =
+                await response.json();
+
+            if (body && body.error) {
+
+                return body.error;
+
+            }
+
+        } catch (parseError) {
+
+            /* Geen JSON terug, dus verder met de code. */
+
+        }
+
+    }
+
+    const status =
+        response && response.status;
+
+    if (status === 404) {
+
+        return "De Edge Function sync-rooster bestaat nog niet in Supabase. Maak hem daar eerst aan.";
+    }
+
+    if (status === 401) {
+
+        return "Je sessie is verlopen. Log opnieuw in en probeer het nog eens.";
+    }
+
+    if (status) {
+
+        return "De Edge Function antwoordde met code " + status +
+            ". Kijk in Supabase bij Edge Functions, Logs wat er misging.";
+    }
+
+    if (error && error.message) {
+
+        return "Er ging iets mis: " + error.message;
+    }
+
+    return "Het rooster kon niet opgehaald worden. Controleer je link.";
+}
+
+
 /* Verversen bij het openen van de app en met de knop. De
    feed van Somtoday zelf werkt maar eens per tien minuten
    tot een uur bij, dus vaker ophalen heeft geen zin. */
@@ -15142,16 +15209,22 @@ async function syncRooster(quiet) {
 
     if (error || !data || data.error) {
 
+        const message =
+            await describeFunctionError(
+                error,
+                data
+            );
+
         console.error(
             "Rooster verversen:",
-            error || (data && data.error) || "geen antwoord"
+            message,
+            error
         );
 
         if (!quiet) {
 
             setRoosterMessage(
-                (data && data.error) ||
-                "Het rooster kon niet opgehaald worden. Controleer je link.",
+                message,
                 "error"
             );
 
