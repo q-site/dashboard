@@ -2487,6 +2487,274 @@ main {
     margin-bottom:26px;
 }
 
+/* =========================================================
+   AGENDA — WEEK- EN DAGWEERGAVE
+
+   Een tijdraster: links de uren, daarnaast een kolom per dag.
+   De uurlijnen zijn een achtergrondpatroon, dat scheelt een
+   berg lege divjes. Afspraken staan er absoluut in, op de
+   plek die bij hun tijd hoort.
+========================================================= */
+
+.agenda-mode-row {
+    display:flex;
+    gap:6px;
+    margin-bottom:16px;
+}
+
+.agenda-mode-button {
+    flex:1;
+    height:38px;
+    border:1px solid var(--border);
+    border-radius:8px;
+    background:var(--white);
+    color:var(--anthracite);
+    font-size:13.5px;
+    font-weight:600;
+}
+
+.agenda-mode-button:hover {
+    border-color:var(--olive);
+}
+
+.agenda-mode-button.active {
+    border-color:var(--olive);
+    background:var(--olive);
+    color:#fff;
+}
+
+.timegrid-scroll {
+    margin-bottom:26px;
+    overflow-x:auto;
+}
+
+.timegrid {
+    --hour-height:52px;
+    --time-column:52px;
+
+    display:grid;
+    grid-template-columns:var(--time-column) repeat(var(--days),minmax(0,1fr));
+}
+
+.timegrid.week {
+    min-width:640px;
+}
+
+.timegrid-corner {
+    border-bottom:1px solid var(--border);
+}
+
+.timegrid-daylabel {
+    padding:5px 4px 8px;
+    border-bottom:1px solid var(--border);
+    border-left:1px solid var(--border);
+    text-align:center;
+    font-size:11.5px;
+    font-weight:700;
+    color:var(--muted);
+    text-transform:uppercase;
+    letter-spacing:.3px;
+    cursor:pointer;
+}
+
+.timegrid-daylabel span {
+    display:block;
+    margin-top:2px;
+    font-size:15px;
+    color:var(--anthracite);
+    text-transform:none;
+    letter-spacing:0;
+}
+
+.timegrid-daylabel.today span {
+    color:var(--accent-text);
+}
+
+.timegrid-daylabel.selected {
+    background:var(--badge-bg);
+}
+
+.timegrid-allday-label,
+.timegrid-allday-cell {
+    padding:5px 4px;
+    border-bottom:1px solid var(--border);
+    min-height:26px;
+}
+
+.timegrid-allday-label {
+    font-size:10.5px;
+    font-weight:700;
+    color:var(--muted);
+    text-transform:uppercase;
+    letter-spacing:.3px;
+    display:flex;
+    align-items:center;
+    justify-content:flex-end;
+    padding-right:8px;
+}
+
+.timegrid-allday-cell {
+    border-left:1px solid var(--border);
+    display:flex;
+    flex-direction:column;
+    gap:3px;
+}
+
+.timegrid-chip {
+    padding:2px 6px;
+    border-radius:5px;
+    background:var(--badge-bg);
+    border-left:3px solid var(--olive);
+    font-size:10.5px;
+    font-weight:600;
+    line-height:1.3;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+
+.timegrid-chip.deadline {
+    background:var(--error-bg);
+    border-left-color:var(--danger);
+    color:var(--danger);
+}
+
+.timegrid-chip.huiswerk {
+    background:var(--warning-bg);
+    border-left-color:var(--warning);
+    color:var(--warning);
+}
+
+.timegrid-hours {
+    position:relative;
+}
+
+.timegrid-hour {
+    height:var(--hour-height);
+    padding-right:8px;
+    text-align:right;
+    font-size:10.5px;
+    font-weight:600;
+    color:var(--muted);
+    transform:translateY(-6px);
+}
+
+.timegrid-column {
+    position:relative;
+    border-left:1px solid var(--border);
+    background:repeating-linear-gradient(
+        to bottom,
+        var(--border) 0,
+        var(--border) 1px,
+        transparent 1px,
+        transparent var(--hour-height)
+    );
+}
+
+.timegrid-column.weekend {
+    background-color:var(--light);
+}
+
+.timegrid-item {
+    position:absolute;
+    overflow:hidden;
+    padding:3px 5px;
+    border:1px solid var(--badge-border);
+    border-left:3px solid var(--olive);
+    border-radius:5px;
+    background:var(--badge-bg);
+    color:var(--anthracite);
+    font-size:11px;
+    line-height:1.25;
+}
+
+.timegrid-item.event {
+    border-color:var(--today-border);
+    border-left-color:var(--warning);
+    background:var(--warning-bg);
+}
+
+.timegrid-item strong {
+    display:block;
+    font-size:11.5px;
+    font-weight:700;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+
+.timegrid-item span {
+    display:block;
+    color:var(--muted);
+    font-size:10.5px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+
+.timegrid-item.event span {
+    color:var(--warning);
+}
+
+/* Streep op de huidige tijd, alleen op vandaag. */
+
+.timegrid-now {
+    position:absolute;
+    left:0;
+    right:0;
+    height:2px;
+    background:var(--danger);
+    pointer-events:none;
+}
+
+.timegrid-now::before {
+    content:"";
+    position:absolute;
+    left:-4px;
+    top:-3px;
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:var(--danger);
+}
+
+.timegrid-empty {
+    padding:26px 10px;
+    text-align:center;
+    color:var(--muted);
+    font-size:13px;
+}
+
+/* In dagweergave is er ruimte zat, dus mag alles groter. */
+
+.timegrid.dag {
+    --hour-height:60px;
+    --time-column:58px;
+}
+
+.timegrid.dag .timegrid-item {
+    font-size:12px;
+    padding:5px 8px;
+}
+
+.timegrid.dag .timegrid-item strong {
+    font-size:13px;
+}
+
+.timegrid.dag .timegrid-item span {
+    font-size:11.5px;
+    white-space:normal;
+}
+
+@media(max-width:500px) {
+
+    .timegrid {
+        --hour-height:46px;
+        --time-column:44px;
+    }
+
+}
+
 .agenda-weekday-label {
     text-align:center;
     font-size:11px;
@@ -5963,12 +6231,40 @@ Maak eerst een categorie aan voordat je een doel toevoegt.
 <p>Al je deadlines en huiswerk staan hier automatisch, met ruimte voor eigen afspraken.</p>
 </div>
 
+<div class="agenda-mode-row">
+
+<button
+    id="agendaModeMaand"
+    class="agenda-mode-button active"
+    onclick="setAgendaMode('maand')"
+>
+Maand
+</button>
+
+<button
+    id="agendaModeWeek"
+    class="agenda-mode-button"
+    onclick="setAgendaMode('week')"
+>
+Week
+</button>
+
+<button
+    id="agendaModeDag"
+    class="agenda-mode-button"
+    onclick="setAgendaMode('dag')"
+>
+Dag
+</button>
+
+</div>
+
 <div class="week-selector">
 
 <button
     id="agendaPrevButton"
     class="week-nav-button"
-    onclick="changeAgendaMonth(-1)"
+    onclick="changeAgendaPeriod(-1)"
 >
 <svg fill="none"
      stroke="currentColor"
@@ -5986,7 +6282,7 @@ Maak eerst een categorie aan voordat je een doel toevoegt.
 <button
     id="agendaNextButton"
     class="week-nav-button"
-    onclick="changeAgendaMonth(1)"
+    onclick="changeAgendaPeriod(1)"
 >
 <svg fill="none"
      stroke="currentColor"
@@ -6011,6 +6307,12 @@ Maak eerst een categorie aan voordat je een doel toevoegt.
 <div
     id="agendaGrid"
     class="agenda-grid"
+></div>
+
+<div
+    id="agendaTimeScroll"
+    class="timegrid-scroll"
+    style="display:none"
 ></div>
 
 <div class="agenda-detail-panel">
@@ -7707,6 +8009,7 @@ let goalSelectedDays = new Set();
 let goalSpecialBehavior = "same";
 
 let agendaViewMonth = null;
+let agendaMode = "maand";
 let roosterLessons = [];
 let agendaSelectedDate = null;
 let agendaEvents = [];
@@ -14996,7 +15299,9 @@ function getAgendaItemsForDate(
                             ? "Les, " + period +
                               ", lokaal " + lesson.location
                             : "Les, " + period,
-                    time:lesson.start_time
+                    time:lesson.start_time,
+                    endTime:lesson.end_time,
+                    location:lesson.location
                 });
 
             });
@@ -15499,6 +15804,31 @@ function renderRoosterPanel() {
 
 function initAgenda() {
 
+    /* De laatst gekozen weergave onthouden we per apparaat.
+       Het is een kijkvoorkeur, geen instelling die mee hoeft
+       naar je telefoon. */
+
+    try {
+
+        const savedMode =
+            localStorage.getItem("agendaMode");
+
+        if (
+            savedMode === "week" ||
+            savedMode === "dag" ||
+            savedMode === "maand"
+        ) {
+
+            agendaMode = savedMode;
+
+        }
+
+    } catch (error) {
+
+        /* Opslag geblokkeerd, dan blijft het maand. */
+
+    }
+
     if (!agendaViewMonth) {
 
         agendaViewMonth =
@@ -15552,8 +15882,658 @@ async function loadAgendaEvents() {
 
 
 function renderAgendaAll() {
-    renderAgendaGrid();
+
+    const monthGrid =
+        document.getElementById(
+            "agendaGrid"
+        );
+
+    const timeScroll =
+        document.getElementById(
+            "agendaTimeScroll"
+        );
+
+    [
+        ["maand", "agendaModeMaand"],
+        ["week", "agendaModeWeek"],
+        ["dag", "agendaModeDag"]
+    ].forEach(pair => {
+
+        const button =
+            document.getElementById(pair[1]);
+
+        if (button) {
+
+            button.classList.toggle(
+                "active",
+                agendaMode === pair[0]
+            );
+
+        }
+
+    });
+
+    if (agendaMode === "maand") {
+
+        monthGrid.style.display = "";
+
+        timeScroll.style.display = "none";
+
+        renderAgendaGrid();
+
+    } else {
+
+        monthGrid.style.display = "none";
+
+        timeScroll.style.display = "";
+
+        renderAgendaTimeGrid();
+
+    }
+
     renderAgendaDetail();
+}
+
+
+function setAgendaMode(mode) {
+
+    agendaMode = mode;
+
+    try {
+
+        localStorage.setItem(
+            "agendaMode",
+            mode
+        );
+
+    } catch (error) {
+
+        /* Privemodus kan opslaan weigeren. Dan begint hij de
+           volgende keer gewoon weer op maand. */
+
+    }
+
+    if (!agendaSelectedDate) {
+
+        agendaSelectedDate = getToday();
+
+    }
+
+    agendaViewMonth =
+        agendaSelectedDate.slice(0, 7);
+
+    renderAgendaAll();
+}
+
+
+/* =========================================================
+   AGENDA — NAVIGATIE
+
+   De pijltjes verspringen een maand, een week of een dag,
+   afhankelijk van de weergave.
+========================================================= */
+
+function changeAgendaPeriod(delta) {
+
+    if (agendaMode === "maand") {
+
+        changeAgendaMonth(delta);
+
+        return;
+    }
+
+    const step =
+        agendaMode === "week"
+            ? 7 * delta
+            : delta;
+
+    agendaSelectedDate =
+        addDaysToDate(
+            agendaSelectedDate || getToday(),
+            step
+        );
+
+    agendaViewMonth =
+        agendaSelectedDate.slice(0, 7);
+
+    renderAgendaAll();
+}
+
+
+/* =========================================================
+   AGENDA — TIJDRASTER
+========================================================= */
+
+/* "08:30" of "08:30:00" wordt 510 minuten. */
+
+function timeToMinutes(value) {
+
+    if (!value) {
+        return null;
+    }
+
+    const parts =
+        String(value).split(":");
+
+    const hours = Number(parts[0]);
+    const minutes = Number(parts[1]);
+
+    if (isNaN(hours) || isNaN(minutes)) {
+        return null;
+    }
+
+    return hours * 60 + minutes;
+}
+
+
+/* 510 wordt "08:30". */
+
+function formatMinutes(minutes) {
+
+    return String(
+        Math.floor(minutes / 60)
+    ).padStart(2, "0") +
+    ":" +
+    String(minutes % 60).padStart(2, "0");
+}
+
+
+/* De dagen die in beeld staan: zeven bij week, een bij dag. */
+
+function getAgendaVisibleDates() {
+
+    const base =
+        agendaSelectedDate || getToday();
+
+    if (agendaMode === "dag") {
+        return [base];
+    }
+
+    const start =
+        getWeekStart(base);
+
+    const dates = [];
+
+    for (let i = 0; i < 7; i++) {
+
+        dates.push(
+            addDaysToDate(start, i)
+        );
+
+    }
+
+    return dates;
+}
+
+
+/* Afspraken die elkaar overlappen komen naast elkaar te
+   staan. Per groep die aan elkaar vastzit wordt geteld
+   hoeveel kolommen er nodig zijn. */
+
+function layoutOverlaps(items) {
+
+    const sorted =
+        items
+            .slice()
+            .sort((a, b) => a.start - b.start);
+
+    let cluster = [];
+    let clusterEnd = -1;
+
+    const closeCluster = () => {
+
+        const columns = [];
+
+        cluster.forEach(item => {
+
+            let placed = false;
+
+            for (let i = 0; i < columns.length; i++) {
+
+                if (columns[i] <= item.start) {
+
+                    item.column = i;
+                    columns[i] = item.end;
+                    placed = true;
+
+                    break;
+                }
+
+            }
+
+            if (!placed) {
+
+                item.column = columns.length;
+                columns.push(item.end);
+
+            }
+
+        });
+
+        cluster.forEach(item => {
+
+            item.columns = columns.length;
+
+        });
+
+        cluster = [];
+        clusterEnd = -1;
+    };
+
+    sorted.forEach(item => {
+
+        if (cluster.length && item.start >= clusterEnd) {
+
+            closeCluster();
+
+        }
+
+        cluster.push(item);
+
+        clusterEnd =
+            Math.max(clusterEnd, item.end);
+
+    });
+
+    if (cluster.length) {
+
+        closeCluster();
+
+    }
+
+    return sorted;
+}
+
+
+function renderAgendaTimeGrid() {
+
+    const scroll =
+        document.getElementById(
+            "agendaTimeScroll"
+        );
+
+    const dates =
+        getAgendaVisibleDates();
+
+    /* Het label boven de pijltjes. */
+
+    const label =
+        document.getElementById(
+            "agendaMonthLabel"
+        );
+
+    if (agendaMode === "dag") {
+
+        const dayKey =
+            getWeekdayKey(dates[0]);
+
+        label.textContent =
+            dayKey.charAt(0).toUpperCase() +
+            dayKey.slice(1) +
+            " " +
+            formatDeadlineDate(dates[0]);
+
+    } else {
+
+        label.textContent =
+            "Week van " +
+            formatDeadlineDate(dates[0]) +
+            " t/m " +
+            formatDeadlineDate(dates[6]);
+
+    }
+
+    /* Alles verzamelen dat in beeld komt. */
+
+    const perDay =
+        dates.map(date => {
+
+            const items =
+                getAgendaItemsForDate(date);
+
+            const timed = [];
+            const allDay = [];
+
+            items.forEach(item => {
+
+                const start =
+                    timeToMinutes(item.time);
+
+                if (start === null) {
+
+                    allDay.push(item);
+
+                    return;
+                }
+
+                /* Lessen weten hun eindtijd, eigen afspraken
+                   niet. Die krijgen een blok van een uur. */
+
+                const end =
+                    timeToMinutes(item.endTime) ||
+                    (start + 60);
+
+                timed.push(
+                    Object.assign(
+                        {},
+                        item,
+                        {
+                            start:start,
+                            end:Math.max(end, start + 20)
+                        }
+                    )
+                );
+
+            });
+
+            return {
+                date:date,
+                timed:layoutOverlaps(timed),
+                allDay:allDay
+            };
+
+        });
+
+    /* Uurbereik: standaard 8 tot 17, ruimer als er iets
+       buiten valt. */
+
+    let earliest = 8 * 60;
+    let latest = 17 * 60;
+
+    perDay.forEach(day => {
+
+        day.timed.forEach(item => {
+
+            earliest = Math.min(earliest, item.start);
+            latest = Math.max(latest, item.end);
+
+        });
+
+    });
+
+    const startHour =
+        Math.max(
+            0,
+            Math.floor(earliest / 60)
+        );
+
+    const endHour =
+        Math.min(
+            24,
+            Math.ceil(latest / 60)
+        );
+
+    const hourCount =
+        Math.max(1, endHour - startHour);
+
+    const hourHeight =
+        window.innerWidth <= 500
+            ? 46
+            : (
+                agendaMode === "dag"
+                    ? 60
+                    : 52
+            );
+
+    const grid =
+        document.createElement("div");
+
+    grid.className =
+        "timegrid " + agendaMode;
+
+    grid.style.setProperty(
+        "--days",
+        String(dates.length)
+    );
+
+    grid.style.setProperty(
+        "--hour-height",
+        hourHeight + "px"
+    );
+
+    /* Kop met de dagen. */
+
+    const corner =
+        document.createElement("div");
+
+    corner.className = "timegrid-corner";
+
+    grid.appendChild(corner);
+
+    const today = getToday();
+
+    dates.forEach(date => {
+
+        const head =
+            document.createElement("div");
+
+        head.className =
+            "timegrid-daylabel" +
+            (
+                date === today
+                    ? " today"
+                    : ""
+            ) +
+            (
+                date === agendaSelectedDate
+                    ? " selected"
+                    : ""
+            );
+
+        head.onclick =
+            () =>
+                selectAgendaDate(date);
+
+        head.textContent =
+            getWeekdayKey(date).slice(0, 2);
+
+        const number =
+            document.createElement("span");
+
+        number.textContent =
+            String(Number(date.slice(8, 10)));
+
+        head.appendChild(number);
+
+        grid.appendChild(head);
+
+    });
+
+    /* Rij met alles zonder tijd. */
+
+    const allDayLabel =
+        document.createElement("div");
+
+    allDayLabel.className =
+        "timegrid-allday-label";
+
+    allDayLabel.textContent = "Hele dag";
+
+    grid.appendChild(allDayLabel);
+
+    perDay.forEach(day => {
+
+        const cell =
+            document.createElement("div");
+
+        cell.className =
+            "timegrid-allday-cell";
+
+        day.allDay.forEach(item => {
+
+            const chip =
+                document.createElement("div");
+
+            chip.className =
+                "timegrid-chip " + item.type;
+
+            chip.textContent = item.label;
+
+            chip.title =
+                item.label + " — " + item.meta;
+
+            cell.appendChild(chip);
+
+        });
+
+        grid.appendChild(cell);
+
+    });
+
+    /* Urenkolom. */
+
+    const hours =
+        document.createElement("div");
+
+    hours.className = "timegrid-hours";
+
+    for (let i = 0; i < hourCount; i++) {
+
+        const hour =
+            document.createElement("div");
+
+        hour.className = "timegrid-hour";
+
+        hour.style.height = hourHeight + "px";
+
+        hour.textContent =
+            String(startHour + i).padStart(2, "0") +
+            ":00";
+
+        hours.appendChild(hour);
+
+    }
+
+    grid.appendChild(hours);
+
+    /* Dagkolommen met de afspraken erin. */
+
+    perDay.forEach(day => {
+
+        const weekday =
+            new Date(day.date + "T12:00:00").getDay();
+
+        const column =
+            document.createElement("div");
+
+        column.className =
+            "timegrid-column" +
+            (
+                weekday === 0 || weekday === 6
+                    ? " weekend"
+                    : ""
+            );
+
+        column.style.height =
+            (hourCount * hourHeight) + "px";
+
+        day.timed.forEach(item => {
+
+            const block =
+                document.createElement("div");
+
+            block.className =
+                "timegrid-item " + item.type;
+
+            const top =
+                (
+                    (item.start - startHour * 60) / 60
+                ) * hourHeight;
+
+            const height =
+                Math.max(
+                    18,
+                    (
+                        (item.end - item.start) / 60
+                    ) * hourHeight - 2
+                );
+
+            const width =
+                100 / (item.columns || 1);
+
+            block.style.top = top + "px";
+            block.style.height = height + "px";
+            block.style.left =
+                (width * (item.column || 0)) + "%";
+            block.style.width =
+                "calc(" + width + "% - 3px)";
+
+            const title =
+                document.createElement("strong");
+
+            title.textContent = item.label;
+
+            block.appendChild(title);
+
+            if (height > 30) {
+
+                const meta =
+                    document.createElement("span");
+
+                meta.textContent =
+                    formatMinutes(item.start) +
+                    (
+                        item.endTime
+                            ? " tot " + formatMinutes(item.end)
+                            : ""
+                    ) +
+                    (
+                        item.location
+                            ? " · " + item.location
+                            : ""
+                    );
+
+                block.appendChild(meta);
+
+            }
+
+            block.title =
+                item.label + "\n" + item.meta;
+
+            column.appendChild(block);
+
+        });
+
+        /* Streep op de huidige tijd. */
+
+        if (day.date === today) {
+
+            const now = new Date();
+
+            const minutes =
+                now.getHours() * 60 +
+                now.getMinutes();
+
+            if (
+                minutes >= startHour * 60 &&
+                minutes <= endHour * 60
+            ) {
+
+                const line =
+                    document.createElement("div");
+
+                line.className = "timegrid-now";
+
+                line.style.top =
+                    (
+                        (
+                            (minutes - startHour * 60) / 60
+                        ) * hourHeight
+                    ) + "px";
+
+                column.appendChild(line);
+
+            }
+
+        }
+
+        grid.appendChild(column);
+
+    });
+
+    scroll.innerHTML = "";
+
+    scroll.appendChild(grid);
 }
 
 
