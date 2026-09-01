@@ -2615,6 +2615,109 @@ main {
     background:var(--accent-text);
 }
 
+/* =========================================================
+   SOMTODAY-ROOSTER
+========================================================= */
+
+.agenda-detail-dot.les {
+    background:none;
+    border:2px solid var(--olive);
+    width:9px;
+    height:9px;
+}
+
+.agenda-detail-item.les .agenda-detail-label {
+    font-weight:600;
+}
+
+.agenda-detail-item.les .agenda-detail-meta {
+    color:var(--muted);
+}
+
+.rooster-panel {
+    margin-top:18px;
+}
+
+.rooster-status-row {
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:10px;
+}
+
+.rooster-badge {
+    display:inline-flex;
+    align-items:center;
+    padding:3px 11px;
+    border-radius:20px;
+    background:var(--success-bg);
+    color:var(--success);
+    font-size:12px;
+    font-weight:700;
+}
+
+.rooster-synced {
+    color:var(--muted);
+    font-size:12.5px;
+}
+
+.rooster-buttons {
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-top:6px;
+}
+
+.secondary-button.danger:hover {
+    border-color:var(--danger);
+    color:var(--danger);
+}
+
+.rooster-input-row {
+    display:grid;
+    grid-template-columns:1fr auto;
+    gap:9px;
+}
+
+.rooster-input {
+    width:100%;
+    min-width:0;
+    height:44px;
+    padding:0 13px;
+    border:1px solid var(--border);
+    border-radius:8px;
+    outline:none;
+    background:var(--white);
+    color:var(--anthracite);
+}
+
+.rooster-input:focus {
+    border-color:var(--olive);
+}
+
+.rooster-message {
+    margin-top:12px;
+    font-size:13px;
+    line-height:1.55;
+    color:var(--muted);
+}
+
+.rooster-message.error {
+    color:var(--danger);
+}
+
+.rooster-message.ok {
+    color:var(--success);
+}
+
+@media(max-width:500px) {
+
+    .rooster-input-row {
+        grid-template-columns:1fr;
+    }
+
+}
+
 .agenda-detail-text {
     flex:1;
     min-width:0;
@@ -5949,6 +6052,80 @@ Maak eerst een categorie aan voordat je een doel toevoegt.
 
 </div>
 
+<div class="content-panel rooster-panel">
+
+<h2 style="font-size:16px;margin-bottom:6px">Somtoday-rooster</h2>
+<p class="modal-hint" style="margin-bottom:16px">Koppel je rooster uit Somtoday, dan staan je lessen automatisch in deze agenda. Je vindt de link in Somtoday onder Instellingen, Agenda.</p>
+
+<div id="roosterConnected" style="display:none">
+
+<div class="rooster-status-row">
+<span class="rooster-badge">Gekoppeld</span>
+<span
+    id="roosterSyncedAt"
+    class="rooster-synced"
+></span>
+</div>
+
+<label class="notif-toggle-row" style="margin-top:14px">
+<input
+    id="roosterVisibleToggle"
+    type="checkbox"
+    onchange="toggleRoosterVisible()"
+>
+Lessen in mijn agenda tonen
+</label>
+
+<div class="rooster-buttons">
+
+<button
+    class="secondary-button"
+    onclick="syncRooster(false)"
+>
+Nu verversen
+</button>
+
+<button
+    class="secondary-button danger"
+    onclick="disconnectRooster()"
+>
+Ontkoppelen
+</button>
+
+</div>
+
+</div>
+
+<div id="roosterDisconnected">
+
+<div class="rooster-input-row">
+
+<input
+    id="roosterUrlInput"
+    class="rooster-input"
+    type="url"
+    inputmode="url"
+    placeholder="Plak hier je iCalendar-link van Somtoday"
+>
+
+<button
+    class="agenda-add-button"
+    onclick="connectRooster()"
+>
+Koppelen
+</button>
+
+</div>
+
+</div>
+
+<div
+    id="roosterStatus"
+    class="rooster-message"
+></div>
+
+</div>
+
 </section>
 
 
@@ -7530,6 +7707,7 @@ let goalSelectedDays = new Set();
 let goalSpecialBehavior = "same";
 
 let agendaViewMonth = null;
+let roosterLessons = [];
 let agendaSelectedDate = null;
 let agendaEvents = [];
 
@@ -8125,7 +8303,10 @@ function defaultUserSettings() {
         sort_todos:"created_desc",
         sort_deadlines:"date_asc",
         sort_huiswerk:"date_asc",
-        onboarding_done:false
+        onboarding_done:false,
+        somtoday_ical_url:null,
+        rooster_visible:true,
+        rooster_synced_at:null
     };
 }
 
@@ -8208,7 +8389,9 @@ async function saveUserSettings() {
                     sort_todos:userSettings.sort_todos,
                     sort_deadlines:userSettings.sort_deadlines,
                     sort_huiswerk:userSettings.sort_huiswerk,
-                    onboarding_done:userSettings.onboarding_done
+                    onboarding_done:userSettings.onboarding_done,
+                    somtoday_ical_url:userSettings.somtoday_ical_url,
+                    rooster_visible:userSettings.rooster_visible
                 },
                 {
                     onConflict:"user_id"
@@ -9654,7 +9837,8 @@ async function loadAllData() {
         loadAgendaEventsData(),
         loadNotificationSettings(),
         loadTrackerCategories(),
-        loadTrackerGoals()
+        loadTrackerGoals(),
+        loadRoosterLessons()
     ]);
 
     renderQuickStats();
@@ -9663,6 +9847,11 @@ async function loadAllData() {
        rondleiding lege blokken uit. */
 
     maybeShowWelcome();
+
+    /* Het rooster op de achtergrond bijwerken. Gaat dat mis,
+       dan blijft het laatst opgehaalde rooster staan. */
+
+    syncRooster(true);
 
     await refreshDueReminders();
 
@@ -14778,10 +14967,59 @@ function getAgendaItemsForDate(
 
         });
 
+    if (roosterIsVisible()) {
+
+        roosterLessons
+            .filter(
+                lesson =>
+                    lesson.event_date === dateString
+            )
+            .forEach(lesson => {
+
+                const period =
+                    lesson.start_time
+                        ? lesson.start_time.slice(0, 5) +
+                          (
+                              lesson.end_time
+                                  ? " tot " +
+                                    lesson.end_time.slice(0, 5)
+                                  : ""
+                          )
+                        : "Hele dag";
+
+                items.push({
+                    type:"les",
+                    label:lesson.title,
+                    completed:false,
+                    meta:
+                        lesson.location
+                            ? "Les, " + period +
+                              ", lokaal " + lesson.location
+                            : "Les, " + period,
+                    time:lesson.start_time
+                });
+
+            });
+
+    }
+
+    /* Alles met een tijd op volgorde, en dat blok onder de
+       items zonder tijd zoals deadlines en huiswerk. */
+
     items.sort((a, b) => {
 
-        if (a.type === "event" && b.type === "event") {
+        const aTimed =
+            a.type === "event" || a.type === "les";
+
+        const bTimed =
+            b.type === "event" || b.type === "les";
+
+        if (aTimed && bTimed) {
             return (a.time || "").localeCompare(b.time || "");
+        }
+
+        if (aTimed !== bTimed) {
+            return aTimed ? 1 : -1;
         }
 
         return 0;
@@ -14789,6 +15027,369 @@ function getAgendaItemsForDate(
     });
 
     return items;
+}
+
+
+/* =========================================================
+   SOMTODAY-ROOSTER
+
+   De feed van Somtoday geeft geen CORS-headers, dus de
+   browser mag hem niet zelf ophalen. Dat doet de Edge
+   Function sync-rooster, die de lessen in de tabel
+   rooster_lessons zet. Hier lezen we alleen die tabel.
+========================================================= */
+
+async function loadRoosterLessons() {
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("rooster_lessons")
+            .select("*")
+            .order("event_date", {
+                ascending:true
+            });
+
+    if (error) {
+
+        console.error(
+            "Rooster laden:",
+            error
+        );
+
+        return;
+    }
+
+    roosterLessons = data || [];
+}
+
+
+function setRoosterMessage(text, kind) {
+
+    const element =
+        document.getElementById(
+            "roosterStatus"
+        );
+
+    if (!element) {
+        return;
+    }
+
+    element.textContent = text;
+
+    element.className =
+        "rooster-message" +
+        (
+            kind
+                ? " " + kind
+                : ""
+        );
+}
+
+
+/* Verversen bij het openen van de app en met de knop. De
+   feed van Somtoday zelf werkt maar eens per tien minuten
+   tot een uur bij, dus vaker ophalen heeft geen zin. */
+
+async function syncRooster(quiet) {
+
+    if (
+        !userSettings ||
+        !userSettings.somtoday_ical_url
+    ) {
+        return;
+    }
+
+    if (quiet && userSettings.rooster_synced_at) {
+
+        const ageMinutes =
+            (
+                Date.now() -
+                new Date(
+                    userSettings.rooster_synced_at
+                ).getTime()
+            ) / 60000;
+
+        if (ageMinutes < 10) {
+
+            return;
+
+        }
+
+    }
+
+    if (!quiet) {
+
+        setRoosterMessage(
+            "Bezig met ophalen...",
+            null
+        );
+
+    }
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient.functions.invoke(
+            "sync-rooster"
+        );
+
+    if (error || (data && data.error)) {
+
+        console.error(
+            "Rooster verversen:",
+            error || data.error
+        );
+
+        if (!quiet) {
+
+            setRoosterMessage(
+                (data && data.error) ||
+                "Het rooster kon niet opgehaald worden. Controleer je link.",
+                "error"
+            );
+
+        }
+
+        return;
+    }
+
+    userSettings.rooster_synced_at =
+        new Date().toISOString();
+
+    await loadRoosterLessons();
+
+    renderRoosterPanel();
+
+    if (agendaViewMonth) {
+
+        renderAgendaAll();
+
+    }
+
+    if (!quiet) {
+
+        setRoosterMessage(
+            data.lessons === 1
+                ? "1 les opgehaald."
+                : data.lessons + " lessen opgehaald.",
+            "ok"
+        );
+
+    }
+}
+
+
+async function connectRooster() {
+
+    const input =
+        document.getElementById(
+            "roosterUrlInput"
+        );
+
+    const url =
+        input.value.trim();
+
+    if (!url) {
+
+        input.focus();
+
+        return;
+    }
+
+    /* Zelfde controle als in de Edge Function, zodat je
+       hier meteen ziet dat je de verkeerde link plakt. */
+
+    let host = "";
+
+    try {
+
+        host =
+            new URL(url).hostname.toLowerCase();
+
+    } catch (error) {
+
+        setRoosterMessage(
+            "Dit is geen geldige link.",
+            "error"
+        );
+
+        return;
+    }
+
+    if (
+        host !== "somtoday.nl" &&
+        !host.endsWith(".somtoday.nl")
+    ) {
+
+        setRoosterMessage(
+            "Deze link hoort niet bij Somtoday. Kopieer hem in Somtoday onder Instellingen, Agenda.",
+            "error"
+        );
+
+        return;
+    }
+
+    userSettings.somtoday_ical_url = url;
+
+    await saveUserSettings();
+
+    input.value = "";
+
+    renderRoosterPanel();
+
+    await syncRooster(false);
+}
+
+
+async function disconnectRooster() {
+
+    const confirmed =
+        confirm(
+            "Rooster ontkoppelen? Je lessen verdwijnen uit de agenda. Je eigen afspraken blijven staan."
+        );
+
+    if (!confirmed) {
+        return;
+    }
+
+    const user =
+        await getCurrentUser();
+
+    if (user) {
+
+        const {
+            error
+        } =
+            await supabaseClient
+                .from("rooster_lessons")
+                .delete()
+                .eq("user_id", user.id);
+
+        if (error) {
+
+            console.error(
+                "Rooster verwijderen:",
+                error
+            );
+
+        }
+
+    }
+
+    userSettings.somtoday_ical_url = null;
+    userSettings.rooster_synced_at = null;
+
+    roosterLessons = [];
+
+    await saveUserSettings();
+
+    renderRoosterPanel();
+
+    renderAgendaAll();
+
+    setRoosterMessage(
+        "Ontkoppeld.",
+        null
+    );
+}
+
+
+async function toggleRoosterVisible() {
+
+    userSettings.rooster_visible =
+        document.getElementById(
+            "roosterVisibleToggle"
+        ).checked;
+
+    renderAgendaAll();
+
+    await saveUserSettings();
+}
+
+
+function roosterIsVisible() {
+
+    return Boolean(
+        userSettings &&
+        userSettings.somtoday_ical_url &&
+        userSettings.rooster_visible
+    );
+}
+
+
+function renderRoosterPanel() {
+
+    const connected =
+        document.getElementById(
+            "roosterConnected"
+        );
+
+    const disconnected =
+        document.getElementById(
+            "roosterDisconnected"
+        );
+
+    if (!connected || !disconnected) {
+        return;
+    }
+
+    const hasLink =
+        Boolean(
+            userSettings &&
+            userSettings.somtoday_ical_url
+        );
+
+    connected.style.display =
+        hasLink
+            ? ""
+            : "none";
+
+    disconnected.style.display =
+        hasLink
+            ? "none"
+            : "";
+
+    if (!hasLink) {
+        return;
+    }
+
+    document.getElementById(
+        "roosterVisibleToggle"
+    ).checked =
+        userSettings.rooster_visible !== false;
+
+    const synced =
+        document.getElementById(
+            "roosterSyncedAt"
+        );
+
+    if (userSettings.rooster_synced_at) {
+
+        const moment =
+            new Date(
+                userSettings.rooster_synced_at
+            );
+
+        synced.textContent =
+            "Laatst opgehaald om " +
+            String(moment.getHours()).padStart(2, "0") +
+            ":" +
+            String(moment.getMinutes()).padStart(2, "0") +
+            " op " +
+            moment.getDate() +
+            " " +
+            clockMonths[moment.getMonth()];
+
+    } else {
+
+        synced.textContent =
+            "Nog niet opgehaald";
+
+    }
 }
 
 
@@ -14807,6 +15408,8 @@ function initAgenda() {
             getToday();
 
     }
+
+    renderRoosterPanel();
 
     loadAgendaEvents();
 }
@@ -15039,10 +15642,15 @@ function renderAgendaGrid() {
             number
         );
 
+        /* Lessen krijgen geen stip. Die staan op elke
+           schooldag, dus een stip zegt dan niets meer. */
+
         const types =
             [
                 ...new Set(
-                    items.map(item => item.type)
+                    items
+                        .filter(item => item.type !== "les")
+                        .map(item => item.type)
                 )
             ];
 
@@ -15140,7 +15748,12 @@ function renderAgendaDetail() {
             document.createElement("div");
 
         row.className =
-            "agenda-detail-item";
+            "agenda-detail-item" +
+            (
+                item.type === "les"
+                    ? " les"
+                    : ""
+            );
 
         const dot =
             document.createElement("div");
@@ -15193,7 +15806,10 @@ function renderAgendaDetail() {
             text
         );
 
-        if (item.type === "event" && item.time) {
+        if (
+            (item.type === "event" || item.type === "les") &&
+            item.time
+        ) {
 
             const time =
                 document.createElement("div");
