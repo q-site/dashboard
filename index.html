@@ -2,7 +2,7 @@
 <html lang="nl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#343833">
 <link rel="icon" type="image/png" sizes="512x512" href="favicon.png">
 <link rel="apple-touch-icon" href="favicon.png">
@@ -66,10 +66,115 @@
     color-scheme:dark;
 }
 
+/* =========================================================
+   ACCENTKLEUREN
+
+   De standaardkleur (olijf) staat hierboven in :root en in
+   [data-theme="dark"]. De blokken hieronder overschrijven
+   alleen de accentvariabelen, apart voor licht en donker.
+   Beide selectors hebben twee attributen, zodat ze het
+   thema-blok hierboven altijd verslaan.
+========================================================= */
+
+[data-theme="light"][data-accent="blauw"] {
+    --olive:#3d5a80;
+    --olive-dark:#2e4560;
+    --accent-text:#2e4560;
+    --badge-bg:#e9edf3;
+    --badge-border:#d3dbe6;
+}
+
+[data-theme="dark"][data-accent="blauw"] {
+    --olive:#6f97c7;
+    --olive-dark:#8bb0da;
+    --accent-text:#a8c6e6;
+    --badge-bg:#2b3542;
+    --badge-border:#3a4553;
+}
+
+[data-theme="light"][data-accent="terracotta"] {
+    --olive:#a1522f;
+    --olive-dark:#834023;
+    --accent-text:#834023;
+    --badge-bg:#f5ebe5;
+    --badge-border:#e6d6cb;
+}
+
+[data-theme="dark"][data-accent="terracotta"] {
+    --olive:#d08a63;
+    --olive-dark:#e0a37f;
+    --accent-text:#e8bb9d;
+    --badge-bg:#3d302a;
+    --badge-border:#4b3b33;
+}
+
+[data-theme="light"][data-accent="paars"] {
+    --olive:#5c4b8a;
+    --olive-dark:#47396c;
+    --accent-text:#47396c;
+    --badge-bg:#eeebf4;
+    --badge-border:#dcd6e8;
+}
+
+[data-theme="dark"][data-accent="paars"] {
+    --olive:#9686c9;
+    --olive-dark:#ab9dd8;
+    --accent-text:#c4b8e6;
+    --badge-bg:#332e42;
+    --badge-border:#413a53;
+}
+
+[data-theme="light"][data-accent="teal"] {
+    --olive:#2f6b64;
+    --olive-dark:#23524d;
+    --accent-text:#23524d;
+    --badge-bg:#e6efee;
+    --badge-border:#cfe0dd;
+}
+
+[data-theme="dark"][data-accent="teal"] {
+    --olive:#63a89e;
+    --olive-dark:#7fbdb4;
+    --accent-text:#9fd3ca;
+    --badge-bg:#273835;
+    --badge-border:#334744;
+}
+
+[data-theme="light"][data-accent="bordeaux"] {
+    --olive:#7d3242;
+    --olive-dark:#642633;
+    --accent-text:#642633;
+    --badge-bg:#f3e9eb;
+    --badge-border:#e4d1d6;
+}
+
+[data-theme="dark"][data-accent="bordeaux"] {
+    --olive:#c07686;
+    --olive-dark:#d2909e;
+    --accent-text:#e0b0ba;
+    --badge-bg:#3a2b2f;
+    --badge-border:#4a373c;
+}
+
 * {
     box-sizing:border-box;
     margin:0;
     padding:0;
+
+    /* Schakelt dubbeltikken om in te zoomen uit, zonder
+       scrollen te blokkeren. Dit is het stuk dat ook in
+       Safari werkt, waar user-scalable=no in een gewoon
+       tabblad genegeerd wordt. */
+
+    touch-action:manipulation;
+}
+
+html {
+    /* Voorkomt dat iOS de tekst zelf groter maakt als je de
+       telefoon draait. */
+
+    -webkit-text-size-adjust:100%;
+    text-size-adjust:100%;
 }
 
 body {
@@ -280,14 +385,62 @@ button {
     min-height:100vh;
 }
 
+/* De balk blijft bovenaan staan, ook tijdens scrollen en
+   ook op een telefoon. z-index 60 zit boven de sorteermenu's
+   (40) en onder de modals (100). */
+
 .topbar {
+    position:sticky;
+    top:0;
+    z-index:60;
     height:68px;
     padding:0 32px;
     display:flex;
     align-items:center;
     justify-content:space-between;
+    gap:12px;
     background:var(--white);
     border-bottom:1px solid var(--border);
+}
+
+/* Zodat de balk niet over een aangeklikt onderdeel heen
+   valt als de browser ernaartoe springt. */
+
+html {
+    scroll-padding-top:80px;
+}
+
+/* =========================================================
+   KLOK IN DE BALK
+========================================================= */
+
+.topbar-clock {
+    flex:1;
+    min-width:0;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    line-height:1.15;
+    white-space:nowrap;
+    overflow:hidden;
+}
+
+.clock-time {
+    font-size:16px;
+    font-weight:700;
+    letter-spacing:.3px;
+    font-variant-numeric:tabular-nums;
+}
+
+.clock-date {
+    color:var(--muted);
+    font-size:11.5px;
+    font-weight:600;
+}
+
+.clock-date-short {
+    display:none;
 }
 
 .brand {
@@ -537,6 +690,14 @@ main {
     margin-bottom:3px;
 }
 
+.stat-value.pass {
+    color:var(--success);
+}
+
+.stat-value.fail {
+    color:var(--danger);
+}
+
 .stat-label {
     color:var(--muted);
     font-size:13px;
@@ -731,11 +892,24 @@ main {
     display:flex;
     justify-content:space-between;
     align-items:center;
+    gap:8px;
     margin-bottom:15px;
 }
 
 .notes-sidebar-header h2 {
+    flex:1;
     font-size:16px;
+}
+
+/* In de smalle zijbalk past alleen het icoon. */
+
+.notes-sidebar-header .sort-button {
+    height:34px;
+    padding:0 9px;
+}
+
+.notes-sidebar-header .sort-button span {
+    display:none;
 }
 
 .new-note-button {
@@ -916,6 +1090,27 @@ main {
     margin-bottom:22px;
 }
 
+.todo-input-row {
+    grid-template-columns:1fr 132px 165px auto;
+}
+
+.todo-priority-select,
+.todo-date-input {
+    height:44px;
+    padding:0 11px;
+    border:1px solid var(--border);
+    border-radius:8px;
+    outline:none;
+    background:var(--white);
+    color:var(--anthracite);
+    font-size:14px;
+}
+
+.todo-priority-select:focus,
+.todo-date-input:focus {
+    border-color:var(--olive);
+}
+
 .todo-input,
 .deadline-input,
 .shortcut-input {
@@ -978,6 +1173,86 @@ main {
 .deadline-item.completed .deadline-title {
     color:var(--muted);
     text-decoration:line-through;
+}
+
+/* =========================================================
+   TODO — PRIORITEIT EN DATUM
+========================================================= */
+
+.todo-body {
+    flex:1;
+    min-width:0;
+}
+
+.todo-meta {
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:6px;
+    margin-top:5px;
+}
+
+.todo-badge {
+    display:inline-flex;
+    align-items:center;
+    padding:2px 9px;
+    border-radius:20px;
+    background:var(--badge-bg);
+    border:1px solid var(--badge-border);
+    color:var(--muted);
+    font-size:11.5px;
+    font-weight:700;
+    letter-spacing:.2px;
+}
+
+.todo-badge.priority-high {
+    background:var(--error-bg);
+    border-color:var(--overdue-border);
+    color:var(--danger);
+}
+
+.todo-badge.priority-low {
+    background:var(--badge-bg);
+    border-color:var(--badge-border);
+    color:var(--muted);
+}
+
+.todo-badge.date-overdue {
+    background:var(--overdue-badge-bg);
+    border-color:var(--overdue-border);
+    color:var(--danger);
+}
+
+.todo-badge.date-today {
+    background:var(--warning-bg);
+    border-color:var(--today-border);
+    color:var(--warning);
+}
+
+.todo-item.completed .todo-badge {
+    opacity:.5;
+}
+
+/* Streepje links dat de prioriteit aangeeft. */
+
+.todo-item.priority-high {
+    border-left:3px solid var(--danger);
+}
+
+.todo-item.priority-low {
+    border-left:3px solid var(--border);
+}
+
+.todo-list-header {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    margin-bottom:12px;
+}
+
+.todo-list-header h2 {
+    font-size:15px;
 }
 
 .delete-todo,
@@ -1282,6 +1557,53 @@ main {
     font-size:13px;
 }
 
+.study-goal-row {
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:9px;
+    margin-bottom:18px;
+    padding-bottom:18px;
+    border-bottom:1px solid var(--border);
+    font-size:13.5px;
+}
+
+.study-goal-row label {
+    font-weight:600;
+}
+
+.study-goal-input {
+    width:84px;
+    height:38px;
+    padding:0 10px;
+    border:1px solid var(--border);
+    border-radius:8px;
+    outline:none;
+    background:var(--white);
+    color:var(--anthracite);
+}
+
+.study-goal-input:focus {
+    border-color:var(--olive);
+}
+
+.study-goal-unit {
+    color:var(--muted);
+}
+
+.study-goal-status {
+    font-size:12.5px;
+    font-weight:600;
+}
+
+.study-goal-status.saved {
+    color:var(--success);
+}
+
+.study-goal-status.error {
+    color:var(--danger);
+}
+
 .study-week-list {
     display:flex;
     flex-direction:column;
@@ -1406,6 +1728,61 @@ main {
     font-size:13px;
 }
 
+.subject-average.pass {
+    color:var(--success);
+    font-weight:600;
+}
+
+.subject-average.fail {
+    color:var(--danger);
+    font-weight:600;
+}
+
+.pass-grade-row {
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:9px;
+    margin-bottom:18px;
+    font-size:13.5px;
+}
+
+.pass-grade-row label {
+    font-weight:600;
+}
+
+.pass-grade-input {
+    width:84px;
+    height:38px;
+    padding:0 10px;
+    border:1px solid var(--border);
+    border-radius:8px;
+    outline:none;
+    background:var(--white);
+    color:var(--anthracite);
+}
+
+.pass-grade-input:focus {
+    border-color:var(--olive);
+}
+
+.pass-grade-hint {
+    color:var(--muted);
+}
+
+.pass-grade-status {
+    font-size:12.5px;
+    font-weight:600;
+}
+
+.pass-grade-status.saved {
+    color:var(--success);
+}
+
+.pass-grade-status.error {
+    color:var(--danger);
+}
+
 .delete-subject {
     width:32px;
     height:32px;
@@ -1446,6 +1823,16 @@ main {
     color:var(--accent-text);
     font-size:13px;
     font-weight:700;
+}
+
+.grade-chip.pass {
+    background:var(--success-bg);
+    color:var(--success);
+}
+
+.grade-chip.fail {
+    background:var(--error-bg);
+    color:var(--danger);
 }
 
 .delete-grade {
@@ -2408,6 +2795,12 @@ main {
 
 .suggestion-password-row input {
     flex:1;
+
+    /* Zonder dit weigert het veld te krimpen onder zijn
+       eigen tekstbreedte en loopt de rij op een smal
+       scherm buiten beeld. */
+
+    min-width:0;
     height:42px;
     padding:0 12px;
     border:1px solid var(--border);
@@ -2614,6 +3007,419 @@ main {
 }
 
 /* =========================================================
+   INSTELLINGEN
+========================================================= */
+
+.settings-select {
+    height:42px;
+    min-width:180px;
+    padding:0 12px;
+    border:1px solid var(--border);
+    border-radius:8px;
+    outline:none;
+    background:var(--white);
+    color:var(--anthracite);
+}
+
+.accent-option-row {
+    display:flex;
+    flex-wrap:wrap;
+    gap:9px;
+}
+
+.accent-option {
+    display:flex;
+    align-items:center;
+    gap:8px;
+    height:38px;
+    padding:0 14px 0 10px;
+    border:1px solid var(--border);
+    border-radius:20px;
+    background:var(--white);
+    color:var(--anthracite);
+    font-size:13.5px;
+    font-weight:600;
+}
+
+.accent-option:hover {
+    border-color:var(--olive);
+}
+
+.accent-option.selected {
+    border-color:var(--olive);
+    box-shadow:inset 0 0 0 1px var(--olive);
+    color:var(--accent-text);
+}
+
+.accent-dot {
+    width:16px;
+    height:16px;
+    border-radius:50%;
+    border:1px solid rgba(0,0,0,.15);
+}
+
+.card-visibility-list {
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(190px,1fr));
+    gap:2px 18px;
+}
+
+.card-visibility-list .notif-toggle-row {
+    margin-bottom:6px;
+}
+
+.secondary-button {
+    height:40px;
+    padding:0 16px;
+    border:1px solid var(--border);
+    border-radius:8px;
+    background:var(--white);
+    color:var(--anthracite);
+    font-size:13.5px;
+    font-weight:600;
+}
+
+.secondary-button:hover {
+    border-color:var(--olive);
+    color:var(--accent-text);
+}
+
+.cards-empty-hint {
+    margin-top:6px;
+    color:var(--muted);
+    font-size:14px;
+    line-height:1.6;
+}
+
+.link-button {
+    padding:0;
+    border:none;
+    background:none;
+    color:var(--accent-text);
+    font-weight:600;
+    text-decoration:underline;
+}
+
+/* =========================================================
+   UITLEG
+========================================================= */
+
+.uitleg-tabs {
+    display:flex;
+    gap:8px;
+    margin-bottom:22px;
+}
+
+.uitleg-tab {
+    flex:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    height:46px;
+    padding:0 14px;
+    border:1px solid var(--border);
+    border-radius:9px;
+    background:var(--white);
+    color:var(--anthracite);
+    font-size:14px;
+    font-weight:600;
+}
+
+.uitleg-tab:hover {
+    border-color:var(--olive);
+}
+
+.uitleg-tab.active {
+    border-color:var(--olive);
+    background:var(--olive);
+    color:#fff;
+}
+
+.uitleg-tab svg {
+    width:17px;
+    height:17px;
+}
+
+.uitleg-panel {
+    display:none;
+}
+
+.uitleg-panel.active {
+    display:block;
+}
+
+.uitleg-intro {
+    margin-bottom:20px;
+    color:var(--muted);
+    font-size:13.5px;
+    line-height:1.6;
+}
+
+.uitleg-steps {
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(196px,1fr));
+    gap:16px;
+}
+
+.uitleg-step {
+    display:flex;
+    flex-direction:column;
+    padding:16px;
+    border:1px solid var(--border);
+    border-radius:10px;
+    background:var(--white);
+}
+
+.uitleg-step-head {
+    display:flex;
+    align-items:center;
+    gap:9px;
+    margin-bottom:6px;
+}
+
+.uitleg-step-number {
+    width:24px;
+    height:24px;
+    flex-shrink:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:50%;
+    background:var(--olive);
+    color:#fff;
+    font-size:12.5px;
+    font-weight:700;
+}
+
+.uitleg-step h3 {
+    font-size:14.5px;
+}
+
+.uitleg-step p {
+    color:var(--muted);
+    font-size:13px;
+    line-height:1.55;
+}
+
+.uitleg-figure {
+    margin-top:14px;
+    display:flex;
+    justify-content:center;
+}
+
+.uitleg-figure svg {
+    width:100%;
+    max-width:180px;
+    height:auto;
+}
+
+/* Kleuren van de telefoontekeningen. Ze volgen het thema,
+   zodat de plaatjes ook in donkere modus kloppen. */
+
+.phone-frame {
+    fill:var(--white);
+    stroke:var(--border);
+    stroke-width:2;
+}
+
+.phone-screen {
+    fill:var(--light);
+}
+
+.phone-panel {
+    fill:var(--white);
+    stroke:var(--border);
+    stroke-width:1;
+}
+
+.phone-line {
+    fill:var(--border);
+}
+
+.phone-text {
+    fill:var(--muted);
+    font-size:8px;
+}
+
+.phone-text-strong {
+    fill:var(--anthracite);
+    font-size:8.5px;
+    font-weight:700;
+}
+
+.phone-highlight {
+    fill:none;
+    stroke:var(--olive);
+    stroke-width:2;
+}
+
+.phone-highlight-fill {
+    fill:var(--olive);
+}
+
+.phone-highlight-text {
+    fill:#fff;
+    font-size:8px;
+    font-weight:700;
+}
+
+.phone-icon {
+    fill:none;
+    stroke:var(--muted);
+    stroke-width:1.6;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+}
+
+.phone-icon-active {
+    fill:none;
+    stroke:var(--olive);
+    stroke-width:1.9;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+}
+
+.phone-dot {
+    fill:var(--danger);
+}
+
+.uitleg-note {
+    display:flex;
+    gap:11px;
+    margin-top:20px;
+    padding:14px 16px;
+    border:1px solid var(--today-border);
+    border-radius:9px;
+    background:var(--warning-bg);
+}
+
+.uitleg-note svg {
+    width:18px;
+    height:18px;
+    flex-shrink:0;
+    margin-top:1px;
+    color:var(--warning);
+}
+
+.uitleg-note p {
+    font-size:13px;
+    line-height:1.6;
+}
+
+.uitleg-faq details {
+    border-bottom:1px solid var(--border);
+}
+
+.uitleg-faq details:last-child {
+    border-bottom:none;
+}
+
+.uitleg-faq summary {
+    padding:13px 2px;
+    cursor:pointer;
+    font-size:14px;
+    font-weight:600;
+    list-style:none;
+}
+
+.uitleg-faq summary::-webkit-details-marker {
+    display:none;
+}
+
+.uitleg-faq summary::before {
+    content:"+";
+    display:inline-block;
+    width:16px;
+    color:var(--accent-text);
+    font-weight:700;
+}
+
+.uitleg-faq details[open] summary::before {
+    content:"–";
+}
+
+.uitleg-faq details p {
+    padding:0 2px 14px 18px;
+    color:var(--muted);
+    font-size:13px;
+    line-height:1.6;
+}
+
+/* =========================================================
+   SORTEREN
+========================================================= */
+
+.sort-control {
+    position:relative;
+    display:inline-block;
+}
+
+.sort-button {
+    display:flex;
+    align-items:center;
+    gap:7px;
+    height:38px;
+    padding:0 13px;
+    border:1px solid var(--border);
+    border-radius:8px;
+    background:var(--white);
+    color:var(--anthracite);
+    font-size:13.5px;
+    font-weight:600;
+    white-space:nowrap;
+}
+
+.sort-button:hover {
+    border-color:var(--olive);
+}
+
+.sort-button svg {
+    width:16px;
+    height:16px;
+    color:var(--muted);
+}
+
+.sort-menu {
+    position:absolute;
+    top:calc(100% + 6px);
+    right:0;
+    z-index:40;
+    display:none;
+    min-width:210px;
+    padding:6px;
+    border:1px solid var(--border);
+    border-radius:10px;
+    background:var(--white);
+    box-shadow:0 8px 24px rgba(0,0,0,.13);
+}
+
+.sort-menu.show {
+    display:block;
+}
+
+.sort-menu button {
+    display:block;
+    width:100%;
+    padding:9px 11px;
+    border:none;
+    border-radius:7px;
+    background:none;
+    color:var(--anthracite);
+    font-size:13.5px;
+    text-align:left;
+}
+
+.sort-menu button:hover {
+    background:var(--badge-bg);
+}
+
+.sort-menu button.selected {
+    color:var(--accent-text);
+    font-weight:700;
+}
+
+/* =========================================================
    MODAL
 ========================================================= */
 
@@ -2794,6 +3600,16 @@ main {
 
 @media(max-width:750px) {
 
+    /* Onder 16px zoomt iOS vanzelf in zodra je een veld
+       aantikt. Met 16px gebeurt dat niet, ook niet in een
+       gewoon Safari-tabblad. */
+
+    input,
+    select,
+    textarea {
+        font-size:16px;
+    }
+
     .topbar {
         padding:0 17px;
     }
@@ -2817,6 +3633,86 @@ main {
 
     .notes-list {
         max-height:220px;
+    }
+}
+
+/* Met vijf knoppen rechts past de naam er op een smal
+   scherm niet meer bij. Het logo blijft staan. */
+
+@media(max-width:620px) {
+
+    .brand-text {
+        display:none;
+    }
+
+    .topbar {
+        padding:0 12px;
+        gap:8px;
+    }
+
+    .topbar-actions {
+        gap:5px;
+    }
+
+    .theme-toggle-button {
+        width:32px;
+        height:32px;
+    }
+
+    .logout-button {
+        height:32px;
+        padding:0 9px;
+        font-size:12px;
+    }
+
+    .clock-time {
+        font-size:14.5px;
+    }
+
+    .clock-date {
+        font-size:10.5px;
+    }
+
+    .clock-date-long {
+        display:none;
+    }
+
+    .clock-date-short {
+        display:block;
+    }
+}
+
+/* Op de allersmalste schermen blijft alleen de tijd over en
+   schuift de rest een maat kleiner, zodat er niets afvalt. */
+
+@media(max-width:340px) {
+
+    .clock-date {
+        display:none;
+    }
+
+    .topbar {
+        padding:0 8px;
+        gap:6px;
+    }
+
+    .topbar-actions {
+        gap:4px;
+    }
+
+    .theme-toggle-button {
+        width:30px;
+        height:30px;
+    }
+
+    .logout-button {
+        height:30px;
+        padding:0 7px;
+        font-size:11.5px;
+    }
+
+    .clock-time {
+        font-size:13.5px;
     }
 }
 
@@ -3078,6 +3974,46 @@ main {
     <path d="M10 20a2 2 0 0 0 4 0"></path>
 </symbol>
 
+<symbol id="gear" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="3.2"></circle>
+    <path d="M12 2.6l1.3 2.6 2.9-.5 1.1 2.7 2.6 1.4-.9 2.8.9 2.8-2.6 1.4-1.1 2.7-2.9-.5L12 21.4l-1.3-2.6-2.9.5-1.1-2.7-2.6-1.4.9-2.8-.9-2.8 2.6-1.4 1.1-2.7 2.9.5z"></path>
+</symbol>
+
+<symbol id="sort" viewBox="0 0 24 24">
+    <path d="M4 7h13"></path>
+    <path d="M4 12h9"></path>
+    <path d="M4 17h5"></path>
+    <path d="M18 10v9"></path>
+    <path d="M15.5 16.5 18 19l2.5-2.5"></path>
+</symbol>
+
+<symbol id="info" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="9"></circle>
+    <path d="M12 11v5"></path>
+    <path d="M12 7.8v.6"></path>
+</symbol>
+
+<symbol id="phone-ios" viewBox="0 0 24 24">
+    <rect x="6" y="2.5" width="12" height="19" rx="3"></rect>
+    <path d="M10 5h4"></path>
+    <path d="M10.5 18.6h3"></path>
+</symbol>
+
+<symbol id="android" viewBox="0 0 24 24">
+    <path d="M5 12.5a7 7 0 0 1 14 0z"></path>
+    <path d="M7.5 7 6 4.7"></path>
+    <path d="M16.5 7 18 4.7"></path>
+    <path d="M9.4 9.6v.1"></path>
+    <path d="M14.6 9.6v.1"></path>
+    <path d="M5 14.4h14v4.2a1.6 1.6 0 0 1-1.6 1.6H6.6A1.6 1.6 0 0 1 5 18.6z"></path>
+</symbol>
+
+<symbol id="warning" viewBox="0 0 24 24">
+    <path d="M12 3.6 21 19.4H3z"></path>
+    <path d="M12 10v4"></path>
+    <path d="M12 16.6v.4"></path>
+</symbol>
+
 </svg>
 
 
@@ -3275,8 +4211,23 @@ Heb je al een account?
 </svg>
 </div>
 
-Persoonlijk dashboard
+<span class="brand-text">Persoonlijk dashboard</span>
 
+</div>
+
+<div class="topbar-clock">
+<span
+    id="clockTime"
+    class="clock-time"
+>--:--</span>
+<span
+    id="clockDateLong"
+    class="clock-date clock-date-long"
+></span>
+<span
+    id="clockDateShort"
+    class="clock-date clock-date-short"
+></span>
 </div>
 
 <div class="topbar-actions">
@@ -3299,6 +4250,34 @@ Persoonlijk dashboard
     class="notification-badge"
     style="display:none"
 ></span>
+</button>
+
+<button
+    class="theme-toggle-button"
+    onclick="openPage('instellingenPage')"
+    title="Instellingen"
+>
+<svg fill="none"
+     stroke="currentColor"
+     stroke-width="1.8"
+     stroke-linecap="round"
+     stroke-linejoin="round">
+    <use href="#gear"></use>
+</svg>
+</button>
+
+<button
+    class="theme-toggle-button"
+    onclick="openPage('uitlegPage')"
+    title="Uitleg: meldingen en app op je telefoon"
+>
+<svg fill="none"
+     stroke="currentColor"
+     stroke-width="1.8"
+     stroke-linecap="round"
+     stroke-linejoin="round">
+    <use href="#info"></use>
+</svg>
 </button>
 
 <button
@@ -3436,7 +4415,10 @@ Uitloggen
     id="statStudyValue"
     class="stat-value"
 >0u 00m</div>
-<div class="stat-label">Geleerd deze week (doel 10u)</div>
+<div
+    id="statStudyLabel"
+    class="stat-label"
+>Geleerd deze week</div>
 <div class="stat-progress-track">
 <div
     id="statStudyFill"
@@ -3452,7 +4434,7 @@ Uitloggen
 <div class="dashboard">
 
 
-<article class="dashboard-card">
+<article class="dashboard-card" data-card="notes">
 
 <div class="card-icon">
 <svg fill="none"
@@ -3488,7 +4470,7 @@ Maak meerdere losse notities en bewaar ze overzichtelijk.
 </article>
 
 
-<article class="dashboard-card">
+<article class="dashboard-card" data-card="todo">
 
 <div class="card-icon">
 <svg fill="none"
@@ -3524,7 +4506,7 @@ Voeg taken toe en houd bij wat nog gedaan moet worden.
 </article>
 
 
-<article class="dashboard-card">
+<article class="dashboard-card" data-card="deadlines">
 
 <div class="card-icon">
 <svg fill="none"
@@ -3560,7 +4542,7 @@ Bewaar belangrijke deadlines en koppel er een datum aan.
 </article>
 
 
-<article class="dashboard-card">
+<article class="dashboard-card" data-card="huiswerk">
 
 <div class="card-icon">
 <svg fill="none"
@@ -3596,7 +4578,7 @@ Houd per vak bij welk huiswerk je moet maken en wanneer het af moet.
 </article>
 
 
-<article class="dashboard-card">
+<article class="dashboard-card" data-card="study">
 
 <div class="card-icon">
 <svg fill="none"
@@ -3632,7 +4614,7 @@ Tim hoelang je leert en houd je voortgang per week bij.
 </article>
 
 
-<article class="dashboard-card">
+<article class="dashboard-card" data-card="cijfers">
 
 <div class="card-icon">
 <svg fill="none"
@@ -3668,7 +4650,7 @@ Houd je cijfers per vak bij en bereken wat je nog nodig hebt.
 </article>
 
 
-<article class="dashboard-card">
+<article class="dashboard-card" data-card="doelen">
 
 <div class="card-icon">
 <svg fill="none"
@@ -3704,7 +4686,7 @@ Dagelijkse, dagspecifieke en wekelijkse eisen per categorie bijhouden.
 </article>
 
 
-<article class="dashboard-card">
+<article class="dashboard-card" data-card="agenda">
 
 <div class="card-icon">
 <svg fill="none"
@@ -3740,7 +4722,7 @@ Al je deadlines en huiswerk automatisch in kaart, plus ruimte voor eigen afsprak
 </article>
 
 
-<article class="dashboard-card">
+<article class="dashboard-card" data-card="suggesties">
 
 <div class="card-icon">
 <svg fill="none"
@@ -3776,6 +4758,18 @@ Ideeën of verbeteringen voor deze website doorgeven.
 </article>
 
 </div>
+
+<p
+    id="cardsEmptyHint"
+    class="cards-empty-hint"
+    style="display:none"
+>
+Je hebt alle blokken verborgen. Zet ze weer aan bij
+<button
+    class="link-button"
+    onclick="openPage('instellingenPage')"
+>Instellingen</button>.
+</p>
 
 
 <!-- =========================================================
@@ -3847,6 +4841,31 @@ Ideeën of verbeteringen voor deze website doorgeven.
 <div class="notes-sidebar-header">
 
 <h2>Mijn notities</h2>
+
+<div class="sort-control">
+
+<button
+    class="sort-button"
+    onclick="toggleSortMenu('notes')"
+    title="Sorteren"
+>
+    <svg fill="none"
+         stroke="currentColor"
+         stroke-width="1.8"
+         stroke-linecap="round"
+         stroke-linejoin="round">
+        <use href="#sort"></use>
+    </svg>
+
+    <span id="sortLabelNotes">Sorteren</span>
+</button>
+
+<div
+    id="sortMenuNotes"
+    class="sort-menu"
+></div>
+
+</div>
 
 <button
     class="new-note-button"
@@ -3970,12 +4989,59 @@ Ideeën of verbeteringen voor deze website doorgeven.
     maxlength="200"
 >
 
+<select
+    id="todoPrioritySelect"
+    class="todo-priority-select"
+    title="Prioriteit"
+>
+<option value="3">Hoog</option>
+<option value="2" selected>Normaal</option>
+<option value="1">Laag</option>
+</select>
+
+<input
+    id="todoDateInput"
+    class="todo-date-input"
+    type="date"
+    title="Datum (optioneel)"
+>
+
 <button
     class="todo-add"
     onclick="addTodo()"
 >
     Taak toevoegen
 </button>
+
+</div>
+
+<div class="todo-list-header">
+
+<h2>Mijn taken</h2>
+
+<div class="sort-control">
+
+<button
+    class="sort-button"
+    onclick="toggleSortMenu('todos')"
+>
+    <svg fill="none"
+         stroke="currentColor"
+         stroke-width="1.8"
+         stroke-linecap="round"
+         stroke-linejoin="round">
+        <use href="#sort"></use>
+    </svg>
+
+    <span id="sortLabelTodos">Sorteren</span>
+</button>
+
+<div
+    id="sortMenuTodos"
+    class="sort-menu"
+></div>
+
+</div>
 
 </div>
 
@@ -4042,6 +5108,36 @@ Ideeën of verbeteringen voor deze website doorgeven.
 
 </div>
 
+<div class="todo-list-header">
+
+<h2>Mijn deadlines</h2>
+
+<div class="sort-control">
+
+<button
+    class="sort-button"
+    onclick="toggleSortMenu('deadlines')"
+>
+    <svg fill="none"
+         stroke="currentColor"
+         stroke-width="1.8"
+         stroke-linecap="round"
+         stroke-linejoin="round">
+        <use href="#sort"></use>
+    </svg>
+
+    <span id="sortLabelDeadlines">Sorteren</span>
+</button>
+
+<div
+    id="sortMenuDeadlines"
+    class="sort-menu"
+></div>
+
+</div>
+
+</div>
+
 <div
     id="deadlineList"
     class="deadline-list"
@@ -4088,6 +5184,36 @@ Ideeën of verbeteringen voor deze website doorgeven.
 >
     Huiswerk toevoegen
 </button>
+
+</div>
+
+<div class="todo-list-header">
+
+<h2>Openstaand huiswerk</h2>
+
+<div class="sort-control">
+
+<button
+    class="sort-button"
+    onclick="toggleSortMenu('huiswerk')"
+>
+    <svg fill="none"
+         stroke="currentColor"
+         stroke-width="1.8"
+         stroke-linecap="round"
+         stroke-linejoin="round">
+        <use href="#sort"></use>
+    </svg>
+
+    <span id="sortLabelHuiswerk">Sorteren</span>
+</button>
+
+<div
+    id="sortMenuHuiswerk"
+    class="sort-menu"
+></div>
+
+</div>
 
 </div>
 
@@ -4170,7 +5296,31 @@ Ideeën of verbeteringen voor deze website doorgeven.
 
 <div class="study-weeks-header">
 <h2>Voortgang per week</h2>
-<p>Streefdoel: 10 uur per week. De balk wordt groen zodra je dat haalt.</p>
+<p>De balk wordt groen zodra je je weekdoel haalt.</p>
+</div>
+
+<div class="study-goal-row">
+
+<label for="studyGoalInput">Mijn weekdoel</label>
+
+<input
+    id="studyGoalInput"
+    class="study-goal-input"
+    type="number"
+    min="1"
+    max="80"
+    step="0.5"
+    inputmode="decimal"
+    onchange="saveStudyGoal()"
+>
+
+<span class="study-goal-unit">uur per week</span>
+
+<span
+    id="studyGoalStatus"
+    class="study-goal-status"
+></span>
+
 </div>
 
 <div
@@ -4210,6 +5360,30 @@ Ideeën of verbeteringen voor deze website doorgeven.
 </div>
 
 <div class="content-panel">
+
+<div class="pass-grade-row">
+
+<label for="passGradeInput">Voldoende vanaf</label>
+
+<input
+    id="passGradeInput"
+    class="pass-grade-input"
+    type="number"
+    min="1"
+    max="10"
+    step="0.1"
+    inputmode="decimal"
+    onchange="savePassGrade()"
+>
+
+<span class="pass-grade-hint">Cijfers en gemiddelden hieronder kleuren groen of rood.</span>
+
+<span
+    id="passGradeStatus"
+    class="pass-grade-status"
+></span>
+
+</div>
 
 <div class="subject-input-row">
 
@@ -4783,6 +5957,511 @@ Pushnotificaties inschakelen op dit apparaat
 
 
 <!-- =========================================================
+     INSTELLINGEN
+========================================================= -->
+
+<section id="instellingenPage" class="page">
+
+<button
+    class="back-button"
+    onclick="openPage('homePage')"
+>
+    <svg fill="none"
+         stroke="currentColor"
+         stroke-width="1.8"
+         stroke-linecap="round"
+         stroke-linejoin="round">
+        <use href="#arrow-left"></use>
+    </svg>
+
+    Terug naar overzicht
+</button>
+
+<div class="page-header">
+<h1>Instellingen</h1>
+<p>Uiterlijk van de site en welke blokken je op het overzicht ziet. Je keuzes worden bij je account opgeslagen en gelden dus ook op je telefoon.</p>
+</div>
+
+<div class="content-panel">
+<h2 style="font-size:16px;margin-bottom:14px">Weergave</h2>
+
+<div class="notif-setting-group">
+<h3>Modus</h3>
+<p>Licht of donker. Deze keuze reist mee naar je andere apparaten.</p>
+
+<select
+    id="themeSelect"
+    class="settings-select"
+    onchange="changeThemeFromSettings()"
+>
+<option value="light">Licht</option>
+<option value="dark">Donker</option>
+</select>
+</div>
+
+<div class="notif-setting-group">
+<h3>Accentkleur</h3>
+<p>De kleur van knoppen, balken en actieve onderdelen. Alle zes zijn getest op leesbaarheid in licht en donker.</p>
+
+<div
+    id="accentOptions"
+    class="accent-option-row"
+></div>
+</div>
+
+</div>
+
+<div class="content-panel">
+<h2 style="font-size:16px;margin-bottom:6px">Blokken op het overzicht</h2>
+<p class="modal-hint" style="margin-bottom:16px">Vink uit wat je niet gebruikt. Het blok verdwijnt alleen van de homepagina, je gegevens blijven bewaard en komen terug zodra je hem weer aanvinkt.</p>
+
+<div
+    id="cardVisibilityOptions"
+    class="card-visibility-list"
+></div>
+
+<button
+    class="secondary-button"
+    style="margin-top:16px"
+    onclick="showAllCards()"
+>
+Alles weer tonen
+</button>
+
+</div>
+
+</section>
+
+
+<!-- =========================================================
+     UITLEG
+
+     Alleen bereikbaar via het i-icoon in de topbar. Bewust
+     geen blok op het dashboard: je hebt het één keer nodig
+     en daarna niet meer.
+========================================================= -->
+
+<section id="uitlegPage" class="page">
+
+<button
+    class="back-button"
+    onclick="openPage('homePage')"
+>
+    <svg fill="none"
+         stroke="currentColor"
+         stroke-width="1.8"
+         stroke-linecap="round"
+         stroke-linejoin="round">
+        <use href="#arrow-left"></use>
+    </svg>
+
+    Terug naar overzicht
+</button>
+
+<div class="page-header">
+<h1>App op je telefoon en meldingen</h1>
+<p>Zet het dashboard als app op je beginscherm en ontvang herinneringen, ook als de site dicht is. Kies hieronder je type telefoon.</p>
+</div>
+
+<div class="content-panel">
+
+<div class="uitleg-tabs">
+
+<button
+    id="uitlegTabIos"
+    class="uitleg-tab active"
+    onclick="showUitlegTab('ios')"
+>
+<svg fill="none"
+     stroke="currentColor"
+     stroke-width="1.8"
+     stroke-linecap="round"
+     stroke-linejoin="round">
+    <use href="#phone-ios"></use>
+</svg>
+iPhone of iPad
+</button>
+
+<button
+    id="uitlegTabAndroid"
+    class="uitleg-tab"
+    onclick="showUitlegTab('android')"
+>
+<svg fill="none"
+     stroke="currentColor"
+     stroke-width="1.8"
+     stroke-linecap="round"
+     stroke-linejoin="round">
+    <use href="#android"></use>
+</svg>
+Android
+</button>
+
+</div>
+
+
+<!-- ============================ iOS ============================ -->
+
+<div id="uitlegPanelIos" class="uitleg-panel active">
+
+<p class="uitleg-intro">
+Op een iPhone of iPad werken meldingen alleen als je de site eerst op je beginscherm zet en hem daarna vanaf dat icoon opent. In een gewoon Safari-tabblad kan het niet. Gebruik hiervoor Safari, niet Chrome.
+</p>
+
+<div class="uitleg-steps">
+
+<div class="uitleg-step">
+<div class="uitleg-step-head">
+<span class="uitleg-step-number">1</span>
+<h3>Tik op het deelicoon</h3>
+</div>
+<p>Open de site in Safari en tik onderaan op het vierkantje met het pijltje omhoog.</p>
+<div class="uitleg-figure">
+<svg viewBox="0 0 180 300" role="img" aria-label="Safari met het deelicoon onderaan omcirkeld">
+<rect class="phone-frame" x="8" y="5" width="164" height="290" rx="20"></rect>
+<rect class="phone-screen" x="15" y="12" width="150" height="276" rx="15"></rect>
+<rect class="phone-panel" x="27" y="24" width="126" height="20" rx="10"></rect>
+<text class="phone-text" x="90" y="37" text-anchor="middle">dashboard</text>
+<rect class="phone-line" x="30" y="62" width="80" height="7" rx="3.5"></rect>
+<rect class="phone-line" x="30" y="80" width="120" height="5" rx="2.5"></rect>
+<rect class="phone-line" x="30" y="92" width="105" height="5" rx="2.5"></rect>
+<rect class="phone-panel" x="30" y="112" width="120" height="46" rx="8"></rect>
+<rect class="phone-panel" x="30" y="166" width="120" height="46" rx="8"></rect>
+<line x1="15" y1="250" x2="165" y2="250" stroke="var(--border)" stroke-width="1"></line>
+<path class="phone-icon" d="M39 264l-5 5 5 5"></path>
+<path class="phone-icon" d="M63 264l5 5-5 5"></path>
+<circle class="phone-highlight" cx="90" cy="269" r="14"></circle>
+<path class="phone-icon-active" d="M90 262v10"></path>
+<path class="phone-icon-active" d="M86.5 265.5 90 262l3.5 3.5"></path>
+<path class="phone-icon-active" d="M84 270v6h12v-6"></path>
+<path class="phone-icon" d="M112 263h8v11h-8z"></path>
+<path class="phone-icon" d="M138 263h9v9h-9z"></path>
+<path class="phone-icon" d="M141 266h9v9h-9"></path>
+</svg>
+</div>
+</div>
+
+<div class="uitleg-step">
+<div class="uitleg-step-head">
+<span class="uitleg-step-number">2</span>
+<h3>Kies "Zet op beginscherm"</h3>
+</div>
+<p>Scroll in het menu een stukje naar beneden tot je die regel ziet en tik erop.</p>
+<div class="uitleg-figure">
+<svg viewBox="0 0 180 300" role="img" aria-label="Deelmenu met de regel Zet op beginscherm gemarkeerd">
+<rect class="phone-frame" x="8" y="5" width="164" height="290" rx="20"></rect>
+<rect class="phone-screen" x="15" y="12" width="150" height="276" rx="15"></rect>
+<rect x="15" y="12" width="150" height="276" rx="15" fill="var(--anthracite)" opacity=".14"></rect>
+<rect class="phone-panel" x="15" y="112" width="150" height="176" rx="15"></rect>
+<rect class="phone-line" x="82" y="120" width="16" height="3" rx="1.5"></rect>
+<text class="phone-text" x="28" y="150">Kopieer</text>
+<rect class="phone-line" x="136" y="143" width="11" height="11" rx="2"></rect>
+<line x1="28" y1="162" x2="152" y2="162" stroke="var(--border)" stroke-width="1"></line>
+<text class="phone-text" x="28" y="180">Voeg toe aan leeslijst</text>
+<rect class="phone-line" x="136" y="173" width="11" height="11" rx="2"></rect>
+<line x1="28" y1="192" x2="152" y2="192" stroke="var(--border)" stroke-width="1"></line>
+<rect class="phone-highlight" x="22" y="199" width="136" height="28" rx="8"></rect>
+<text class="phone-text-strong" x="30" y="217">Zet op beginscherm</text>
+<path class="phone-icon-active" d="M136 208h11v11h-11z"></path>
+<path class="phone-icon-active" d="M141.5 210.5v6"></path>
+<path class="phone-icon-active" d="M138.5 213.5h6"></path>
+<line x1="28" y1="238" x2="152" y2="238" stroke="var(--border)" stroke-width="1"></line>
+<text class="phone-text" x="28" y="256">Markeer</text>
+<rect class="phone-line" x="136" y="249" width="11" height="11" rx="2"></rect>
+</svg>
+</div>
+</div>
+
+<div class="uitleg-step">
+<div class="uitleg-step-head">
+<span class="uitleg-step-number">3</span>
+<h3>Tik rechtsboven op "Voeg toe"</h3>
+</div>
+<p>De naam mag je laten staan. Het icoon verschijnt daarna op je beginscherm.</p>
+<div class="uitleg-figure">
+<svg viewBox="0 0 180 300" role="img" aria-label="Bevestigingsscherm met de knop Voeg toe gemarkeerd">
+<rect class="phone-frame" x="8" y="5" width="164" height="290" rx="20"></rect>
+<rect class="phone-screen" x="15" y="12" width="150" height="276" rx="15"></rect>
+<rect x="15" y="12" width="150" height="276" rx="15" fill="var(--anthracite)" opacity=".14"></rect>
+<rect class="phone-panel" x="15" y="40" width="150" height="120" rx="14"></rect>
+<text class="phone-text" x="24" y="63" font-size="6.5">Annuleer</text>
+<text class="phone-text-strong" x="86" y="63" text-anchor="middle" font-size="7">Beginscherm</text>
+<rect class="phone-highlight-fill" x="118" y="53" width="36" height="15" rx="7.5"></rect>
+<text class="phone-highlight-text" x="136" y="63.5" text-anchor="middle" font-size="7">Voeg toe</text>
+<line x1="26" y1="78" x2="154" y2="78" stroke="var(--border)" stroke-width="1"></line>
+<rect class="phone-highlight-fill" x="28" y="95" width="30" height="30" rx="7"></rect>
+<rect class="phone-line" x="68" y="99" width="72" height="8" rx="4"></rect>
+<rect class="phone-line" x="68" y="114" width="52" height="6" rx="3"></rect>
+<rect class="phone-line" x="28" y="138" width="112" height="5" rx="2.5"></rect>
+</svg>
+</div>
+</div>
+
+<div class="uitleg-step">
+<div class="uitleg-step-head">
+<span class="uitleg-step-number">4</span>
+<h3>Open de app vanaf het icoon</h3>
+</div>
+<p>Belangrijk: open hem vanaf nu via dit icoon en niet meer via Safari, anders werken meldingen niet.</p>
+<div class="uitleg-figure">
+<svg viewBox="0 0 180 300" role="img" aria-label="Beginscherm met het nieuwe app-icoon gemarkeerd">
+<rect class="phone-frame" x="8" y="5" width="164" height="290" rx="20"></rect>
+<rect class="phone-screen" x="15" y="12" width="150" height="276" rx="15"></rect>
+<rect class="phone-line" x="30" y="34" width="28" height="28" rx="7"></rect>
+<rect class="phone-line" x="76" y="34" width="28" height="28" rx="7"></rect>
+<rect class="phone-line" x="122" y="34" width="28" height="28" rx="7"></rect>
+<rect class="phone-highlight" x="26" y="86" width="36" height="36" rx="10"></rect>
+<rect class="phone-highlight-fill" x="30" y="90" width="28" height="28" rx="7"></rect>
+<path d="M38 98h5v5h-5z M45 98h5v5h-5z M38 105h5v5h-5z M45 105h5v5h-5z" fill="#fff"></path>
+<text class="phone-text-strong" x="44" y="134" text-anchor="middle">Dashboard</text>
+<rect class="phone-line" x="76" y="90" width="28" height="28" rx="7"></rect>
+<rect class="phone-line" x="122" y="90" width="28" height="28" rx="7"></rect>
+<rect class="phone-line" x="30" y="150" width="28" height="28" rx="7"></rect>
+<rect class="phone-line" x="76" y="150" width="28" height="28" rx="7"></rect>
+<rect class="phone-panel" x="26" y="238" width="128" height="46" rx="16"></rect>
+<rect class="phone-line" x="36" y="248" width="26" height="26" rx="7"></rect>
+<rect class="phone-line" x="70" y="248" width="26" height="26" rx="7"></rect>
+<rect class="phone-line" x="104" y="248" width="26" height="26" rx="7"></rect>
+</svg>
+</div>
+</div>
+
+<div class="uitleg-step">
+<div class="uitleg-step-head">
+<span class="uitleg-step-number">5</span>
+<h3>Zet meldingen aan</h3>
+</div>
+<p>Tik in de app op het belletje rechtsboven, zet "Pushnotificaties inschakelen op dit apparaat" aan en kies "Sta toe".</p>
+<div class="uitleg-figure">
+<svg viewBox="0 0 180 300" role="img" aria-label="De app vraagt toestemming voor meldingen, met de knop Sta toe gemarkeerd">
+<rect class="phone-frame" x="8" y="5" width="164" height="290" rx="20"></rect>
+<rect class="phone-screen" x="15" y="12" width="150" height="276" rx="15"></rect>
+<rect class="phone-panel" x="15" y="12" width="150" height="34" rx="15"></rect>
+<text class="phone-text-strong" x="28" y="34">Meldingen</text>
+<circle class="phone-highlight" cx="143" cy="29" r="11"></circle>
+<path class="phone-icon-active" d="M138 30a5 5 0 0 1 10 0c0 3 1 4 1.4 4.4h-12.8c.4-.4 1.4-1.4 1.4-4.4z"></path>
+<path class="phone-icon-active" d="M141.6 36.4a2 2 0 0 0 2.8 0"></path>
+<rect class="phone-line" x="28" y="60" width="90" height="6" rx="3"></rect>
+<rect class="phone-highlight-fill" x="28" y="78" width="26" height="15" rx="7.5"></rect>
+<circle cx="47" cy="85.5" r="5.5" fill="#fff"></circle>
+<text class="phone-text" x="62" y="90">Pushnotificaties aan</text>
+<rect x="15" y="12" width="150" height="276" rx="15" fill="var(--anthracite)" opacity=".14"></rect>
+<rect class="phone-panel" x="26" y="120" width="128" height="92" rx="13"></rect>
+<text class="phone-text-strong" x="90" y="146" text-anchor="middle">"Dashboard" wil je</text>
+<text class="phone-text-strong" x="90" y="158" text-anchor="middle">meldingen sturen</text>
+<text class="phone-text" x="90" y="172" text-anchor="middle">Meldingen kunnen geluid geven</text>
+<line x1="26" y1="182" x2="154" y2="182" stroke="var(--border)" stroke-width="1"></line>
+<line x1="90" y1="182" x2="90" y2="212" stroke="var(--border)" stroke-width="1"></line>
+<text class="phone-text" x="58" y="200" text-anchor="middle">Sta niet toe</text>
+<rect class="phone-highlight-fill" x="99" y="188" width="46" height="17" rx="8.5"></rect>
+<text class="phone-highlight-text" x="122" y="200" text-anchor="middle">Sta toe</text>
+</svg>
+</div>
+</div>
+
+</div>
+
+<div class="uitleg-note">
+<svg fill="none"
+     stroke="currentColor"
+     stroke-width="1.8"
+     stroke-linecap="round"
+     stroke-linejoin="round">
+    <use href="#warning"></use>
+</svg>
+<p>Je hebt iOS 16.4 of nieuwer nodig. Werkt het niet, controleer dan bij Instellingen, Algemeen, Software-update of je bijgewerkt bent.</p>
+</div>
+
+</div>
+
+
+<!-- ========================== Android ========================== -->
+
+<div id="uitlegPanelAndroid" class="uitleg-panel">
+
+<p class="uitleg-intro">
+Op Android werken meldingen ook in een gewoon tabblad, maar als app op je startscherm is het prettiger: hij opent zonder adresbalk en staat tussen je andere apps. Gebruik Chrome.
+</p>
+
+<div class="uitleg-steps">
+
+<div class="uitleg-step">
+<div class="uitleg-step-head">
+<span class="uitleg-step-number">1</span>
+<h3>Tik op de drie puntjes</h3>
+</div>
+<p>Open de site in Chrome en tik rechtsboven op het menu.</p>
+<div class="uitleg-figure">
+<svg viewBox="0 0 180 300" role="img" aria-label="Chrome met het menu van drie puntjes rechtsboven omcirkeld">
+<rect class="phone-frame" x="8" y="5" width="164" height="290" rx="20"></rect>
+<rect class="phone-screen" x="15" y="12" width="150" height="276" rx="15"></rect>
+<rect class="phone-panel" x="24" y="24" width="104" height="20" rx="10"></rect>
+<text class="phone-text" x="76" y="37" text-anchor="middle">dashboard</text>
+<circle class="phone-highlight" cx="146" cy="34" r="12"></circle>
+<circle cx="146" cy="29" r="1.9" fill="var(--olive)"></circle>
+<circle cx="146" cy="34" r="1.9" fill="var(--olive)"></circle>
+<circle cx="146" cy="39" r="1.9" fill="var(--olive)"></circle>
+<rect class="phone-line" x="30" y="66" width="80" height="7" rx="3.5"></rect>
+<rect class="phone-line" x="30" y="84" width="120" height="5" rx="2.5"></rect>
+<rect class="phone-line" x="30" y="96" width="105" height="5" rx="2.5"></rect>
+<rect class="phone-panel" x="30" y="116" width="120" height="46" rx="8"></rect>
+<rect class="phone-panel" x="30" y="170" width="120" height="46" rx="8"></rect>
+<rect class="phone-panel" x="30" y="224" width="120" height="46" rx="8"></rect>
+</svg>
+</div>
+</div>
+
+<div class="uitleg-step">
+<div class="uitleg-step-head">
+<span class="uitleg-step-number">2</span>
+<h3>Kies "App installeren"</h3>
+</div>
+<p>Bij sommige versies van Chrome heet het "Toevoegen aan startscherm". Dat is hetzelfde.</p>
+<div class="uitleg-figure">
+<svg viewBox="0 0 180 300" role="img" aria-label="Chrome-menu met de optie App installeren gemarkeerd">
+<rect class="phone-frame" x="8" y="5" width="164" height="290" rx="20"></rect>
+<rect class="phone-screen" x="15" y="12" width="150" height="276" rx="15"></rect>
+<rect x="15" y="12" width="150" height="276" rx="15" fill="var(--anthracite)" opacity=".14"></rect>
+<rect class="phone-panel" x="62" y="34" width="98" height="132" rx="9"></rect>
+<text class="phone-text" x="72" y="56">Nieuw tabblad</text>
+<text class="phone-text" x="72" y="80">Bladwijzers</text>
+<text class="phone-text" x="72" y="104">Recente tabbladen</text>
+<rect class="phone-highlight" x="66" y="112" width="90" height="24" rx="7"></rect>
+<text class="phone-text-strong" x="73" y="128">App installeren</text>
+<text class="phone-text" x="72" y="156">Instellingen</text>
+</svg>
+</div>
+</div>
+
+<div class="uitleg-step">
+<div class="uitleg-step-head">
+<span class="uitleg-step-number">3</span>
+<h3>Bevestig met "Installeren"</h3>
+</div>
+<p>Chrome vraagt nog één keer of je het zeker weet. Daarna staat het icoon op je startscherm.</p>
+<div class="uitleg-figure">
+<svg viewBox="0 0 180 300" role="img" aria-label="Bevestigingsvenster met de knop Installeren gemarkeerd">
+<rect class="phone-frame" x="8" y="5" width="164" height="290" rx="20"></rect>
+<rect class="phone-screen" x="15" y="12" width="150" height="276" rx="15"></rect>
+<rect x="15" y="12" width="150" height="276" rx="15" fill="var(--anthracite)" opacity=".14"></rect>
+<rect class="phone-panel" x="26" y="110" width="128" height="86" rx="12"></rect>
+<rect class="phone-highlight-fill" x="38" y="124" width="26" height="26" rx="6"></rect>
+<text class="phone-text-strong" x="74" y="136">Dashboard</text>
+<text class="phone-text" x="74" y="148">installeren</text>
+<text class="phone-text" x="72" y="176" text-anchor="middle">Annuleren</text>
+<rect class="phone-highlight-fill" x="98" y="164" width="46" height="17" rx="8.5"></rect>
+<text class="phone-highlight-text" x="121" y="176" text-anchor="middle">Installeren</text>
+</svg>
+</div>
+</div>
+
+<div class="uitleg-step">
+<div class="uitleg-step-head">
+<span class="uitleg-step-number">4</span>
+<h3>Open de app vanaf het icoon</h3>
+</div>
+<p>Hij staat nu tussen je andere apps en opent zonder adresbalk.</p>
+<div class="uitleg-figure">
+<svg viewBox="0 0 180 300" role="img" aria-label="Startscherm met het nieuwe app-icoon gemarkeerd">
+<rect class="phone-frame" x="8" y="5" width="164" height="290" rx="20"></rect>
+<rect class="phone-screen" x="15" y="12" width="150" height="276" rx="15"></rect>
+<rect class="phone-line" x="30" y="34" width="28" height="28" rx="14"></rect>
+<rect class="phone-line" x="76" y="34" width="28" height="28" rx="14"></rect>
+<rect class="phone-line" x="122" y="34" width="28" height="28" rx="14"></rect>
+<rect class="phone-highlight" x="26" y="86" width="36" height="36" rx="18"></rect>
+<rect class="phone-highlight-fill" x="30" y="90" width="28" height="28" rx="14"></rect>
+<path d="M38 98h5v5h-5z M45 98h5v5h-5z M38 105h5v5h-5z M45 105h5v5h-5z" fill="#fff"></path>
+<text class="phone-text-strong" x="44" y="134" text-anchor="middle">Dashboard</text>
+<rect class="phone-line" x="76" y="90" width="28" height="28" rx="14"></rect>
+<rect class="phone-line" x="122" y="90" width="28" height="28" rx="14"></rect>
+<rect class="phone-line" x="30" y="150" width="28" height="28" rx="14"></rect>
+<rect class="phone-line" x="76" y="150" width="28" height="28" rx="14"></rect>
+<rect class="phone-panel" x="26" y="238" width="128" height="46" rx="16"></rect>
+<rect class="phone-line" x="36" y="248" width="26" height="26" rx="13"></rect>
+<rect class="phone-line" x="70" y="248" width="26" height="26" rx="13"></rect>
+<rect class="phone-line" x="104" y="248" width="26" height="26" rx="13"></rect>
+</svg>
+</div>
+</div>
+
+<div class="uitleg-step">
+<div class="uitleg-step-head">
+<span class="uitleg-step-number">5</span>
+<h3>Zet meldingen aan</h3>
+</div>
+<p>Tik in de app op het belletje rechtsboven, zet "Pushnotificaties inschakelen op dit apparaat" aan en kies "Toestaan".</p>
+<div class="uitleg-figure">
+<svg viewBox="0 0 180 300" role="img" aria-label="De app vraagt toestemming voor meldingen, met de knop Toestaan gemarkeerd">
+<rect class="phone-frame" x="8" y="5" width="164" height="290" rx="20"></rect>
+<rect class="phone-screen" x="15" y="12" width="150" height="276" rx="15"></rect>
+<rect class="phone-panel" x="15" y="12" width="150" height="34" rx="15"></rect>
+<text class="phone-text-strong" x="28" y="34">Meldingen</text>
+<circle class="phone-highlight" cx="143" cy="29" r="11"></circle>
+<path class="phone-icon-active" d="M138 30a5 5 0 0 1 10 0c0 3 1 4 1.4 4.4h-12.8c.4-.4 1.4-1.4 1.4-4.4z"></path>
+<path class="phone-icon-active" d="M141.6 36.4a2 2 0 0 0 2.8 0"></path>
+<rect class="phone-line" x="28" y="60" width="90" height="6" rx="3"></rect>
+<rect class="phone-highlight-fill" x="28" y="78" width="26" height="15" rx="7.5"></rect>
+<circle cx="47" cy="85.5" r="5.5" fill="#fff"></circle>
+<text class="phone-text" x="62" y="90">Pushnotificaties aan</text>
+<rect x="15" y="12" width="150" height="276" rx="15" fill="var(--anthracite)" opacity=".14"></rect>
+<rect class="phone-panel" x="26" y="124" width="128" height="80" rx="12"></rect>
+<text class="phone-text-strong" x="40" y="150">Meldingen toestaan?</text>
+<text class="phone-text" x="40" y="165">Dashboard wil je meldingen</text>
+<text class="phone-text" x="40" y="176">sturen</text>
+<text class="phone-text" x="66" y="192" text-anchor="middle">Blokkeren</text>
+<rect class="phone-highlight-fill" x="94" y="181" width="48" height="16" rx="8"></rect>
+<text class="phone-highlight-text" x="118" y="192" text-anchor="middle">Toestaan</text>
+</svg>
+</div>
+</div>
+
+</div>
+
+<div class="uitleg-note">
+<svg fill="none"
+     stroke="currentColor"
+     stroke-width="1.8"
+     stroke-linecap="round"
+     stroke-linejoin="round">
+    <use href="#warning"></use>
+</svg>
+<p>Heb je per ongeluk op "Blokkeren" getikt? Dan vraagt Chrome het niet nog eens. Tik op het slotje links in de adresbalk, ga naar Machtigingen en zet Meldingen weer op Vragen of Toestaan.</p>
+</div>
+
+</div>
+
+</div>
+
+<div class="content-panel uitleg-faq">
+
+<h2 style="font-size:16px;margin-bottom:6px">Werkt het niet?</h2>
+
+<details>
+<summary>Ik krijg geen meldingen binnen</summary>
+<p>Controleer drie dingen. Staat de schakelaar bij Meldingen nog aan op dit apparaat? Je zet hem per apparaat apart aan, dus je telefoon en je laptop staan los van elkaar. Staan de meldingen van de app aan in de instellingen van je telefoon zelf? En op een iPhone: heb je de app echt vanaf het icoon op je beginscherm geopend, en niet vanuit Safari?</p>
+</details>
+
+<details>
+<summary>Ik zie "Zet op beginscherm" niet staan in Safari</summary>
+<p>Scroll in het deelmenu verder naar beneden, de regel staat onder de rij met apps. Zie je hem dan nog niet, dan sta je waarschijnlijk in een privétabblad of gebruik je Chrome op je iPhone. Open de site opnieuw in een gewoon tabblad van Safari.</p>
+</details>
+
+<details>
+<summary>Werkt het ook op mijn laptop?</summary>
+<p>Ja. Daar hoef je niets te installeren: ga naar Meldingen, zet de schakelaar aan en klik in het venster van je browser op Toestaan. Meldingen komen dan binnen zolang je browser open staat.</p>
+</details>
+
+<details>
+<summary>Ik wil de app weer weghalen</summary>
+<p>Houd het icoon op je beginscherm ingedrukt en kies verwijderen, net als bij een gewone app. Je gegevens blijven gewoon bestaan, want die staan in je account en niet op je telefoon. Je kunt daarna nog steeds via de browser inloggen.</p>
+</details>
+
+</div>
+
+</section>
+
+
+<!-- =========================================================
      CATEGORIE MODAL
 ========================================================= -->
 
@@ -5334,6 +7013,75 @@ function toggleTheme() {
     );
 
     applyTheme(next);
+
+    /* Ook opslaan bij het account, zodat het thema
+       meereist naar je andere apparaten. Voor het
+       inloggen bestaat userSettings nog niet en blijft
+       het alleen bij localStorage. */
+
+    if (userSettings) {
+
+        userSettings.theme = next;
+
+        saveUserSettings();
+
+    }
+}
+
+
+/* =========================================================
+   ACCENTKLEUR
+========================================================= */
+
+const accentOptions =
+    [
+        { value:"olijf", label:"Olijf", swatch:"#566344" },
+        { value:"blauw", label:"Blauw", swatch:"#3d5a80" },
+        { value:"terracotta", label:"Terracotta", swatch:"#a1522f" },
+        { value:"paars", label:"Paars", swatch:"#5c4b8a" },
+        { value:"teal", label:"Teal", swatch:"#2f6b64" },
+        { value:"bordeaux", label:"Bordeaux", swatch:"#7d3242" }
+    ];
+
+
+function applyAccent(accent) {
+
+    const known =
+        accentOptions.some(
+            option =>
+                option.value === accent
+        );
+
+    const value =
+        known
+            ? accent
+            : "olijf";
+
+    document.documentElement.setAttribute(
+        "data-accent",
+        value
+    );
+}
+
+
+function selectAccent(accent) {
+
+    applyAccent(accent);
+
+    localStorage.setItem(
+        "accent",
+        accent
+    );
+
+    if (userSettings) {
+
+        userSettings.accent_color = accent;
+
+        saveUserSettings();
+
+    }
+
+    renderAccentOptions();
 }
 
 
@@ -5348,6 +7096,12 @@ function toggleTheme() {
         savedTheme === "dark"
             ? "dark"
             : "light"
+    );
+
+    applyAccent(
+        localStorage.getItem(
+            "accent"
+        )
     );
 
 })();
@@ -5416,6 +7170,8 @@ let suggestions = [];
 let notificationSettings = null;
 let dueReminders = [];
 let notificationCheckInterval = null;
+
+let userSettings = null;
 
 const offsetOptions =
     [
@@ -5735,6 +7491,8 @@ async function showWebsite() {
         .getElementById("website")
         .style.display = "block";
 
+    startClock();
+
     await loadAllData();
 }
 
@@ -5923,9 +7681,18 @@ function openPage(pageId) {
         initMeldingen();
     }
 
+    if (pageId === "instellingenPage") {
+        renderSettingsPage();
+    }
+
+    if (pageId === "uitlegPage") {
+        initUitleg();
+    }
+
     if (pageId === "homePage") {
         loadShortcuts();
         renderQuickStats();
+        applyHiddenCards();
     }
 }
 
@@ -5957,10 +7724,1185 @@ async function getCurrentUser() {
 
 
 /* =========================================================
+   VOORKEUREN — LADEN EN OPSLAAN
+
+   Alle persoonlijke instellingen staan in één rij in de
+   tabel user_settings. Zo is er per nieuwe instelling
+   alleen een kolom nodig en geen nieuwe tabel.
+========================================================= */
+
+const dashboardCards =
+    [
+        { key:"notes", label:"Notities" },
+        { key:"todo", label:"To-do lijst" },
+        { key:"deadlines", label:"Deadlines" },
+        { key:"huiswerk", label:"Huiswerk" },
+        { key:"study", label:"Studietimer" },
+        { key:"cijfers", label:"Cijfers" },
+        { key:"doelen", label:"Doelen" },
+        { key:"agenda", label:"Agenda" },
+        { key:"suggesties", label:"Suggesties" }
+    ];
+
+
+function defaultUserSettings() {
+
+    return {
+        study_weekly_goal_hours:10,
+        pass_grade:5.5,
+        accent_color:"olijf",
+        theme:"light",
+        hidden_cards:[],
+        sort_notes:"updated_desc",
+        sort_todos:"created_desc",
+        sort_deadlines:"date_asc",
+        sort_huiswerk:"date_asc"
+    };
+}
+
+
+async function loadUserSettings() {
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("user_settings")
+            .select("*")
+            .maybeSingle();
+
+    if (error) {
+
+        console.error(
+            "Voorkeuren laden:",
+            error
+        );
+
+    }
+
+    userSettings =
+        Object.assign(
+            defaultUserSettings(),
+            data || {}
+        );
+
+    /* hidden_cards komt als array terug, maar een lege
+       kolom kan null zijn. */
+
+    if (!Array.isArray(userSettings.hidden_cards)) {
+
+        userSettings.hidden_cards = [];
+
+    }
+
+    userSettings.study_weekly_goal_hours =
+        Number(
+            userSettings.study_weekly_goal_hours
+        ) || 10;
+
+    userSettings.pass_grade =
+        Number(
+            userSettings.pass_grade
+        ) || 5.5;
+}
+
+
+async function saveUserSettings() {
+
+    if (!userSettings) {
+        return;
+    }
+
+    const user =
+        await getCurrentUser();
+
+    if (!user) {
+        return;
+    }
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("user_settings")
+            .upsert(
+                {
+                    user_id:user.id,
+                    study_weekly_goal_hours:
+                        userSettings.study_weekly_goal_hours,
+                    pass_grade:userSettings.pass_grade,
+                    accent_color:userSettings.accent_color,
+                    theme:userSettings.theme,
+                    hidden_cards:userSettings.hidden_cards,
+                    sort_notes:userSettings.sort_notes,
+                    sort_todos:userSettings.sort_todos,
+                    sort_deadlines:userSettings.sort_deadlines,
+                    sort_huiswerk:userSettings.sort_huiswerk
+                },
+                {
+                    onConflict:"user_id"
+                }
+            );
+
+    if (error) {
+
+        console.error(
+            "Voorkeuren opslaan:",
+            error
+        );
+
+        alert(
+            "De instelling kon niet worden opgeslagen."
+        );
+
+    }
+}
+
+
+/* Past de opgeslagen voorkeuren toe op de pagina. Wordt
+   aangeroepen na het laden en na elke wijziging. */
+
+function applyUserSettings() {
+
+    if (!userSettings) {
+        return;
+    }
+
+    applyTheme(
+        userSettings.theme === "dark"
+            ? "dark"
+            : "light"
+    );
+
+    localStorage.setItem(
+        "theme",
+        userSettings.theme
+    );
+
+    applyAccent(
+        userSettings.accent_color
+    );
+
+    localStorage.setItem(
+        "accent",
+        userSettings.accent_color
+    );
+
+    applyHiddenCards();
+}
+
+
+function applyHiddenCards() {
+
+    const hidden =
+        (userSettings && userSettings.hidden_cards) ||
+        [];
+
+    dashboardCards.forEach(card => {
+
+        const element =
+            document.querySelector(
+                '[data-card="' + card.key + '"]'
+            );
+
+        if (!element) {
+            return;
+        }
+
+        element.style.display =
+            hidden.includes(card.key)
+                ? "none"
+                : "";
+
+    });
+
+    const emptyHint =
+        document.getElementById(
+            "cardsEmptyHint"
+        );
+
+    if (emptyHint) {
+
+        emptyHint.style.display =
+            hidden.length >= dashboardCards.length
+                ? ""
+                : "none";
+
+    }
+}
+
+
+function toggleCardVisibility(key) {
+
+    if (!userSettings) {
+        return;
+    }
+
+    const hidden =
+        userSettings.hidden_cards;
+
+    const index =
+        hidden.indexOf(key);
+
+    if (index === -1) {
+
+        hidden.push(key);
+
+    } else {
+
+        hidden.splice(index, 1);
+
+    }
+
+    applyHiddenCards();
+
+    renderCardVisibilityOptions();
+
+    saveUserSettings();
+}
+
+
+function showAllCards() {
+
+    if (!userSettings) {
+        return;
+    }
+
+    userSettings.hidden_cards = [];
+
+    applyHiddenCards();
+
+    renderCardVisibilityOptions();
+
+    saveUserSettings();
+}
+
+
+/* =========================================================
+   KLOK IN DE BALK
+
+   Alleen uren en minuten. De eerste tik valt precies op de
+   minuutwissel, daarna elke minuut, zodat de tijd nooit tot
+   een minuut achterloopt.
+========================================================= */
+
+let clockInterval = null;
+
+const clockDays =
+    [
+        "zondag", "maandag", "dinsdag", "woensdag",
+        "donderdag", "vrijdag", "zaterdag"
+    ];
+
+const clockMonths =
+    [
+        "januari", "februari", "maart", "april", "mei",
+        "juni", "juli", "augustus", "september", "oktober",
+        "november", "december"
+    ];
+
+
+function renderClock() {
+
+    const now = new Date();
+
+    const timeEl =
+        document.getElementById("clockTime");
+
+    if (!timeEl) {
+        return;
+    }
+
+    timeEl.textContent =
+        String(now.getHours()).padStart(2, "0") +
+        ":" +
+        String(now.getMinutes()).padStart(2, "0");
+
+    const day =
+        clockDays[now.getDay()];
+
+    const month =
+        clockMonths[now.getMonth()];
+
+    document.getElementById(
+        "clockDateLong"
+    ).textContent =
+        day +
+        " " +
+        now.getDate() +
+        " " +
+        month;
+
+    document.getElementById(
+        "clockDateShort"
+    ).textContent =
+        day.slice(0, 2) +
+        " " +
+        now.getDate() +
+        " " +
+        month.slice(0, 3);
+}
+
+
+function startClock() {
+
+    renderClock();
+
+    if (clockInterval) {
+        clearInterval(clockInterval);
+        clockInterval = null;
+    }
+
+    const msToNextMinute =
+        60000 -
+        (
+            Date.now() % 60000
+        );
+
+    setTimeout(
+        () => {
+
+            renderClock();
+
+            clockInterval =
+                setInterval(
+                    renderClock,
+                    60000
+                );
+
+        },
+        msToNextMinute
+    );
+}
+
+
+/* Na slaapstand of het wisselen van tabblad loopt een timer
+   achter, dus dan meteen bijwerken. */
+
+document.addEventListener(
+    "visibilitychange",
+    () => {
+
+        if (document.visibilityState === "visible") {
+
+            renderClock();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   UITLEG
+
+   Twee panelen, iOS en Android. Bij het openen wordt het
+   paneel gekozen dat bij het apparaat past, daarna kan de
+   gebruiker zelf wisselen.
+========================================================= */
+
+let uitlegTabChosenByUser = false;
+
+
+function detectPlatform() {
+
+    const agent =
+        navigator.userAgent || "";
+
+    if (/android/i.test(agent)) {
+        return "android";
+    }
+
+    if (/iphone|ipad|ipod/i.test(agent)) {
+        return "ios";
+    }
+
+    /* Een iPad met iPadOS meldt zich als Mac. Het verschil
+       is dat hij een aanraakscherm heeft. */
+
+    if (
+        /macintosh/i.test(agent) &&
+        navigator.maxTouchPoints > 1
+    ) {
+        return "ios";
+    }
+
+    return null;
+}
+
+
+function showUitlegTab(platform) {
+
+    uitlegTabChosenByUser = true;
+
+    const panels =
+        {
+            ios:"uitlegPanelIos",
+            android:"uitlegPanelAndroid"
+        };
+
+    const tabs =
+        {
+            ios:"uitlegTabIos",
+            android:"uitlegTabAndroid"
+        };
+
+    Object.keys(panels).forEach(key => {
+
+        document
+            .getElementById(panels[key])
+            .classList.toggle(
+                "active",
+                key === platform
+            );
+
+        document
+            .getElementById(tabs[key])
+            .classList.toggle(
+                "active",
+                key === platform
+            );
+
+    });
+}
+
+
+function initUitleg() {
+
+    if (uitlegTabChosenByUser) {
+        return;
+    }
+
+    const platform =
+        detectPlatform();
+
+    if (platform) {
+
+        showUitlegTab(platform);
+
+        /* De automatische keuze telt niet als een keuze van
+           de gebruiker, zodat een iPad die als Mac langskomt
+           later alsnog goed gezet kan worden. */
+
+        uitlegTabChosenByUser = false;
+
+    }
+}
+
+
+/* =========================================================
+   VOORKEUREN — SORTEREN
+
+   Elke lijst heeft zijn eigen set sorteeropties. De keuze
+   staat in user_settings, dus hij geldt ook op je telefoon.
+========================================================= */
+
+const sortOptions =
+    {
+        notes:[
+            { value:"updated_desc", label:"Laatst bewerkt" },
+            { value:"created_desc", label:"Nieuwste eerst" },
+            { value:"created_asc", label:"Oudste eerst" },
+            { value:"title_asc", label:"Titel A tot Z" }
+        ],
+        todos:[
+            { value:"created_desc", label:"Nieuwste eerst" },
+            { value:"created_asc", label:"Oudste eerst" },
+            { value:"priority_desc", label:"Prioriteit" },
+            { value:"date_asc", label:"Datum" },
+            { value:"text_asc", label:"Naam A tot Z" }
+        ],
+        deadlines:[
+            { value:"date_asc", label:"Eerste deadline bovenaan" },
+            { value:"date_desc", label:"Laatste deadline bovenaan" },
+            { value:"created_desc", label:"Nieuwste eerst" },
+            { value:"title_asc", label:"Titel A tot Z" }
+        ],
+        huiswerk:[
+            { value:"date_asc", label:"Eerste deadline bovenaan" },
+            { value:"date_desc", label:"Laatste deadline bovenaan" },
+            { value:"subject_asc", label:"Vak A tot Z" },
+            { value:"created_desc", label:"Nieuwste eerst" }
+        ]
+    };
+
+
+/* "todos" wordt "Todos", zodat de id's van de knop en het
+   menu voorspelbaar zijn. */
+
+function sortElementSuffix(kind) {
+
+    return kind.charAt(0).toUpperCase() +
+        kind.slice(1);
+}
+
+
+function getSortValue(kind) {
+
+    const stored =
+        userSettings
+            ? userSettings["sort_" + kind]
+            : null;
+
+    const known =
+        sortOptions[kind].some(
+            option =>
+                option.value === stored
+        );
+
+    return known
+        ? stored
+        : sortOptions[kind][0].value;
+}
+
+
+async function setSortValue(kind, value) {
+
+    if (userSettings) {
+
+        userSettings["sort_" + kind] = value;
+
+    }
+
+    closeSortMenus();
+
+    renderSortControl(kind);
+
+    if (kind === "notes") {
+        renderNotesList();
+    }
+
+    if (kind === "todos") {
+        renderTodos();
+    }
+
+    if (kind === "deadlines") {
+        renderDeadlines();
+    }
+
+    if (kind === "huiswerk") {
+        renderHuiswerk();
+    }
+
+    await saveUserSettings();
+}
+
+
+function renderSortControl(kind) {
+
+    const suffix =
+        sortElementSuffix(kind);
+
+    const menu =
+        document.getElementById(
+            "sortMenu" + suffix
+        );
+
+    const label =
+        document.getElementById(
+            "sortLabel" + suffix
+        );
+
+    if (!menu || !label) {
+        return;
+    }
+
+    const active =
+        getSortValue(kind);
+
+    menu.innerHTML = "";
+
+    sortOptions[kind].forEach(option => {
+
+        const button =
+            document.createElement("button");
+
+        button.type = "button";
+
+        button.className =
+            option.value === active
+                ? "selected"
+                : "";
+
+        button.textContent =
+            option.label;
+
+        button.onclick =
+            () =>
+                setSortValue(
+                    kind,
+                    option.value
+                );
+
+        menu.appendChild(button);
+
+    });
+
+    const activeOption =
+        sortOptions[kind].find(
+            option =>
+                option.value === active
+        );
+
+    label.textContent =
+        activeOption
+            ? activeOption.label
+            : "Sorteren";
+}
+
+
+function closeSortMenus() {
+
+    document
+        .querySelectorAll(".sort-menu")
+        .forEach(menu => {
+            menu.classList.remove("show");
+        });
+}
+
+
+function toggleSortMenu(kind) {
+
+    const menu =
+        document.getElementById(
+            "sortMenu" + sortElementSuffix(kind)
+        );
+
+    if (!menu) {
+        return;
+    }
+
+    const wasOpen =
+        menu.classList.contains("show");
+
+    closeSortMenus();
+
+    if (!wasOpen) {
+
+        renderSortControl(kind);
+
+        menu.classList.add("show");
+
+    }
+}
+
+
+document.addEventListener(
+    "click",
+    event => {
+
+        if (!event.target.closest(".sort-control")) {
+
+            closeSortMenus();
+
+        }
+
+    }
+);
+
+
+/* Sorteert een kopie van de lijst, zodat de volgorde
+   waarin de gegevens binnenkwamen ongemoeid blijft. */
+
+function sortItems(kind, items) {
+
+    const value =
+        getSortValue(kind);
+
+    const copy =
+        items.slice();
+
+    const byText =
+        (a, b) =>
+            String(a || "").localeCompare(
+                String(b || ""),
+                "nl",
+                { sensitivity:"base" }
+            );
+
+    /* Items zonder datum komen altijd achteraan, ook bij
+       omgekeerd sorteren. */
+
+    const byDate =
+        (first, second, ascending) => {
+
+            if (!first && !second) return 0;
+            if (!first) return 1;
+            if (!second) return -1;
+
+            return ascending
+                ? String(first).localeCompare(String(second))
+                : String(second).localeCompare(String(first));
+        };
+
+    copy.sort((a, b) => {
+
+        switch (value) {
+
+            case "updated_desc":
+                return byDate(
+                    a.updated_at,
+                    b.updated_at,
+                    false
+                );
+
+            case "created_desc":
+                return byDate(
+                    a.created_at,
+                    b.created_at,
+                    false
+                );
+
+            case "created_asc":
+                return byDate(
+                    a.created_at,
+                    b.created_at,
+                    true
+                );
+
+            case "title_asc":
+                return byText(
+                    a.title,
+                    b.title
+                );
+
+            case "text_asc":
+                return byText(
+                    a.text,
+                    b.text
+                );
+
+            case "subject_asc":
+                return byText(
+                    a.subject,
+                    b.subject
+                );
+
+            case "priority_desc":
+                return (
+                    Number(b.priority || 2) -
+                    Number(a.priority || 2)
+                ) ||
+                byDate(
+                    a.due_date,
+                    b.due_date,
+                    true
+                );
+
+            case "date_asc":
+                return byDate(
+                    a.due_date || a.deadline_date,
+                    b.due_date || b.deadline_date,
+                    true
+                );
+
+            case "date_desc":
+                return byDate(
+                    a.due_date || a.deadline_date,
+                    b.due_date || b.deadline_date,
+                    false
+                );
+
+            default:
+                return 0;
+        }
+
+    });
+
+    return copy;
+}
+
+
+/* =========================================================
+   VOORKEUREN — WEEKDOEL STUDIETIMER
+========================================================= */
+
+function getStudyGoalHours() {
+
+    const value =
+        userSettings
+            ? Number(
+                userSettings.study_weekly_goal_hours
+            )
+            : 10;
+
+    return value > 0
+        ? value
+        : 10;
+}
+
+
+/* 10 wordt "10", 7.5 wordt "7,5". */
+
+function formatGoalHours(hours) {
+
+    return String(hours)
+        .replace(".", ",");
+}
+
+
+function renderStudyGoalInput() {
+
+    const input =
+        document.getElementById(
+            "studyGoalInput"
+        );
+
+    if (input) {
+
+        input.value =
+            getStudyGoalHours();
+
+    }
+
+    const label =
+        document.getElementById(
+            "statStudyLabel"
+        );
+
+    if (label) {
+
+        label.textContent =
+            "Geleerd deze week (doel " +
+            formatGoalHours(
+                getStudyGoalHours()
+            ) +
+            "u)";
+
+    }
+}
+
+
+async function saveStudyGoal() {
+
+    const input =
+        document.getElementById(
+            "studyGoalInput"
+        );
+
+    const status =
+        document.getElementById(
+            "studyGoalStatus"
+        );
+
+    const value =
+        Number(
+            input.value.replace(",", ".")
+        );
+
+    if (
+        isNaN(value) ||
+        value < 1 ||
+        value > 80
+    ) {
+
+        status.textContent =
+            "Kies een doel tussen 1 en 80 uur.";
+
+        status.className =
+            "study-goal-status error";
+
+        input.value =
+            getStudyGoalHours();
+
+        return;
+    }
+
+    userSettings.study_weekly_goal_hours =
+        value;
+
+    status.textContent = "Opgeslagen";
+
+    status.className =
+        "study-goal-status saved";
+
+    setTimeout(
+        () => {
+
+            status.textContent = "";
+
+        },
+        2000
+    );
+
+    renderStudyGoalInput();
+
+    renderStudyWeeks();
+
+    renderQuickStats();
+
+    await saveUserSettings();
+}
+
+
+/* =========================================================
+   VOORKEUREN — VOLDOENDE-GRENS
+========================================================= */
+
+function getPassGrade() {
+
+    const value =
+        userSettings
+            ? Number(
+                userSettings.pass_grade
+            )
+            : 5.5;
+
+    return value > 0
+        ? value
+        : 5.5;
+}
+
+
+function renderPassGradeInput() {
+
+    const input =
+        document.getElementById(
+            "passGradeInput"
+        );
+
+    if (input) {
+
+        input.value =
+            getPassGrade();
+
+    }
+}
+
+
+async function savePassGrade() {
+
+    const input =
+        document.getElementById(
+            "passGradeInput"
+        );
+
+    const status =
+        document.getElementById(
+            "passGradeStatus"
+        );
+
+    const value =
+        Number(
+            input.value.replace(",", ".")
+        );
+
+    if (
+        isNaN(value) ||
+        value < 1 ||
+        value > 10
+    ) {
+
+        status.textContent =
+            "Kies een grens tussen 1 en 10.";
+
+        status.className =
+            "pass-grade-status error";
+
+        input.value =
+            getPassGrade();
+
+        return;
+    }
+
+    userSettings.pass_grade = value;
+
+    status.textContent = "Opgeslagen";
+
+    status.className =
+        "pass-grade-status saved";
+
+    setTimeout(
+        () => {
+
+            status.textContent = "";
+
+        },
+        2000
+    );
+
+    renderSubjects();
+
+    await saveUserSettings();
+}
+
+
+/* =========================================================
+   VOORKEUREN — INSTELLINGENPAGINA
+========================================================= */
+
+function renderAccentOptions() {
+
+    const container =
+        document.getElementById(
+            "accentOptions"
+        );
+
+    if (!container) {
+        return;
+    }
+
+    container.innerHTML = "";
+
+    const active =
+        (userSettings && userSettings.accent_color) ||
+        localStorage.getItem("accent") ||
+        "olijf";
+
+    accentOptions.forEach(option => {
+
+        const button =
+            document.createElement("button");
+
+        button.type = "button";
+
+        button.className =
+            "accent-option" +
+            (
+                option.value === active
+                    ? " selected"
+                    : ""
+            );
+
+        button.onclick =
+            () =>
+                selectAccent(option.value);
+
+        const dot =
+            document.createElement("span");
+
+        dot.className = "accent-dot";
+
+        dot.style.background = option.swatch;
+
+        const label =
+            document.createElement("span");
+
+        label.textContent = option.label;
+
+        button.appendChild(dot);
+
+        button.appendChild(label);
+
+        container.appendChild(button);
+
+    });
+}
+
+
+function renderCardVisibilityOptions() {
+
+    const container =
+        document.getElementById(
+            "cardVisibilityOptions"
+        );
+
+    if (!container) {
+        return;
+    }
+
+    container.innerHTML = "";
+
+    const hidden =
+        (userSettings && userSettings.hidden_cards) ||
+        [];
+
+    dashboardCards.forEach(card => {
+
+        const row =
+            document.createElement("label");
+
+        row.className = "notif-toggle-row";
+
+        const checkbox =
+            document.createElement("input");
+
+        checkbox.type = "checkbox";
+
+        checkbox.checked =
+            !hidden.includes(card.key);
+
+        checkbox.onchange =
+            () =>
+                toggleCardVisibility(card.key);
+
+        row.appendChild(checkbox);
+
+        row.appendChild(
+            document.createTextNode(
+                card.label
+            )
+        );
+
+        container.appendChild(row);
+
+    });
+}
+
+
+function renderSettingsPage() {
+
+    renderAccentOptions();
+
+    renderCardVisibilityOptions();
+
+    const themeSelect =
+        document.getElementById(
+            "themeSelect"
+        );
+
+    if (themeSelect && userSettings) {
+
+        themeSelect.value =
+            userSettings.theme;
+
+    }
+}
+
+
+function changeThemeFromSettings() {
+
+    const value =
+        document.getElementById(
+            "themeSelect"
+        ).value;
+
+    const theme =
+        value === "dark"
+            ? "dark"
+            : "light";
+
+    applyTheme(theme);
+
+    localStorage.setItem(
+        "theme",
+        theme
+    );
+
+    if (userSettings) {
+
+        userSettings.theme = theme;
+
+        saveUserSettings();
+
+    }
+}
+
+
+/* =========================================================
    ALLES LADEN
 ========================================================= */
 
 async function loadAllData() {
+
+    /* De voorkeuren worden als eerste geladen, want de
+       lijsten hieronder sorteren ermee en de homepagina
+       verbergt er tegels mee. */
+
+    await loadUserSettings();
+
+    applyUserSettings();
 
     await Promise.all([
         loadNotes(),
@@ -6151,15 +9093,31 @@ function renderQuickStats() {
         gradeValueEl.textContent =
             "-";
 
+        gradeValueEl.classList.remove(
+            "pass",
+            "fail"
+        );
+
         gradeLabelEl.textContent =
             "Nog geen cijfers";
 
     } else {
 
+        const gradeAverage =
+            getAverage(grades);
+
         gradeValueEl.textContent =
-            getAverage(
-                grades
-            ).toFixed(1);
+            gradeAverage.toFixed(1);
+
+        gradeValueEl.classList.toggle(
+            "pass",
+            gradeAverage >= getPassGrade()
+        );
+
+        gradeValueEl.classList.toggle(
+            "fail",
+            gradeAverage < getPassGrade()
+        );
 
         gradeLabelEl.textContent =
             "Gemiddeld cijfer";
@@ -6201,9 +9159,12 @@ function renderQuickStats() {
     const studyHours =
         secondsThisWeek / 3600;
 
+    const studyGoal =
+        getStudyGoalHours();
+
     const studyPercentage =
         Math.min(
-            (studyHours / 10) * 100,
+            (studyHours / studyGoal) * 100,
             100
         );
 
@@ -6217,8 +9178,10 @@ function renderQuickStats() {
 
     studyFillEl.classList.toggle(
         "reached",
-        studyHours >= 10
+        studyHours >= studyGoal
     );
+
+    renderStudyGoalInput();
 }
 
 
@@ -6316,6 +9279,8 @@ async function loadNotes() {
 
 function renderNotesList() {
 
+    renderSortControl("notes");
+
     const list =
         document.getElementById(
             "notesList"
@@ -6335,7 +9300,7 @@ function renderNotesList() {
         return;
     }
 
-    notes.forEach(note => {
+    sortItems("notes", notes).forEach(note => {
 
         const button =
             document.createElement("button");
@@ -6652,6 +9617,16 @@ async function addTodo() {
         return;
     }
 
+    const prioritySelect =
+        document.getElementById(
+            "todoPrioritySelect"
+        );
+
+    const dateInput =
+        document.getElementById(
+            "todoDateInput"
+        );
+
     const {
         error
     } =
@@ -6660,7 +9635,13 @@ async function addTodo() {
             .insert({
                 user_id:user.id,
                 text:text,
-                completed:false
+                completed:false,
+                priority:
+                    Number(
+                        prioritySelect.value
+                    ) || 2,
+                due_date:
+                    dateInput.value || null
             });
 
     if (error) {
@@ -6679,13 +9660,64 @@ async function addTodo() {
 
     input.value = "";
 
+    dateInput.value = "";
+
+    prioritySelect.value = "2";
+
     await loadTodos();
 
     input.focus();
 }
 
 
+/* Zet een datum om naar een korte omschrijving, plus een
+   klasse die de badge kleurt bij vandaag of te laat. */
+
+function describeTodoDate(dateString) {
+
+    const days =
+        getDaysUntil(dateString);
+
+    if (days < 0) {
+
+        return {
+            label:
+                Math.abs(days) === 1
+                    ? "1 dag te laat"
+                    : Math.abs(days) + " dagen te laat",
+            className:"date-overdue"
+        };
+
+    }
+
+    if (days === 0) {
+
+        return {
+            label:"Vandaag",
+            className:"date-today"
+        };
+
+    }
+
+    if (days === 1) {
+
+        return {
+            label:"Morgen",
+            className:"date-today"
+        };
+
+    }
+
+    return {
+        label:"Over " + days + " dagen",
+        className:""
+    };
+}
+
+
 function renderTodos() {
+
+    renderSortControl("todos");
 
     const list =
         document.getElementById(
@@ -6705,13 +9737,23 @@ function renderTodos() {
         return;
     }
 
-    todos.forEach(todo => {
+    sortItems("todos", todos).forEach(todo => {
 
         const item =
             document.createElement("div");
 
+        const priority =
+            Number(todo.priority) || 2;
+
         item.className =
             "todo-item" +
+            (
+                priority === 3
+                    ? " priority-high"
+                    : priority === 1
+                        ? " priority-low"
+                        : ""
+            ) +
             (
                 todo.completed
                     ? " completed"
@@ -6739,6 +9781,12 @@ function renderTodos() {
                 )
         );
 
+        const body =
+            document.createElement("div");
+
+        body.className =
+            "todo-body";
+
         const text =
             document.createElement("span");
 
@@ -6747,6 +9795,74 @@ function renderTodos() {
 
         text.textContent =
             todo.text;
+
+        body.appendChild(text);
+
+        const meta =
+            document.createElement("div");
+
+        meta.className =
+            "todo-meta";
+
+        /* Normaal krijgt geen badge, anders staat de lijst
+           vol met labels die niets toevoegen. */
+
+        if (priority !== 2) {
+
+            const priorityBadge =
+                document.createElement("span");
+
+            priorityBadge.className =
+                "todo-badge " +
+                (
+                    priority === 3
+                        ? "priority-high"
+                        : "priority-low"
+                );
+
+            priorityBadge.textContent =
+                priority === 3
+                    ? "Hoog"
+                    : "Laag";
+
+            meta.appendChild(
+                priorityBadge
+            );
+
+        }
+
+        if (todo.due_date) {
+
+            const described =
+                describeTodoDate(
+                    todo.due_date
+                );
+
+            const dateBadge =
+                document.createElement("span");
+
+            dateBadge.className =
+                "todo-badge " +
+                (
+                    todo.completed
+                        ? ""
+                        : described.className
+                );
+
+            dateBadge.textContent =
+                described.label;
+
+            meta.appendChild(
+                dateBadge
+            );
+
+        }
+
+        if (meta.children.length) {
+
+            body.appendChild(meta);
+
+        }
 
         const deleteButton =
             document.createElement("button");
@@ -6778,7 +9894,7 @@ function renderTodos() {
         );
 
         item.appendChild(
-            text
+            body
         );
 
         item.appendChild(
@@ -6963,6 +10079,8 @@ async function addDeadline() {
 
 function renderDeadlines() {
 
+    renderSortControl("deadlines");
+
     const list =
         document.getElementById(
             "deadlineList"
@@ -6981,7 +10099,7 @@ function renderDeadlines() {
         return;
     }
 
-    deadlines.forEach(deadline => {
+    sortItems("deadlines", deadlines).forEach(deadline => {
 
         const item =
             document.createElement("div");
@@ -7327,6 +10445,8 @@ async function addHuiswerk() {
 
 function renderHuiswerk() {
 
+    renderSortControl("huiswerk");
+
     const list =
         document.getElementById(
             "huiswerkList"
@@ -7345,7 +10465,7 @@ function renderHuiswerk() {
         return;
     }
 
-    huiswerk.forEach(item => {
+    sortItems("huiswerk", huiswerk).forEach(item => {
 
         const el =
             document.createElement("div");
@@ -7806,6 +10926,8 @@ async function saveStudySession(
 
 function renderStudyWeeks() {
 
+    renderStudyGoalInput();
+
     const list =
         document.getElementById(
             "studyWeekList"
@@ -7861,16 +10983,19 @@ function renderStudyWeeks() {
             const totalHours =
                 totalSeconds / 3600;
 
+            const weekGoal =
+                getStudyGoalHours();
+
             const percentage =
                 Math.min(
                     (
-                        totalHours / 10
+                        totalHours / weekGoal
                     ) * 100,
                     100
                 );
 
             const reached =
-                totalHours >= 10;
+                totalHours >= weekGoal;
 
             const card =
                 document.createElement("div");
@@ -8371,6 +11496,8 @@ async function deleteGrade(id) {
 
 function renderSubjects() {
 
+    renderPassGradeInput();
+
     const list =
         document.getElementById(
             "subjectList"
@@ -8425,16 +11552,34 @@ function renderSubjects() {
         const average =
             document.createElement("div");
 
-        average.className =
-            "subject-average";
+        if (subjectGrades.length) {
 
-        average.textContent =
-            subjectGrades.length
-                ? "Gemiddelde: " +
-                  getAverage(
-                      subjectGrades
-                  ).toFixed(1)
-                : "Nog geen cijfers";
+            const averageValue =
+                getAverage(
+                    subjectGrades
+                );
+
+            average.className =
+                "subject-average " +
+                (
+                    averageValue >= getPassGrade()
+                        ? "pass"
+                        : "fail"
+                );
+
+            average.textContent =
+                "Gemiddelde: " +
+                averageValue.toFixed(1);
+
+        } else {
+
+            average.className =
+                "subject-average";
+
+            average.textContent =
+                "Nog geen cijfers";
+
+        }
 
         info.appendChild(name);
         info.appendChild(average);
@@ -8497,7 +11642,13 @@ function renderSubjects() {
                         document.createElement("span");
 
                     chip.className =
-                        "grade-chip";
+                        "grade-chip " +
+                        (
+                            Number(grade.grade) >=
+                            getPassGrade()
+                                ? "pass"
+                                : "fail"
+                        );
 
                     const value =
                         document.createElement("span");
