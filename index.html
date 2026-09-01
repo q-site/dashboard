@@ -3101,6 +3101,231 @@ main {
 }
 
 /* =========================================================
+   WELKOM EN RONDLEIDING
+
+   z-index: de rondleiding (90) en het welkomvenster (95)
+   liggen boven de balk (60), maar onder de modals (100).
+========================================================= */
+
+.welcome-overlay {
+    position:fixed;
+    inset:0;
+    z-index:95;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    background:rgba(20,21,15,.55);
+}
+
+.welcome-overlay.show {
+    display:flex;
+}
+
+.welcome-box {
+    position:relative;
+    width:100%;
+    max-width:430px;
+    padding:32px 30px 28px;
+    border-radius:14px;
+    background:var(--white);
+    box-shadow:0 18px 48px rgba(0,0,0,.28);
+    text-align:center;
+}
+
+.welcome-close {
+    position:absolute;
+    top:12px;
+    right:12px;
+    width:32px;
+    height:32px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border:none;
+    border-radius:7px;
+    background:none;
+    color:var(--muted);
+}
+
+.welcome-close:hover {
+    background:var(--light);
+    color:var(--anthracite);
+}
+
+.welcome-close svg {
+    width:16px;
+    height:16px;
+}
+
+.welcome-mark {
+    width:52px;
+    height:52px;
+    margin:0 auto 16px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:14px;
+    background:var(--olive);
+    color:#fff;
+}
+
+.welcome-mark svg {
+    width:26px;
+    height:26px;
+}
+
+.welcome-box h2 {
+    font-size:21px;
+    margin-bottom:8px;
+}
+
+.welcome-box > p {
+    color:var(--muted);
+    font-size:14px;
+    line-height:1.6;
+}
+
+.welcome-actions {
+    display:flex;
+    flex-direction:column;
+    gap:9px;
+    margin-top:24px;
+}
+
+.welcome-primary {
+    height:46px;
+    border:none;
+    border-radius:9px;
+    background:var(--olive);
+    color:#fff;
+    font-size:14.5px;
+    font-weight:600;
+}
+
+.welcome-primary:hover {
+    background:var(--olive-dark);
+}
+
+.welcome-secondary {
+    height:44px;
+    border:1px solid var(--border);
+    border-radius:9px;
+    background:var(--white);
+    color:var(--anthracite);
+    font-size:14px;
+    font-weight:600;
+}
+
+.welcome-secondary:hover {
+    border-color:var(--olive);
+    color:var(--accent-text);
+}
+
+/* De rondleiding. De donkere laag is de slagschaduw van het
+   uitgelichte vak, zo hoeft er nergens een gat geknipt te
+   worden. */
+
+.tour-layer {
+    position:fixed;
+    inset:0;
+    z-index:90;
+    display:none;
+}
+
+.tour-layer.show {
+    display:block;
+}
+
+.tour-spotlight {
+    position:fixed;
+    border-radius:12px;
+    box-shadow:0 0 0 9999px rgba(20,21,15,.62);
+    pointer-events:none;
+    transition:top .22s ease, left .22s ease,
+        width .22s ease, height .22s ease;
+}
+
+.tour-tip {
+    position:fixed;
+    width:min(310px,calc(100vw - 28px));
+    padding:17px 18px 16px;
+    border-radius:12px;
+    background:var(--white);
+    box-shadow:0 14px 36px rgba(0,0,0,.3);
+}
+
+.tour-tip h3 {
+    font-size:15.5px;
+    margin-bottom:6px;
+}
+
+.tour-tip p {
+    color:var(--muted);
+    font-size:13.5px;
+    line-height:1.55;
+}
+
+.tour-foot {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    margin-top:16px;
+}
+
+.tour-count {
+    color:var(--muted);
+    font-size:12.5px;
+    font-weight:600;
+    font-variant-numeric:tabular-nums;
+}
+
+.tour-buttons {
+    display:flex;
+    gap:7px;
+}
+
+.tour-button {
+    height:34px;
+    padding:0 13px;
+    border:1px solid var(--border);
+    border-radius:7px;
+    background:var(--white);
+    color:var(--anthracite);
+    font-size:13px;
+    font-weight:600;
+}
+
+.tour-button:hover {
+    border-color:var(--olive);
+}
+
+.tour-button.primary {
+    border-color:var(--olive);
+    background:var(--olive);
+    color:#fff;
+}
+
+.tour-button.primary:hover {
+    background:var(--olive-dark);
+}
+
+.tour-skip {
+    padding:0;
+    border:none;
+    background:none;
+    color:var(--muted);
+    font-size:12.5px;
+    font-weight:600;
+    text-decoration:underline;
+}
+
+.tour-skip:hover {
+    color:var(--anthracite);
+}
+
+/* =========================================================
    UITLEG
 ========================================================= */
 
@@ -4014,6 +4239,18 @@ main {
     <path d="M12 16.6v.4"></path>
 </symbol>
 
+<symbol id="close" viewBox="0 0 24 24">
+    <path d="M6 6l12 12"></path>
+    <path d="M18 6 6 18"></path>
+</symbol>
+
+<symbol id="wave" viewBox="0 0 24 24">
+    <path d="M11 3.5a1.4 1.4 0 0 1 2.8 0v6"></path>
+    <path d="M8.2 6a1.4 1.4 0 0 1 2.8 0v3.5"></path>
+    <path d="M13.8 6.5a1.4 1.4 0 0 1 2.8 0v3.6"></path>
+    <path d="M16.6 9.4a1.4 1.4 0 0 1 2.8 0v3.1c0 4.5-3 8-7.4 8-2.6 0-4.4-1.2-5.7-3.2L3 12.2a1.4 1.4 0 0 1 2.2-1.7l3 3"></path>
+</symbol>
+
 </svg>
 
 
@@ -4253,6 +4490,7 @@ Heb je al een account?
 </button>
 
 <button
+    id="settingsButton"
     class="theme-toggle-button"
     onclick="openPage('instellingenPage')"
     title="Instellingen"
@@ -4267,6 +4505,7 @@ Heb je al een account?
 </button>
 
 <button
+    id="uitlegButton"
     class="theme-toggle-button"
     onclick="openPage('uitlegPage')"
     title="Uitleg: meldingen en app op je telefoon"
@@ -4431,7 +4670,7 @@ Uitloggen
 </div>
 
 
-<div class="dashboard">
+<div id="dashboardCards" class="dashboard">
 
 
 <article class="dashboard-card" data-card="notes">
@@ -4776,7 +5015,7 @@ Je hebt alle blokken verborgen. Zet ze weer aan bij
      SNELKOPPELINGEN
 ========================================================= -->
 
-<div class="shortcuts-panel">
+<div id="shortcutsPanel" class="shortcuts-panel">
 
 <div class="shortcuts-header">
 
@@ -6030,6 +6269,19 @@ Alles weer tonen
 
 </div>
 
+<div class="content-panel">
+<h2 style="font-size:16px;margin-bottom:6px">Rondleiding</h2>
+<p class="modal-hint" style="margin-bottom:16px">De korte uitleg die je bij je eerste keer inloggen kreeg. Hij loopt over het overzicht en de knoppen bovenin.</p>
+
+<button
+    class="secondary-button"
+    onclick="startTour()"
+>
+Rondleiding opnieuw bekijken
+</button>
+
+</div>
+
 </section>
 
 
@@ -6682,6 +6934,122 @@ Op Android werken meldingen ook in een gewoon tabblad, maar als app op je starts
 </div>
 </div>
 
+
+<!-- =========================================================
+     WELKOM EN RONDLEIDING
+========================================================= -->
+
+<div id="welcomeOverlay" class="welcome-overlay">
+
+<div class="welcome-box">
+
+<button
+    class="welcome-close"
+    onclick="dismissWelcome()"
+    title="Sluiten"
+>
+<svg fill="none"
+     stroke="currentColor"
+     stroke-width="2"
+     stroke-linecap="round"
+     stroke-linejoin="round">
+    <use href="#close"></use>
+</svg>
+</button>
+
+<div class="welcome-mark">
+<svg fill="none"
+     stroke="currentColor"
+     stroke-width="1.7"
+     stroke-linecap="round"
+     stroke-linejoin="round">
+    <use href="#wave"></use>
+</svg>
+</div>
+
+<h2>Welkom bij je dashboard</h2>
+
+<p>Alles voor school op één plek: huiswerk, deadlines, cijfers, doelen en je agenda. Zal ik je in het kort laten zien waar alles staat?</p>
+
+<div class="welcome-actions">
+
+<button
+    class="welcome-primary"
+    onclick="startTourFromWelcome()"
+>
+Geef me een rondleiding
+</button>
+
+<button
+    class="welcome-secondary"
+    onclick="dismissWelcome()"
+>
+Rondleiding overslaan
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div id="tourLayer" class="tour-layer">
+
+<div
+    id="tourSpotlight"
+    class="tour-spotlight"
+></div>
+
+<div
+    id="tourTip"
+    class="tour-tip"
+>
+
+<h3 id="tourTitle"></h3>
+
+<p id="tourText"></p>
+
+<div class="tour-foot">
+
+<button
+    class="tour-skip"
+    onclick="endTour()"
+>
+Overslaan
+</button>
+
+<div class="tour-buttons">
+
+<button
+    id="tourPrevButton"
+    class="tour-button"
+    onclick="previousTourStep()"
+>
+Vorige
+</button>
+
+<button
+    id="tourNextButton"
+    class="tour-button primary"
+    onclick="nextTourStep()"
+>
+Volgende
+</button>
+
+</div>
+
+</div>
+
+<div
+    id="tourCount"
+    class="tour-count"
+    style="margin-top:10px;text-align:center"
+></div>
+
+</div>
+
+</div>
 
 
 </main>
@@ -7756,7 +8124,8 @@ function defaultUserSettings() {
         sort_notes:"updated_desc",
         sort_todos:"created_desc",
         sort_deadlines:"date_asc",
-        sort_huiswerk:"date_asc"
+        sort_huiswerk:"date_asc",
+        onboarding_done:false
     };
 }
 
@@ -7838,7 +8207,8 @@ async function saveUserSettings() {
                     sort_notes:userSettings.sort_notes,
                     sort_todos:userSettings.sort_todos,
                     sort_deadlines:userSettings.sort_deadlines,
-                    sort_huiswerk:userSettings.sort_huiswerk
+                    sort_huiswerk:userSettings.sort_huiswerk,
+                    onboarding_done:userSettings.onboarding_done
                 },
                 {
                     onConflict:"user_id"
@@ -7977,6 +8347,375 @@ function showAllCards() {
 
     saveUserSettings();
 }
+
+
+/* =========================================================
+   WELKOM EN RONDLEIDING
+
+   De welkomstboodschap verschijnt één keer, bij de eerste
+   keer inloggen. Dat wordt onthouden in user_settings, dus
+   op je telefoon zie je hem daarna niet opnieuw.
+========================================================= */
+
+const tourSteps =
+    [
+        {
+            target:"#statsStrip",
+            title:"Je week in het kort",
+            text:"Openstaand huiswerk, je eerstvolgende deadline, je gemiddelde cijfer en hoeveel je deze week hebt geleerd. Deze balk werkt zichzelf bij zodra je iets invult."
+        },
+        {
+            target:"#dashboardCards",
+            title:"De blokken",
+            text:"Elk blok opent zijn eigen pagina: notities, to-do, deadlines, huiswerk, studietimer, cijfers, doelen, agenda en suggesties. Wat je niet gebruikt kun je later verbergen."
+        },
+        {
+            target:"#shortcutsPanel",
+            title:"Snelkoppelingen",
+            text:"Zet hier links naar sites die je vaak nodig hebt, zoals Magister of je schoolmail. Met de plusknop voeg je er een toe."
+        },
+        {
+            target:"#notificationBellButton",
+            title:"Meldingen",
+            text:"Hier stel je in hoeveel dagen van tevoren je een herinnering wilt voor deadlines, huiswerk en afspraken."
+        },
+        {
+            target:"#settingsButton",
+            title:"Instellingen",
+            text:"Kies je accentkleur, licht of donker, en welke blokken je op het overzicht ziet."
+        },
+        {
+            target:"#uitlegButton",
+            title:"Uitleg",
+            text:"Hier staat stap voor stap hoe je dit dashboard als app op je telefoon zet en meldingen aanzet. Dat is het handigst om als eerste te doen."
+        }
+    ];
+
+let tourIndex = 0;
+let tourActive = false;
+
+
+function maybeShowWelcome() {
+
+    if (!userSettings || userSettings.onboarding_done) {
+        return;
+    }
+
+    document
+        .getElementById("welcomeOverlay")
+        .classList.add("show");
+}
+
+
+/* Zowel het kruisje als "overslaan" sluiten af. De
+   boodschap komt daarna niet meer terug. */
+
+function dismissWelcome() {
+
+    document
+        .getElementById("welcomeOverlay")
+        .classList.remove("show");
+
+    markOnboardingDone();
+}
+
+
+function markOnboardingDone() {
+
+    if (
+        !userSettings ||
+        userSettings.onboarding_done
+    ) {
+        return;
+    }
+
+    userSettings.onboarding_done = true;
+
+    saveUserSettings();
+}
+
+
+function startTourFromWelcome() {
+
+    document
+        .getElementById("welcomeOverlay")
+        .classList.remove("show");
+
+    markOnboardingDone();
+
+    startTour();
+}
+
+
+function startTour() {
+
+    openPage("homePage");
+
+    tourIndex = 0;
+    tourActive = true;
+
+    document
+        .getElementById("tourLayer")
+        .classList.add("show");
+
+    window.addEventListener(
+        "resize",
+        positionTour
+    );
+
+    window.addEventListener(
+        "scroll",
+        positionTour,
+        true
+    );
+
+    renderTourStep();
+}
+
+
+function endTour() {
+
+    tourActive = false;
+
+    document
+        .getElementById("tourLayer")
+        .classList.remove("show");
+
+    window.removeEventListener(
+        "resize",
+        positionTour
+    );
+
+    window.removeEventListener(
+        "scroll",
+        positionTour,
+        true
+    );
+
+    markOnboardingDone();
+}
+
+
+function nextTourStep() {
+
+    if (tourIndex >= tourSteps.length - 1) {
+
+        endTour();
+
+        return;
+    }
+
+    tourIndex = tourIndex + 1;
+
+    renderTourStep();
+}
+
+
+function previousTourStep() {
+
+    if (tourIndex === 0) {
+        return;
+    }
+
+    tourIndex = tourIndex - 1;
+
+    renderTourStep();
+}
+
+
+function renderTourStep() {
+
+    const step =
+        tourSteps[tourIndex];
+
+    document.getElementById(
+        "tourTitle"
+    ).textContent = step.title;
+
+    document.getElementById(
+        "tourText"
+    ).textContent = step.text;
+
+    document.getElementById(
+        "tourCount"
+    ).textContent =
+        "Stap " +
+        (tourIndex + 1) +
+        " van " +
+        tourSteps.length;
+
+    document.getElementById(
+        "tourPrevButton"
+    ).style.visibility =
+        tourIndex === 0
+            ? "hidden"
+            : "visible";
+
+    document.getElementById(
+        "tourNextButton"
+    ).textContent =
+        tourIndex === tourSteps.length - 1
+            ? "Klaar"
+            : "Volgende";
+
+    const element =
+        document.querySelector(step.target);
+
+    if (!element) {
+
+        /* Onderdeel bestaat niet, dus die stap slaan we
+           over. */
+
+        nextTourStep();
+
+        return;
+    }
+
+    const rect =
+        element.getBoundingClientRect();
+
+    const needsScroll =
+        rect.top < 90 ||
+        rect.bottom > window.innerHeight - 40;
+
+    if (needsScroll) {
+
+        element.scrollIntoView({
+            block:"center",
+            behavior:"smooth"
+        });
+
+        setTimeout(
+            positionTour,
+            360
+        );
+
+    }
+
+    positionTour();
+}
+
+
+function positionTour() {
+
+    if (!tourActive) {
+        return;
+    }
+
+    const step =
+        tourSteps[tourIndex];
+
+    const element =
+        document.querySelector(step.target);
+
+    if (!element) {
+        return;
+    }
+
+    const rect =
+        element.getBoundingClientRect();
+
+    const padding = 8;
+
+    const spotlight =
+        document.getElementById(
+            "tourSpotlight"
+        );
+
+    spotlight.style.top =
+        (rect.top - padding) + "px";
+
+    spotlight.style.left =
+        (rect.left - padding) + "px";
+
+    spotlight.style.width =
+        (rect.width + padding * 2) + "px";
+
+    spotlight.style.height =
+        (rect.height + padding * 2) + "px";
+
+    const tip =
+        document.getElementById(
+            "tourTip"
+        );
+
+    const tipRect =
+        tip.getBoundingClientRect();
+
+    const margin = 14;
+
+    /* Onder het uitgelichte vak als het past, anders
+       erboven, en als het vak zo groot is dat het allebei
+       niet kan, onderaan het scherm. Daar staat de ballon
+       nooit over de balk bovenin. */
+
+    const below =
+        rect.bottom + padding + margin;
+
+    const above =
+        rect.top - padding - margin - tipRect.height;
+
+    let top;
+
+    if (
+        below + tipRect.height <=
+        window.innerHeight - margin
+    ) {
+
+        top = below;
+
+    } else if (above >= margin) {
+
+        top = above;
+
+    } else {
+
+        top =
+            window.innerHeight - margin - tipRect.height;
+
+    }
+
+    /* Uitlijnen op het midden van het vak, maar wel binnen
+       het scherm blijven. */
+
+    let left =
+        rect.left +
+        (rect.width / 2) -
+        (tipRect.width / 2);
+
+    if (left < margin) {
+        left = margin;
+    }
+
+    if (
+        left + tipRect.width >
+        window.innerWidth - margin
+    ) {
+
+        left =
+            window.innerWidth - margin - tipRect.width;
+
+    }
+
+    tip.style.top = top + "px";
+    tip.style.left = left + "px";
+}
+
+
+/* Escape sluit de rondleiding. */
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        if (event.key === "Escape" && tourActive) {
+
+            endTour();
+
+        }
+
+    }
+);
 
 
 /* =========================================================
@@ -8919,6 +9658,11 @@ async function loadAllData() {
     ]);
 
     renderQuickStats();
+
+    /* Pas tonen als het dashboard gevuld is, anders licht de
+       rondleiding lege blokken uit. */
+
+    maybeShowWelcome();
 
     await refreshDueReminders();
 
