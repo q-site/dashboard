@@ -1,0 +1,2089 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#343833">
+<link rel="icon" type="image/png" href="../favicon.png">
+<title>Beheer · Persoonlijk Dashboard</title>
+
+<!--
+    BEHEERPAGINA
+
+    Bereikbaar op /admin. Er staat nergens in de app een knop
+    naartoe. Maar let op: dat de pagina verstopt is, beveiligt
+    niets. De echte beveiliging zit in Supabase: alleen wie in
+    de tabel admins staat, mag updatemeldingen maken en alle
+    suggesties lezen. Wie deze pagina vindt zonder dat recht,
+    krijgt alleen "Geen toegang" te zien en de database geeft
+    hem ook niets.
+-->
+
+<style>
+:root {
+    --white:#fff;
+    --olive:#566344;
+    --olive-dark:#414b34;
+    --anthracite:#343833;
+    --light:#f4f5f2;
+    --border:#dde0da;
+    --muted:#72776f;
+    --danger:#a33a32;
+    --danger-dark:#832e27;
+    --warning:#a87824;
+    --badge-bg:#eef0eb;
+    --badge-border:#d9ddd4;
+    --danger-hover-bg:#f1e9e8;
+    --warning-bg:#f3ead5;
+    --success:#3f7d4a;
+    --success-bg:#eaf1e9;
+    --error-bg:#f9e8e6;
+    --overdue-bg:#fffafa;
+    --overdue-badge-bg:#f1e1df;
+    --overdue-border:#d6aaa6;
+    --today-border:#d6c18f;
+    --login-backdrop:#343833;
+    --accent-text:#414b34;
+
+    color-scheme:light;
+}
+
+[data-theme="dark"] {
+    --white:#242822;
+    --olive:#7c9166;
+    --olive-dark:#93a97e;
+    --anthracite:#ecefe8;
+    --light:#191c17;
+    --border:#3a3f37;
+    --muted:#9aa093;
+    --danger:#c9645a;
+    --danger-dark:#b2564c;
+    --warning:#d9a94c;
+    --badge-bg:#333a2f;
+    --badge-border:#3a3f37;
+    --danger-hover-bg:#402f2c;
+    --warning-bg:#3c3222;
+    --success:#7fbf8a;
+    --success-bg:#243328;
+    --error-bg:#3a2723;
+    --overdue-bg:#241f1e;
+    --overdue-badge-bg:#3e2c29;
+    --overdue-border:#6b433e;
+    --today-border:#6b5636;
+    --login-backdrop:#14150f;
+    --accent-text:#b9c9a7;
+
+    color-scheme:dark;
+}
+
+/* =========================================================
+   ACCENTKLEUREN
+
+   De standaardkleur (olijf) staat hierboven in :root en in
+   [data-theme="dark"]. De blokken hieronder overschrijven
+   alleen de accentvariabelen, apart voor licht en donker.
+   Beide selectors hebben twee attributen, zodat ze het
+   thema-blok hierboven altijd verslaan.
+========================================================= */
+
+[data-theme="light"][data-accent="blauw"] {
+    --olive:#3d5a80;
+    --olive-dark:#2e4560;
+    --accent-text:#2e4560;
+    --badge-bg:#e9edf3;
+    --badge-border:#d3dbe6;
+}
+
+[data-theme="dark"][data-accent="blauw"] {
+    --olive:#6f97c7;
+    --olive-dark:#8bb0da;
+    --accent-text:#a8c6e6;
+    --badge-bg:#2b3542;
+    --badge-border:#3a4553;
+}
+
+[data-theme="light"][data-accent="terracotta"] {
+    --olive:#a1522f;
+    --olive-dark:#834023;
+    --accent-text:#834023;
+    --badge-bg:#f5ebe5;
+    --badge-border:#e6d6cb;
+}
+
+[data-theme="dark"][data-accent="terracotta"] {
+    --olive:#d08a63;
+    --olive-dark:#e0a37f;
+    --accent-text:#e8bb9d;
+    --badge-bg:#3d302a;
+    --badge-border:#4b3b33;
+}
+
+[data-theme="light"][data-accent="paars"] {
+    --olive:#5c4b8a;
+    --olive-dark:#47396c;
+    --accent-text:#47396c;
+    --badge-bg:#eeebf4;
+    --badge-border:#dcd6e8;
+}
+
+[data-theme="dark"][data-accent="paars"] {
+    --olive:#9686c9;
+    --olive-dark:#ab9dd8;
+    --accent-text:#c4b8e6;
+    --badge-bg:#332e42;
+    --badge-border:#413a53;
+}
+
+[data-theme="light"][data-accent="teal"] {
+    --olive:#2f6b64;
+    --olive-dark:#23524d;
+    --accent-text:#23524d;
+    --badge-bg:#e6efee;
+    --badge-border:#cfe0dd;
+}
+
+[data-theme="dark"][data-accent="teal"] {
+    --olive:#63a89e;
+    --olive-dark:#7fbdb4;
+    --accent-text:#9fd3ca;
+    --badge-bg:#273835;
+    --badge-border:#334744;
+}
+
+[data-theme="light"][data-accent="bordeaux"] {
+    --olive:#7d3242;
+    --olive-dark:#642633;
+    --accent-text:#642633;
+    --badge-bg:#f3e9eb;
+    --badge-border:#e4d1d6;
+}
+
+[data-theme="dark"][data-accent="bordeaux"] {
+    --olive:#c07686;
+    --olive-dark:#d2909e;
+    --accent-text:#e0b0ba;
+    --badge-bg:#3a2b2f;
+    --badge-border:#4a373c;
+}
+
+* {
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+html {
+    -webkit-text-size-adjust:100%;
+}
+
+body {
+    font-family:Inter,-apple-system,BlinkMacSystemFont,
+        "Segoe UI",Arial,sans-serif;
+    background:var(--light);
+    color:var(--anthracite);
+    min-height:100vh;
+}
+
+button,
+input,
+textarea {
+    font:inherit;
+    color:inherit;
+}
+
+button {
+    cursor:pointer;
+}
+
+input,
+textarea {
+    background:var(--white);
+    color:var(--anthracite);
+}
+
+input::placeholder,
+textarea::placeholder {
+    color:var(--muted);
+    opacity:1;
+}
+
+/* =========================================================
+   BALK
+========================================================= */
+
+.topbar {
+    position:sticky;
+    top:0;
+    z-index:20;
+    height:64px;
+    padding:0 28px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    background:var(--white);
+    border-bottom:1px solid var(--border);
+}
+
+.brand {
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:16px;
+    font-weight:650;
+}
+
+.brand-mark {
+    width:30px;
+    height:30px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:7px;
+    background:var(--olive);
+    color:#fff;
+}
+
+.brand-mark svg {
+    width:17px;
+    height:17px;
+}
+
+.brand-tag {
+    padding:2px 8px;
+    border-radius:20px;
+    background:var(--badge-bg);
+    border:1px solid var(--badge-border);
+    color:var(--accent-text);
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:.3px;
+    text-transform:uppercase;
+}
+
+.topbar-actions {
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+.bar-button {
+    height:36px;
+    padding:0 12px;
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    border:1px solid var(--border);
+    border-radius:7px;
+    background:var(--white);
+    color:var(--anthracite);
+    font-size:13px;
+    font-weight:600;
+    text-decoration:none;
+}
+
+.bar-button:hover {
+    background:var(--light);
+}
+
+.bar-button svg {
+    width:16px;
+    height:16px;
+}
+
+/* =========================================================
+   INHOUD
+========================================================= */
+
+main {
+    width:min(100% - 32px,1080px);
+    margin:0 auto;
+    padding:34px 0 60px;
+}
+
+.page-header {
+    margin-bottom:22px;
+}
+
+.page-header h1 {
+    font-size:28px;
+    letter-spacing:-.4px;
+    margin-bottom:6px;
+}
+
+.page-header p {
+    color:var(--muted);
+    font-size:14px;
+    line-height:1.55;
+}
+
+.panel {
+    padding:24px;
+    border:1px solid var(--border);
+    border-radius:12px;
+    background:var(--white);
+}
+
+.panel + .panel {
+    margin-top:16px;
+}
+
+.panel h2 {
+    font-size:16px;
+    margin-bottom:4px;
+}
+
+.panel-hint {
+    color:var(--muted);
+    font-size:13px;
+    line-height:1.55;
+    margin-bottom:18px;
+}
+
+.center-card {
+    max-width:400px;
+    margin:60px auto 0;
+    text-align:center;
+}
+
+.center-card .panel-hint {
+    margin-bottom:22px;
+}
+
+.field {
+    margin-bottom:14px;
+    text-align:left;
+}
+
+.field label {
+    display:block;
+    margin-bottom:6px;
+    font-size:13px;
+    font-weight:600;
+}
+
+.field input[type="text"],
+.field input[type="email"],
+.field input[type="password"],
+.field textarea {
+    width:100%;
+    padding:0 12px;
+    border:1px solid var(--border);
+    border-radius:8px;
+    outline:none;
+    font-size:15px;
+}
+
+.field input[type="text"],
+.field input[type="email"],
+.field input[type="password"] {
+    height:44px;
+}
+
+.field textarea {
+    min-height:190px;
+    padding:11px 12px;
+    line-height:1.55;
+    resize:vertical;
+}
+
+.field input:focus,
+.field textarea:focus {
+    border-color:var(--olive);
+}
+
+.field-hint {
+    margin-top:6px;
+    color:var(--muted);
+    font-size:12px;
+    line-height:1.5;
+}
+
+.field-row {
+    display:grid;
+    grid-template-columns:130px 1fr;
+    gap:12px;
+}
+
+.check-row {
+    display:flex;
+    align-items:center;
+    gap:9px;
+    margin:4px 0 18px;
+    font-size:14px;
+    font-weight:600;
+}
+
+.check-row input {
+    width:18px;
+    height:18px;
+    accent-color:var(--olive);
+}
+
+.button-row {
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+}
+
+.primary {
+    height:42px;
+    padding:0 18px;
+    border:none;
+    border-radius:8px;
+    background:var(--olive);
+    color:#fff;
+    font-weight:600;
+}
+
+.primary:hover {
+    background:var(--olive-dark);
+}
+
+.primary:disabled {
+    opacity:.6;
+    cursor:default;
+}
+
+.secondary {
+    height:42px;
+    padding:0 16px;
+    border:1px solid var(--border);
+    border-radius:8px;
+    background:var(--white);
+    font-weight:600;
+}
+
+.secondary:hover {
+    border-color:var(--olive);
+}
+
+.small-button {
+    height:32px;
+    padding:0 11px;
+    border:1px solid var(--border);
+    border-radius:7px;
+    background:var(--white);
+    font-size:12.5px;
+    font-weight:600;
+    white-space:nowrap;
+}
+
+.small-button:hover {
+    border-color:var(--olive);
+}
+
+.small-button.danger {
+    color:var(--danger);
+}
+
+.small-button.danger:hover {
+    border-color:var(--danger);
+}
+
+.small-button.danger.armed {
+    border-color:var(--danger);
+    background:var(--danger);
+    color:#fff;
+}
+
+.message {
+    min-height:20px;
+    margin-top:12px;
+    font-size:13px;
+    line-height:1.5;
+}
+
+.message.error {
+    color:var(--danger);
+}
+
+.message.ok {
+    color:var(--success);
+}
+
+/* =========================================================
+   TABBLADEN
+========================================================= */
+
+.tabs {
+    display:flex;
+    gap:6px;
+    margin-bottom:18px;
+}
+
+.tab {
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    height:40px;
+    padding:0 16px;
+    border:1px solid var(--border);
+    border-radius:8px;
+    background:var(--white);
+    font-size:14px;
+    font-weight:600;
+}
+
+.tab:hover {
+    border-color:var(--olive);
+}
+
+.tab.active {
+    border-color:var(--olive);
+    background:var(--olive);
+    color:#fff;
+}
+
+.tab-count {
+    min-width:22px;
+    height:20px;
+    padding:0 6px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:10px;
+    background:var(--badge-bg);
+    color:var(--accent-text);
+    font-size:11.5px;
+    font-weight:700;
+}
+
+.tab.active .tab-count {
+    background:rgba(255,255,255,.22);
+    color:#fff;
+}
+
+.tab-panel {
+    display:none;
+}
+
+.tab-panel.active {
+    display:block;
+}
+
+/* =========================================================
+   UPDATEMELDINGEN
+========================================================= */
+
+.update-layout {
+    display:grid;
+    grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);
+    gap:16px;
+    align-items:start;
+}
+
+.update-layout .panel + .panel {
+    margin-top:0;
+}
+
+.preview-frame {
+    padding:22px;
+    border-radius:12px;
+    background:rgba(20,21,15,.55);
+}
+
+.preview-box {
+    padding:28px 26px 24px;
+    border-radius:14px;
+    background:var(--white);
+    box-shadow:0 18px 48px rgba(0,0,0,.28);
+}
+
+.update-version {
+    display:inline-flex;
+    align-items:center;
+    margin-bottom:12px;
+    padding:4px 11px;
+    border-radius:20px;
+    background:var(--badge-bg);
+    border:1px solid var(--badge-border);
+    color:var(--accent-text);
+    font-size:12px;
+    font-weight:700;
+}
+
+.preview-box h3 {
+    font-size:20px;
+    margin-bottom:4px;
+}
+
+.update-notes {
+    color:var(--anthracite);
+    font-size:14px;
+    line-height:1.55;
+}
+
+.update-notes p {
+    margin:8px 0;
+    color:var(--muted);
+}
+
+.update-notes ul {
+    margin:8px 0;
+    padding:0;
+    list-style:none;
+}
+
+.update-notes li {
+    position:relative;
+    padding:6px 0 6px 18px;
+    border-bottom:1px solid var(--border);
+}
+
+.update-notes li:last-child {
+    border-bottom:none;
+}
+
+.update-notes li::before {
+    content:"";
+    position:absolute;
+    left:2px;
+    top:14px;
+    width:7px;
+    height:7px;
+    border-radius:50%;
+    background:var(--olive);
+}
+
+.preview-button {
+    width:100%;
+    height:44px;
+    margin-top:18px;
+    border:none;
+    border-radius:9px;
+    background:var(--olive);
+    color:#fff;
+    font-weight:600;
+    pointer-events:none;
+}
+
+.preview-empty {
+    color:var(--muted);
+    font-size:13px;
+}
+
+.record-list {
+    display:flex;
+    flex-direction:column;
+}
+
+.record {
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:14px;
+    padding:14px 0;
+    border-bottom:1px solid var(--border);
+}
+
+.record:last-child {
+    border-bottom:none;
+    padding-bottom:0;
+}
+
+.record:first-child {
+    padding-top:0;
+}
+
+.record-main {
+    flex:1;
+    min-width:0;
+}
+
+.record-top {
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:8px;
+    margin-bottom:4px;
+}
+
+.record-title {
+    font-size:14.5px;
+    font-weight:700;
+}
+
+.record-meta {
+    color:var(--muted);
+    font-size:12.5px;
+}
+
+.record-text {
+    margin-top:6px;
+    font-size:14px;
+    line-height:1.55;
+    white-space:pre-wrap;
+    overflow-wrap:anywhere;
+}
+
+.record-actions {
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:flex-end;
+    gap:6px;
+}
+
+.pill {
+    display:inline-flex;
+    align-items:center;
+    padding:2px 9px;
+    border-radius:20px;
+    font-size:11.5px;
+    font-weight:700;
+}
+
+.pill.version {
+    background:var(--badge-bg);
+    border:1px solid var(--badge-border);
+    color:var(--accent-text);
+}
+
+.pill.live {
+    background:var(--success-bg);
+    color:var(--success);
+}
+
+.pill.draft {
+    background:var(--warning-bg);
+    color:var(--warning);
+}
+
+.pill.current {
+    background:var(--olive);
+    color:#fff;
+}
+
+.empty {
+    padding:26px;
+    border:1px dashed var(--border);
+    border-radius:9px;
+    color:var(--muted);
+    font-size:14px;
+    text-align:center;
+}
+
+.list-header {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    margin-bottom:16px;
+}
+
+.list-header h2 {
+    margin-bottom:0;
+}
+
+.hidden {
+    display:none !important;
+}
+
+@media(max-width:820px) {
+
+    .update-layout {
+        grid-template-columns:1fr;
+    }
+
+}
+
+@media(max-width:560px) {
+
+    .topbar {
+        padding:0 14px;
+    }
+
+    .brand-text,
+    .bar-label {
+        display:none;
+    }
+
+    .panel {
+        padding:18px;
+    }
+
+    .field-row {
+        grid-template-columns:1fr;
+        gap:0;
+    }
+
+    .record {
+        flex-direction:column;
+    }
+
+    .record-actions {
+        justify-content:flex-start;
+    }
+
+    .tabs {
+        flex-wrap:wrap;
+    }
+
+    .tab {
+        flex:1;
+        justify-content:center;
+    }
+
+    .preview-frame {
+        padding:12px;
+    }
+
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute">
+<symbol id="grid" viewBox="0 0 24 24">
+    <rect x="3" y="3" width="7" height="7" rx="1.5"></rect>
+    <rect x="14" y="3" width="7" height="7" rx="1.5"></rect>
+    <rect x="3" y="14" width="7" height="7" rx="1.5"></rect>
+    <rect x="14" y="14" width="7" height="7" rx="1.5"></rect>
+</symbol>
+<symbol id="arrow-left" viewBox="0 0 24 24">
+    <path d="M19 12H5"></path>
+    <path d="m12 19-7-7 7-7"></path>
+</symbol>
+<symbol id="sun" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4"></circle>
+    <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+</symbol>
+<symbol id="moon" viewBox="0 0 24 24">
+    <path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"></path>
+</symbol>
+</svg>
+
+
+<header class="topbar">
+
+<div class="brand">
+<div class="brand-mark">
+<svg fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <use href="#grid"></use>
+</svg>
+</div>
+<span class="brand-text">Persoonlijk dashboard</span>
+<span class="brand-tag">Beheer</span>
+</div>
+
+<div class="topbar-actions">
+
+<a class="bar-button" href="../">
+<svg fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <use href="#arrow-left"></use>
+</svg>
+<span class="bar-label">Naar dashboard</span>
+</a>
+
+<button
+    class="bar-button"
+    onclick="toggleTheme()"
+    title="Licht of donker"
+>
+<svg fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <use id="themeIcon" href="#moon"></use>
+</svg>
+</button>
+
+<button
+    id="logoutButton"
+    class="bar-button hidden"
+    onclick="logout()"
+>
+Uitloggen
+</button>
+
+</div>
+
+</header>
+
+
+<main>
+
+<!-- Bezig met laden -->
+
+<div id="loadingView" class="center-card">
+<p class="panel-hint">Even kijken wie er is...</p>
+</div>
+
+
+<!-- Inloggen -->
+
+<div id="loginView" class="center-card hidden">
+<div class="panel">
+
+<h2>Inloggen als beheerder</h2>
+<p class="panel-hint">Met hetzelfde account als waarmee je op het dashboard inlogt.</p>
+
+<div class="field">
+<label for="loginEmail">E-mailadres</label>
+<input id="loginEmail" type="email" autocomplete="email">
+</div>
+
+<div class="field">
+<label for="loginPassword">Wachtwoord</label>
+<input id="loginPassword" type="password" autocomplete="current-password">
+</div>
+
+<button
+    id="loginButton"
+    class="primary"
+    style="width:100%"
+    onclick="login()"
+>
+Inloggen
+</button>
+
+<div id="loginMessage" class="message error"></div>
+
+</div>
+</div>
+
+
+<!-- Geen toegang -->
+
+<div id="deniedView" class="center-card hidden">
+<div class="panel">
+
+<h2>Geen toegang</h2>
+<p class="panel-hint">
+Je bent ingelogd als <strong id="deniedEmail"></strong>, maar dat account is geen beheerder.
+</p>
+
+<div class="button-row" style="justify-content:center">
+<a class="secondary" style="display:inline-flex;align-items:center;text-decoration:none" href="../">Naar dashboard</a>
+<button class="primary" onclick="logout()">Ander account</button>
+</div>
+
+</div>
+</div>
+
+
+<!-- Beheer -->
+
+<div id="adminView" class="hidden">
+
+<div class="page-header">
+<h1>Beheer</h1>
+<p>Maak updatemeldingen voor je gebruikers en lees ingestuurde suggesties. Ingelogd als <strong id="adminEmail"></strong>.</p>
+</div>
+
+<div class="tabs">
+
+<button
+    id="tabUpdates"
+    class="tab active"
+    onclick="showTab('updates')"
+>
+Updatemeldingen
+<span id="updatesCount" class="tab-count">0</span>
+</button>
+
+<button
+    id="tabSuggestions"
+    class="tab"
+    onclick="showTab('suggestions')"
+>
+Suggesties
+<span id="suggestionsCount" class="tab-count">0</span>
+</button>
+
+</div>
+
+
+<!-- ================= Updatemeldingen ================= -->
+
+<div id="panelUpdates" class="tab-panel active">
+
+<div class="update-layout">
+
+<div class="panel">
+
+<h2 id="updateFormTitle">Nieuwe melding</h2>
+<p class="panel-hint">De nieuwste gepubliceerde melding verschijnt één keer bij iedereen die hem nog niet gezien heeft, zodra ze de app openen.</p>
+
+<div class="field-row">
+
+<div class="field">
+<label for="updateVersionInput">Versie</label>
+<input
+    id="updateVersionInput"
+    type="text"
+    maxlength="20"
+    placeholder="1.2"
+    oninput="renderPreview()"
+>
+</div>
+
+<div class="field">
+<label for="updateTitleInput">Titel</label>
+<input
+    id="updateTitleInput"
+    type="text"
+    maxlength="80"
+    placeholder="Bijvoorbeeld: Nieuw in je agenda"
+    oninput="renderPreview()"
+>
+</div>
+
+</div>
+
+<div class="field">
+<label for="updateNotesInput">Wat is er veranderd?</label>
+<textarea
+    id="updateNotesInput"
+    maxlength="3000"
+    placeholder="- Eerste verandering&#10;- Tweede verandering&#10;- Derde verandering"
+    oninput="renderPreview()"
+></textarea>
+<div class="field-hint">Begin een regel met een streepje voor een opsommingspunt. Een regel zonder streepje wordt een gewone zin.</div>
+</div>
+
+<label class="check-row">
+<input id="updatePublishedInput" type="checkbox" checked>
+Direct publiceren
+</label>
+
+<div class="button-row">
+
+<button
+    id="updateSaveButton"
+    class="primary"
+    onclick="saveUpdate()"
+>
+Melding opslaan
+</button>
+
+<button
+    id="updateCancelButton"
+    class="secondary hidden"
+    onclick="resetUpdateForm()"
+>
+Annuleren
+</button>
+
+</div>
+
+<div id="updateMessage" class="message"></div>
+
+</div>
+
+<div class="panel">
+
+<h2>Voorbeeld</h2>
+<p class="panel-hint">Zo ziet je gebruiker het.</p>
+
+<div class="preview-frame">
+<div class="preview-box">
+<div id="previewVersion" class="update-version">Versie</div>
+<h3 id="previewTitle">Wat is er nieuw</h3>
+<div id="previewNotes" class="update-notes"></div>
+<button class="preview-button" tabindex="-1">Begrepen</button>
+</div>
+</div>
+
+</div>
+
+</div>
+
+<div class="panel" style="margin-top:16px">
+
+<div class="list-header">
+<h2>Alle meldingen</h2>
+</div>
+
+<div id="updatesList" class="record-list"></div>
+
+</div>
+
+</div>
+
+
+<!-- ================= Suggesties ================= -->
+
+<div id="panelSuggestions" class="tab-panel">
+
+<div class="panel">
+
+<div class="list-header">
+<h2>Ingestuurde suggesties</h2>
+<button class="small-button" onclick="loadSuggestions()">Vernieuwen</button>
+</div>
+
+<div id="suggestionsList" class="record-list"></div>
+
+</div>
+
+</div>
+
+</div>
+
+</main>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+/* =========================================================
+   CONFIGURATIE
+
+   Zelfde project en publieke sleutel als het dashboard. De
+   inlogsessie wordt gedeeld: ben je op het dashboard
+   ingelogd, dan ben je dat hier ook.
+========================================================= */
+
+const SUPABASE_URL =
+    "https://nrhvxcnokhvdampevlen.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_2-C21qtuPZbxawIAu2liyg_kT2ua_Ac";
+
+const supabaseClient =
+    supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+let updates = [];
+let suggestions = [];
+let editingUpdateId = null;
+
+
+/* =========================================================
+   THEMA
+
+   Volgt dezelfde keuze als het dashboard.
+========================================================= */
+
+function applyTheme(theme) {
+
+    document.documentElement.setAttribute(
+        "data-theme",
+        theme
+    );
+
+    document.getElementById(
+        "themeIcon"
+    ).setAttribute(
+        "href",
+        theme === "dark"
+            ? "#sun"
+            : "#moon"
+    );
+}
+
+
+function toggleTheme() {
+
+    const next =
+        document.documentElement.getAttribute("data-theme") === "dark"
+            ? "light"
+            : "dark";
+
+    try {
+        localStorage.setItem("theme", next);
+    } catch (error) {}
+
+    applyTheme(next);
+}
+
+
+(function initTheme() {
+
+    let theme = "light";
+    let accent = "olijf";
+
+    try {
+        theme = localStorage.getItem("theme") === "dark" ? "dark" : "light";
+        accent = localStorage.getItem("accent") || "olijf";
+    } catch (error) {}
+
+    applyTheme(theme);
+
+    document.documentElement.setAttribute(
+        "data-accent",
+        accent
+    );
+
+})();
+
+
+/* =========================================================
+   WEERGAVES
+========================================================= */
+
+function showView(name) {
+
+    [
+        "loadingView",
+        "loginView",
+        "deniedView",
+        "adminView"
+    ].forEach(id => {
+
+        document
+            .getElementById(id)
+            .classList.toggle(
+                "hidden",
+                id !== name
+            );
+
+    });
+
+    document
+        .getElementById("logoutButton")
+        .classList.toggle(
+            "hidden",
+            name === "loginView" || name === "loadingView"
+        );
+}
+
+
+function showTab(name) {
+
+    document.getElementById("tabUpdates").classList.toggle("active", name === "updates");
+    document.getElementById("tabSuggestions").classList.toggle("active", name === "suggestions");
+
+    document.getElementById("panelUpdates").classList.toggle("active", name === "updates");
+    document.getElementById("panelSuggestions").classList.toggle("active", name === "suggestions");
+}
+
+
+function setMessage(id, text, kind) {
+
+    const element =
+        document.getElementById(id);
+
+    element.textContent = text || "";
+
+    element.className =
+        "message" +
+        (
+            kind
+                ? " " + kind
+                : ""
+        );
+}
+
+
+function formatDateTime(value) {
+
+    const date = new Date(value);
+
+    return date.toLocaleDateString("nl-NL", {
+        day:"numeric",
+        month:"long",
+        year:"numeric"
+    }) +
+    " om " +
+    String(date.getHours()).padStart(2, "0") +
+    ":" +
+    String(date.getMinutes()).padStart(2, "0");
+}
+
+
+/* Verwijderen in twee stappen, net als in de app. */
+
+function armDeleteButton(button, action) {
+
+    button.onclick =
+        () => {
+
+            if (!button.classList.contains("armed")) {
+
+                button.classList.add("armed");
+
+                button.textContent = "Zeker weten?";
+
+                button.disarmTimer =
+                    setTimeout(
+                        () => {
+                            button.classList.remove("armed");
+                            button.textContent = "Verwijderen";
+                        },
+                        4000
+                    );
+
+                return;
+            }
+
+            clearTimeout(button.disarmTimer);
+
+            action();
+
+        };
+}
+
+
+/* =========================================================
+   INLOGGEN EN TOEGANG
+========================================================= */
+
+async function checkAccess() {
+
+    const {
+        data
+    } =
+        await supabaseClient.auth.getSession();
+
+    const session =
+        data && data.session;
+
+    if (!session) {
+
+        showView("loginView");
+
+        document.getElementById("loginEmail").focus();
+
+        return;
+    }
+
+    const email =
+        session.user.email || "onbekend account";
+
+    /* De database beslist. Deze uitkomst bepaalt alleen wat
+       je te zien krijgt; zonder beheerrecht geeft de database
+       sowieso niets terug. */
+
+    const {
+        data:isAdmin,
+        error
+    } =
+        await supabaseClient.rpc("is_admin");
+
+    if (error) {
+
+        console.error("Beheerrecht controleren:", error);
+
+        document.getElementById("deniedEmail").textContent = email;
+
+        showView("deniedView");
+
+        return;
+    }
+
+    if (!isAdmin) {
+
+        document.getElementById("deniedEmail").textContent = email;
+
+        showView("deniedView");
+
+        return;
+    }
+
+    document.getElementById("adminEmail").textContent = email;
+
+    showView("adminView");
+
+    await Promise.all([
+        loadUpdates(),
+        loadSuggestions()
+    ]);
+
+    if (!editingUpdateId) {
+        resetUpdateForm();
+    }
+}
+
+
+async function login() {
+
+    const email =
+        document.getElementById("loginEmail").value.trim();
+
+    const password =
+        document.getElementById("loginPassword").value;
+
+    if (!email || !password) {
+
+        setMessage("loginMessage", "Vul je e-mailadres en wachtwoord in.", "error");
+
+        return;
+    }
+
+    const button =
+        document.getElementById("loginButton");
+
+    button.disabled = true;
+
+    const {
+        error
+    } =
+        await supabaseClient.auth.signInWithPassword({
+            email:email,
+            password:password
+        });
+
+    button.disabled = false;
+
+    if (error) {
+
+        setMessage("loginMessage", "Inloggen mislukt. Klopt je e-mailadres en wachtwoord?", "error");
+
+        return;
+    }
+
+    setMessage("loginMessage", "", null);
+
+    document.getElementById("loginPassword").value = "";
+
+    await checkAccess();
+}
+
+
+async function logout() {
+
+    await supabaseClient.auth.signOut();
+
+    showView("loginView");
+}
+
+
+document
+    .getElementById("loginPassword")
+    .addEventListener("keydown", event => {
+
+        if (event.key === "Enter") {
+            login();
+        }
+
+    });
+
+
+/* =========================================================
+   UPDATEMELDINGEN
+========================================================= */
+
+/* Regels met een streepje worden een lijst, de rest een
+   zin. Precies zoals in de app, via textContent. */
+
+function renderUpdateNotes(container, notes) {
+
+    container.innerHTML = "";
+
+    let list = null;
+
+    String(notes || "")
+        .split(/\r?\n/)
+        .forEach(raw => {
+
+            const line = raw.trim();
+
+            if (!line) {
+                list = null;
+                return;
+            }
+
+            const bullet =
+                line.match(/^[-*•]\s+(.*)$/);
+
+            if (bullet) {
+
+                if (!list) {
+                    list = document.createElement("ul");
+                    container.appendChild(list);
+                }
+
+                const item = document.createElement("li");
+
+                item.textContent = bullet[1];
+
+                list.appendChild(item);
+
+                return;
+            }
+
+            list = null;
+
+            const paragraph = document.createElement("p");
+
+            paragraph.textContent = line;
+
+            container.appendChild(paragraph);
+
+        });
+}
+
+
+function renderPreview() {
+
+    const version =
+        document.getElementById("updateVersionInput").value.trim();
+
+    const title =
+        document.getElementById("updateTitleInput").value.trim();
+
+    const notes =
+        document.getElementById("updateNotesInput").value;
+
+    document.getElementById("previewVersion").textContent =
+        "Versie " + (version || "?");
+
+    document.getElementById("previewTitle").textContent =
+        title || "Wat is er nieuw";
+
+    const container =
+        document.getElementById("previewNotes");
+
+    renderUpdateNotes(container, notes);
+
+    if (!notes.trim()) {
+
+        container.innerHTML =
+            '<p class="preview-empty">Hier komen je wijzigingen te staan.</p>';
+
+    }
+}
+
+
+/* 1.1 wordt 1.2, 1.9 wordt 1.10. Alleen een voorstel, je
+   kunt er alles van maken. */
+
+function suggestNextVersion() {
+
+    if (!updates.length) {
+        return "1.1";
+    }
+
+    const latest =
+        updates[0].version;
+
+    const parts =
+        String(latest).split(".");
+
+    const last =
+        Number(parts[parts.length - 1]);
+
+    if (isNaN(last)) {
+        return "";
+    }
+
+    parts[parts.length - 1] =
+        String(last + 1);
+
+    return parts.join(".");
+}
+
+
+/* De melding die gebruikers nu te zien krijgen: de nieuwste
+   gepubliceerde. */
+
+function getCurrentUpdateId() {
+
+    const live =
+        updates.find(update => update.published);
+
+    return live
+        ? live.id
+        : null;
+}
+
+
+async function loadUpdates() {
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("app_updates")
+            .select("*")
+            .order("created_at", {
+                ascending:false
+            });
+
+    if (error) {
+
+        console.error("Meldingen laden:", error);
+
+        document.getElementById("updatesList").innerHTML =
+            '<div class="empty">De meldingen konden niet geladen worden. Is de SQL van update 1.1 al gedraaid?</div>';
+
+        return;
+    }
+
+    updates = data || [];
+
+    renderUpdatesList();
+}
+
+
+function renderUpdatesList() {
+
+    const list =
+        document.getElementById("updatesList");
+
+    document.getElementById("updatesCount").textContent =
+        updates.length;
+
+    list.innerHTML = "";
+
+    if (!updates.length) {
+
+        list.innerHTML =
+            '<div class="empty">Nog geen meldingen.</div>';
+
+        return;
+    }
+
+    const currentId =
+        getCurrentUpdateId();
+
+    updates.forEach(update => {
+
+        const record =
+            document.createElement("div");
+
+        record.className = "record";
+
+        const main =
+            document.createElement("div");
+
+        main.className = "record-main";
+
+        const top =
+            document.createElement("div");
+
+        top.className = "record-top";
+
+        const version =
+            document.createElement("span");
+
+        version.className = "pill version";
+
+        version.textContent =
+            "Versie " + update.version;
+
+        const title =
+            document.createElement("span");
+
+        title.className = "record-title";
+
+        title.textContent =
+            update.title || "Zonder titel";
+
+        const status =
+            document.createElement("span");
+
+        if (update.id === currentId) {
+
+            status.className = "pill current";
+            status.textContent = "Wordt nu getoond";
+
+        } else if (update.published) {
+
+            status.className = "pill live";
+            status.textContent = "Gepubliceerd";
+
+        } else {
+
+            status.className = "pill draft";
+            status.textContent = "Concept";
+
+        }
+
+        top.appendChild(version);
+        top.appendChild(title);
+        top.appendChild(status);
+
+        const meta =
+            document.createElement("div");
+
+        meta.className = "record-meta";
+
+        meta.textContent =
+            "Gemaakt op " + formatDateTime(update.created_at);
+
+        main.appendChild(top);
+        main.appendChild(meta);
+
+        const actions =
+            document.createElement("div");
+
+        actions.className = "record-actions";
+
+        const editButton =
+            document.createElement("button");
+
+        editButton.className = "small-button";
+        editButton.textContent = "Aanpassen";
+        editButton.onclick = () => editUpdate(update);
+
+        const publishButton =
+            document.createElement("button");
+
+        publishButton.className = "small-button";
+        publishButton.textContent =
+            update.published
+                ? "Verbergen"
+                : "Publiceren";
+        publishButton.onclick =
+            () => setPublished(update, !update.published);
+
+        const deleteButton =
+            document.createElement("button");
+
+        deleteButton.className = "small-button danger";
+        deleteButton.textContent = "Verwijderen";
+
+        armDeleteButton(
+            deleteButton,
+            () => deleteUpdate(update.id)
+        );
+
+        actions.appendChild(editButton);
+        actions.appendChild(publishButton);
+        actions.appendChild(deleteButton);
+
+        record.appendChild(main);
+        record.appendChild(actions);
+
+        list.appendChild(record);
+
+    });
+}
+
+
+function resetUpdateForm() {
+
+    editingUpdateId = null;
+
+    document.getElementById("updateFormTitle").textContent = "Nieuwe melding";
+    document.getElementById("updateSaveButton").textContent = "Melding opslaan";
+    document.getElementById("updateCancelButton").classList.add("hidden");
+
+    document.getElementById("updateVersionInput").value = suggestNextVersion();
+    document.getElementById("updateTitleInput").value = "";
+    document.getElementById("updateNotesInput").value = "";
+    document.getElementById("updatePublishedInput").checked = true;
+
+    setMessage("updateMessage", "", null);
+
+    renderPreview();
+}
+
+
+function editUpdate(update) {
+
+    editingUpdateId = update.id;
+
+    document.getElementById("updateFormTitle").textContent = "Melding aanpassen";
+    document.getElementById("updateSaveButton").textContent = "Wijzigingen opslaan";
+    document.getElementById("updateCancelButton").classList.remove("hidden");
+
+    document.getElementById("updateVersionInput").value = update.version;
+    document.getElementById("updateTitleInput").value = update.title || "";
+    document.getElementById("updateNotesInput").value = update.notes || "";
+    document.getElementById("updatePublishedInput").checked = update.published;
+
+    setMessage(
+        "updateMessage",
+        "Let op: wie deze versie al gezien heeft, krijgt hem niet opnieuw. Wil je dat iedereen hem nog een keer ziet, maak dan een nieuwe versie.",
+        null
+    );
+
+    renderPreview();
+
+    window.scrollTo({ top:0, behavior:"smooth" });
+}
+
+
+async function saveUpdate() {
+
+    const version =
+        document.getElementById("updateVersionInput").value.trim();
+
+    const title =
+        document.getElementById("updateTitleInput").value.trim();
+
+    const notes =
+        document.getElementById("updateNotesInput").value.trim();
+
+    const published =
+        document.getElementById("updatePublishedInput").checked;
+
+    if (!version) {
+
+        setMessage("updateMessage", "Vul een versienummer in.", "error");
+
+        return;
+    }
+
+    if (!notes) {
+
+        setMessage("updateMessage", "Schrijf op wat er veranderd is.", "error");
+
+        return;
+    }
+
+    const button =
+        document.getElementById("updateSaveButton");
+
+    button.disabled = true;
+
+    const fields = {
+        version:version,
+        title:title || null,
+        notes:notes,
+        published:published
+    };
+
+    const {
+        error
+    } =
+        editingUpdateId
+            ? await supabaseClient
+                .from("app_updates")
+                .update(fields)
+                .eq("id", editingUpdateId)
+            : await supabaseClient
+                .from("app_updates")
+                .insert(fields);
+
+    button.disabled = false;
+
+    if (error) {
+
+        console.error("Melding opslaan:", error);
+
+        /* 23505 is de code voor een dubbele waarde. */
+
+        setMessage(
+            "updateMessage",
+            error.code === "23505"
+                ? "Versie " + version + " bestaat al. Kies een ander nummer."
+                : "Opslaan mislukt: " + error.message,
+            "error"
+        );
+
+        return;
+    }
+
+    const wasEditing =
+        Boolean(editingUpdateId);
+
+    await loadUpdates();
+
+    resetUpdateForm();
+
+    setMessage(
+        "updateMessage",
+        wasEditing
+            ? "Melding aangepast."
+            : (
+                published
+                    ? "Gepubliceerd. Gebruikers zien hem de volgende keer dat ze de app openen."
+                    : "Opgeslagen als concept. Publiceer hem als hij klaar is."
+            ),
+        "ok"
+    );
+}
+
+
+async function setPublished(update, published) {
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("app_updates")
+            .update({ published:published })
+            .eq("id", update.id);
+
+    if (error) {
+
+        console.error("Publiceren:", error);
+
+        alert("Dat lukte niet: " + error.message);
+
+        return;
+    }
+
+    await loadUpdates();
+}
+
+
+async function deleteUpdate(id) {
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("app_updates")
+            .delete()
+            .eq("id", id);
+
+    if (error) {
+
+        console.error("Melding verwijderen:", error);
+
+        alert("Verwijderen mislukt: " + error.message);
+
+        return;
+    }
+
+    if (editingUpdateId === id) {
+        resetUpdateForm();
+    }
+
+    await loadUpdates();
+}
+
+
+/* =========================================================
+   SUGGESTIES
+========================================================= */
+
+async function loadSuggestions() {
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("suggestions")
+            .select("*")
+            .order("created_at", {
+                ascending:false
+            });
+
+    if (error) {
+
+        console.error("Suggesties laden:", error);
+
+        document.getElementById("suggestionsList").innerHTML =
+            '<div class="empty">De suggesties konden niet geladen worden.</div>';
+
+        return;
+    }
+
+    suggestions = data || [];
+
+    renderSuggestions();
+}
+
+
+function renderSuggestions() {
+
+    const list =
+        document.getElementById("suggestionsList");
+
+    document.getElementById("suggestionsCount").textContent =
+        suggestions.length;
+
+    list.innerHTML = "";
+
+    if (!suggestions.length) {
+
+        list.innerHTML =
+            '<div class="empty">Nog geen suggesties binnengekomen.</div>';
+
+        return;
+    }
+
+    suggestions.forEach(suggestion => {
+
+        const record =
+            document.createElement("div");
+
+        record.className = "record";
+
+        const main =
+            document.createElement("div");
+
+        main.className = "record-main";
+
+        const top =
+            document.createElement("div");
+
+        top.className = "record-top";
+
+        const sender =
+            document.createElement("span");
+
+        sender.className = "record-title";
+
+        sender.textContent =
+            suggestion.user_email || "Onbekend account";
+
+        top.appendChild(sender);
+
+        const meta =
+            document.createElement("div");
+
+        meta.className = "record-meta";
+
+        meta.textContent =
+            formatDateTime(suggestion.created_at);
+
+        const text =
+            document.createElement("div");
+
+        text.className = "record-text";
+
+        text.textContent = suggestion.message;
+
+        main.appendChild(top);
+        main.appendChild(meta);
+        main.appendChild(text);
+
+        const actions =
+            document.createElement("div");
+
+        actions.className = "record-actions";
+
+        const deleteButton =
+            document.createElement("button");
+
+        deleteButton.className = "small-button danger";
+        deleteButton.textContent = "Verwijderen";
+
+        armDeleteButton(
+            deleteButton,
+            () => deleteSuggestion(suggestion.id)
+        );
+
+        actions.appendChild(deleteButton);
+
+        record.appendChild(main);
+        record.appendChild(actions);
+
+        list.appendChild(record);
+
+    });
+}
+
+
+async function deleteSuggestion(id) {
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("suggestions")
+            .delete()
+            .eq("id", id);
+
+    if (error) {
+
+        console.error("Suggestie verwijderen:", error);
+
+        alert("Verwijderen mislukt: " + error.message);
+
+        return;
+    }
+
+    await loadSuggestions();
+}
+
+
+/* =========================================================
+   START
+========================================================= */
+
+checkAccess();
+</script>
+
+</body>
+</html>
