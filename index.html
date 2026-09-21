@@ -4411,6 +4411,415 @@ main {
     }
 
 }
+/* =========================================================
+   STUDIETIMER — STOPPEN EN SESSIES
+========================================================= */
+
+.stop-summary {
+    margin-bottom:6px;
+    font-size:15px;
+    line-height:1.55;
+}
+
+.stop-summary strong {
+    font-size:18px;
+}
+
+.stop-shorten-row {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-top:14px;
+}
+
+.stop-message {
+    min-height:18px;
+    margin-top:8px;
+    font-size:12.5px;
+    color:var(--danger);
+}
+
+.study-sessions {
+    margin-top:12px;
+    border-top:1px solid var(--border);
+    padding-top:8px;
+}
+
+.study-sessions summary {
+    cursor:pointer;
+    font-size:12.5px;
+    font-weight:600;
+    color:var(--muted);
+    list-style:none;
+    padding:4px 0;
+}
+
+.study-sessions summary::-webkit-details-marker {
+    display:none;
+}
+
+.study-sessions summary::before {
+    content:"+";
+    display:inline-block;
+    width:14px;
+    color:var(--accent-text);
+    font-weight:700;
+}
+
+.study-sessions[open] summary::before {
+    content:"–";
+}
+
+.study-session-row {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    padding:6px 0 6px 14px;
+    border-bottom:1px solid var(--border);
+    font-size:13.5px;
+}
+
+.study-session-row:last-child {
+    border-bottom:none;
+}
+
+.study-session-date {
+    color:var(--muted);
+}
+
+.study-session-right {
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-weight:700;
+}
+
+/* =========================================================
+   LEESLIJST
+========================================================= */
+
+.book-search-row {
+    display:grid;
+    grid-template-columns:1fr auto;
+    gap:10px;
+}
+
+.book-search-input {
+    width:100%;
+    min-width:0;
+    height:44px;
+    padding:0 13px;
+    border:1px solid var(--border);
+    border-radius:8px;
+    outline:none;
+}
+
+.book-search-input:focus {
+    border-color:var(--olive);
+}
+
+.book-search-status {
+    min-height:18px;
+    margin-top:10px;
+    color:var(--muted);
+    font-size:13px;
+}
+
+.book-results {
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    margin-top:4px;
+}
+
+.book-result {
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:8px 10px;
+    border:1px solid var(--border);
+    border-radius:9px;
+    background:var(--white);
+}
+
+.book-result-main {
+    flex:1;
+    min-width:0;
+}
+
+.book-result-title {
+    font-size:14px;
+    font-weight:700;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+
+.book-result-meta {
+    margin-top:2px;
+    color:var(--muted);
+    font-size:12.5px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+
+.book-cover {
+    flex-shrink:0;
+    width:34px;
+    height:50px;
+    border-radius:4px;
+    object-fit:cover;
+    background:var(--badge-bg);
+    border:1px solid var(--badge-border);
+}
+
+.book-cover.large {
+    width:56px;
+    height:84px;
+    border-radius:5px;
+}
+
+.book-cover-placeholder {
+    flex-shrink:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:var(--accent-text);
+    font-size:12px;
+    font-weight:700;
+}
+
+.book-stats {
+    margin-bottom:14px;
+    color:var(--muted);
+    font-size:13.5px;
+}
+
+.book-stats strong {
+    color:var(--anthracite);
+}
+
+.book-filter-row {
+    display:flex;
+    flex-wrap:wrap;
+    gap:7px;
+    margin-bottom:16px;
+}
+
+.book-filter {
+    height:34px;
+    padding:0 13px;
+    border:1px solid var(--border);
+    border-radius:18px;
+    background:var(--white);
+    font-size:13px;
+    font-weight:600;
+}
+
+.book-filter:hover {
+    border-color:var(--olive);
+}
+
+.book-filter.active {
+    border-color:var(--olive);
+    background:var(--olive);
+    color:#fff;
+}
+
+.book-list {
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+.book-card {
+    display:flex;
+    align-items:flex-start;
+    gap:14px;
+    padding:12px;
+    border:1px solid var(--border);
+    border-radius:10px;
+    background:var(--white);
+}
+
+.book-card-main {
+    flex:1;
+    min-width:0;
+}
+
+.book-card-title {
+    font-size:15px;
+    font-weight:700;
+    line-height:1.3;
+}
+
+.book-card-meta {
+    margin-top:3px;
+    color:var(--muted);
+    font-size:12.5px;
+}
+
+.book-pills {
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+    margin-top:8px;
+}
+
+.book-pill {
+    display:inline-flex;
+    align-items:center;
+    padding:2px 9px;
+    border-radius:20px;
+    background:var(--badge-bg);
+    border:1px solid var(--badge-border);
+    color:var(--accent-text);
+    font-size:11.5px;
+    font-weight:700;
+}
+
+.book-pill.bezig {
+    background:var(--warning-bg);
+    border-color:var(--today-border);
+    color:var(--warning);
+}
+
+.book-pill.gelezen {
+    background:var(--success-bg);
+    border-color:transparent;
+    color:var(--success);
+}
+
+.book-pill.school {
+    background:var(--white);
+}
+
+.book-stars {
+    margin-top:6px;
+    color:var(--warning);
+    font-size:14px;
+    letter-spacing:1px;
+}
+
+.book-notes {
+    margin-top:6px;
+    color:var(--muted);
+    font-size:13px;
+    line-height:1.5;
+    display:-webkit-box;
+    -webkit-line-clamp:2;
+    -webkit-box-orient:vertical;
+    overflow:hidden;
+    white-space:pre-line;
+}
+
+.book-modal-head {
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:14px;
+}
+
+.book-modal-head .modal-hint {
+    margin:0;
+}
+
+.book-date-row {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+}
+
+.book-number-row {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+}
+
+.star-row {
+    display:flex;
+    gap:4px;
+}
+
+.star-button {
+    width:36px;
+    height:36px;
+    border:1px solid var(--border);
+    border-radius:8px;
+    background:var(--white);
+    color:var(--border);
+    font-size:19px;
+    line-height:1;
+}
+
+.star-button.on {
+    border-color:var(--today-border);
+    background:var(--warning-bg);
+    color:var(--warning);
+}
+
+.book-textarea {
+    width:100%;
+    min-height:96px;
+    padding:10px 12px;
+    border:1px solid var(--border);
+    border-radius:8px;
+    outline:none;
+    line-height:1.5;
+    resize:vertical;
+}
+
+.book-textarea:focus {
+    border-color:var(--olive);
+}
+
+@media(max-width:500px) {
+
+    .book-search-row {
+        grid-template-columns:1fr;
+    }
+
+    .book-cover.large {
+        width:46px;
+        height:69px;
+    }
+
+}
+
+/* =========================================================
+   DOELEN — MAXIMUM EN AGENDA
+========================================================= */
+
+.checklist-item-note.limit {
+    color:var(--muted);
+}
+
+.overview-goal-value.over {
+    color:var(--danger);
+    font-weight:700;
+}
+
+.agenda-dot.goal {
+    background:var(--accent-text);
+}
+
+.timegrid-chip.goal {
+    background:var(--success-bg);
+    border-left-color:var(--success);
+    color:var(--success);
+}
+
+.timegrid-item.goal {
+    border-color:transparent;
+    border-left-color:var(--success);
+    background:var(--success-bg);
+}
+
+.timegrid-item.goal span {
+    color:var(--success);
+}
 
 /* =========================================================
    MOBIEL
@@ -4840,6 +5249,17 @@ main {
     <path d="M12 3.6 21 19.4H3z"></path>
     <path d="M12 10v4"></path>
     <path d="M12 16.6v.4"></path>
+</symbol>
+
+<symbol id="books" viewBox="0 0 24 24">
+    <path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H8v16H5.5A1.5 1.5 0 0 1 4 18.5z"></path>
+    <path d="M8 4h3.5v16H8"></path>
+    <path d="M14.2 5.2l3-.8 3.4 13.4-3 .8z"></path>
+</symbol>
+
+<symbol id="search" viewBox="0 0 24 24">
+    <circle cx="11" cy="11" r="6.5"></circle>
+    <path d="M20 20l-4.3-4.3"></path>
 </symbol>
 
 <symbol id="pencil" viewBox="0 0 24 24">
@@ -5554,6 +5974,42 @@ Al je deadlines en huiswerk automatisch in kaart, plus ruimte voor eigen afsprak
 <button
     class="card-button"
     onclick="openPage('agendaPage')"
+>
+    Openen
+
+    <svg fill="none"
+         stroke="currentColor"
+         stroke-width="1.8"
+         stroke-linecap="round"
+         stroke-linejoin="round">
+        <use href="#arrow-right"></use>
+    </svg>
+</button>
+
+</article>
+
+
+<article class="dashboard-card" data-card="leeslijst">
+
+<div class="card-icon">
+<svg fill="none"
+     stroke="currentColor"
+     stroke-width="1.8"
+     stroke-linecap="round"
+     stroke-linejoin="round">
+    <use href="#books"></use>
+</svg>
+</div>
+
+<h2>Leeslijst</h2>
+
+<p>
+Houd bij welke boeken je leest, wilt lezen en voor school gelezen hebt.
+</p>
+
+<button
+    class="card-button"
+    onclick="openPage('leeslijstPage')"
 >
     Openen
 
@@ -6681,6 +7137,91 @@ Koppelen
 
 
 <!-- =========================================================
+     LEESLIJST
+========================================================= -->
+
+<section id="leeslijstPage" class="page">
+
+<button
+    class="back-button"
+    onclick="openPage('homePage')"
+>
+    <svg fill="none"
+         stroke="currentColor"
+         stroke-width="1.8"
+         stroke-linecap="round"
+         stroke-linejoin="round">
+        <use href="#arrow-left"></use>
+    </svg>
+
+    Terug naar overzicht
+</button>
+
+<div class="page-header">
+<h1>Leeslijst</h1>
+<p>Houd bij welke boeken je leest, wilt lezen en voor school gelezen hebt.</p>
+</div>
+
+<div class="content-panel">
+
+<h2 style="font-size:16px;margin-bottom:12px">Boek toevoegen</h2>
+
+<div class="book-search-row">
+
+<input
+    id="bookSearchInput"
+    class="book-search-input"
+    type="search"
+    placeholder="Zoek op titel of schrijver, bijv. Het Achterhuis"
+    autocomplete="off"
+    oninput="onBookSearchInput()"
+>
+
+<button
+    class="secondary-button"
+    style="height:44px"
+    onclick="openBookModal()"
+>
+    Zelf invullen
+</button>
+
+</div>
+
+<div
+    id="bookSearchStatus"
+    class="book-search-status"
+></div>
+
+<div
+    id="bookSearchResults"
+    class="book-results"
+></div>
+
+</div>
+
+<div class="content-panel">
+
+<div
+    id="bookStats"
+    class="book-stats"
+></div>
+
+<div
+    id="bookFilterRow"
+    class="book-filter-row"
+></div>
+
+<div
+    id="bookList"
+    class="book-list"
+></div>
+
+</div>
+
+</section>
+
+
+<!-- =========================================================
      SUGGESTIES
 ========================================================= -->
 
@@ -7554,6 +8095,26 @@ Op Android werken meldingen ook in een gewoon tabblad, maar als app op je starts
 </div>
 
 <div class="modal-field">
+<label>Soort eis</label>
+<div class="modal-radio-group">
+<div
+    class="modal-radio-option selected"
+    id="goalModeMinOption"
+    onclick="setGoalTargetMode('min')"
+>
+    Minimaal
+</div>
+<div
+    class="modal-radio-option"
+    id="goalModeMaxOption"
+    onclick="setGoalTargetMode('max')"
+>
+    Maximaal
+</div>
+</div>
+</div>
+
+<div class="modal-field">
 <label
     for="goalTargetInput"
     id="goalTargetLabel"
@@ -7616,6 +8177,31 @@ Op Android werken meldingen ook in een gewoon tabblad, maar als app op je starts
     min="0"
     step="1"
 >
+</div>
+
+<div class="modal-field">
+<label
+    class="notif-toggle-row"
+    style="margin-bottom:8px"
+>
+<input
+    id="goalShowInAgenda"
+    type="checkbox"
+    onchange="toggleGoalAgendaTime()"
+>
+Laat dit doel in mijn agenda zien
+</label>
+<div
+    id="goalAgendaTimeField"
+    style="display:none"
+>
+<label for="goalAgendaTime">Tijdstip (niet verplicht)</label>
+<input
+    id="goalAgendaTime"
+    type="time"
+>
+<div class="modal-hint">Met een tijdstip staat het doel op die tijd in de week- en dagweergave. Zonder tijdstip staat het bij 'hele dag'.</div>
+</div>
 </div>
 
 <div
@@ -8078,7 +8664,7 @@ Datum
 
 <div class="modal-box">
 
-<h2>
+<h2 id="studyModalTitle">
 Tijd toevoegen
 </h2>
 
@@ -8129,7 +8715,20 @@ Minuten
 
 </div>
 
-<div class="modal-actions">
+<div
+    id="studyModalActions"
+    class="modal-actions"
+>
+
+<button
+    id="studyDeleteButton"
+    class="modal-delete"
+    style="display:none"
+>
+    Verwijderen
+</button>
+
+<div class="modal-actions-right">
 
 <button
     class="modal-cancel"
@@ -8140,10 +8739,308 @@ Minuten
 
 <button
     class="modal-save"
-    onclick="addManualStudyTime()"
+    onclick="saveStudyModal()"
 >
     Opslaan
 </button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- =========================================================
+     BOEK MODAL
+========================================================= -->
+
+<div
+    id="bookModal"
+    class="modal"
+>
+
+<div class="modal-box">
+
+<h2 id="bookModalTitle">Boek toevoegen</h2>
+
+<div
+    id="bookModalHead"
+    class="book-modal-head"
+    style="display:none"
+></div>
+
+<div class="modal-field">
+<label for="bookTitleInput">Titel</label>
+<input
+    id="bookTitleInput"
+    type="text"
+    maxlength="200"
+>
+</div>
+
+<div class="modal-field">
+<label for="bookAuthorInput">Schrijver</label>
+<input
+    id="bookAuthorInput"
+    type="text"
+    maxlength="160"
+>
+</div>
+
+<div class="book-number-row">
+
+<div class="modal-field">
+<label for="bookYearInput">Jaar</label>
+<input
+    id="bookYearInput"
+    type="number"
+    min="0"
+    max="2100"
+    step="1"
+    inputmode="numeric"
+>
+</div>
+
+<div class="modal-field">
+<label for="bookPagesInput">Pagina's</label>
+<input
+    id="bookPagesInput"
+    type="number"
+    min="1"
+    step="1"
+    inputmode="numeric"
+>
+</div>
+
+</div>
+
+<div class="modal-field">
+<label>Status</label>
+<div class="modal-radio-group">
+<div
+    class="modal-radio-option"
+    id="bookStatusWil"
+    onclick="setBookStatus('wil_lezen')"
+>
+    Wil ik lezen
+</div>
+<div
+    class="modal-radio-option"
+    id="bookStatusBezig"
+    onclick="setBookStatus('bezig')"
+>
+    Aan het lezen
+</div>
+<div
+    class="modal-radio-option"
+    id="bookStatusGelezen"
+    onclick="setBookStatus('gelezen')"
+>
+    Gelezen
+</div>
+</div>
+</div>
+
+<div
+    id="bookDatesField"
+    class="book-date-row"
+    style="display:none"
+>
+
+<div class="modal-field">
+<label for="bookStartedInput">Begonnen op</label>
+<input
+    id="bookStartedInput"
+    type="date"
+>
+</div>
+
+<div
+    class="modal-field"
+    id="bookFinishedField"
+>
+<label for="bookFinishedInput">Uitgelezen op</label>
+<input
+    id="bookFinishedInput"
+    type="date"
+>
+</div>
+
+</div>
+
+<div
+    class="modal-field"
+    id="bookRatingField"
+    style="display:none"
+>
+<label>Wat vond je ervan?</label>
+<div
+    id="bookStarRow"
+    class="star-row"
+></div>
+</div>
+
+<div class="modal-field">
+<label class="notif-toggle-row" style="margin-bottom:8px">
+<input
+    id="bookSchoolInput"
+    type="checkbox"
+    onchange="toggleBookSchool()"
+>
+Voor school
+</label>
+<input
+    id="bookSubjectInput"
+    type="text"
+    maxlength="60"
+    placeholder="Vak, bijv. Nederlands of Engels"
+    style="display:none"
+>
+</div>
+
+<div class="modal-field">
+<label for="bookNotesInput">Notities</label>
+<textarea
+    id="bookNotesInput"
+    class="book-textarea"
+    maxlength="4000"
+    placeholder="Waar gaat het over, wat vond je ervan, citaten voor je leesverslag..."
+></textarea>
+</div>
+
+<div
+    id="bookModalActions"
+    class="modal-actions"
+>
+
+<button
+    id="bookDeleteButton"
+    class="modal-delete"
+    style="display:none"
+>
+    Verwijderen
+</button>
+
+<div class="modal-actions-right">
+
+<button
+    class="modal-cancel"
+    onclick="closeBookModal()"
+>
+    Annuleren
+</button>
+
+<button
+    class="modal-save"
+    onclick="saveBook()"
+>
+    Opslaan
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- =========================================================
+     STUDIETIMER STOPPEN
+
+     Na Stop wordt niets automatisch opgeslagen. Eerst kies je:
+     opslaan, inkorten of niet opslaan.
+========================================================= -->
+
+<div
+    id="studyStopModal"
+    class="modal"
+>
+
+<div class="modal-box">
+
+<h2>
+Sessie gestopt
+</h2>
+
+<p class="stop-summary">
+Je hebt <strong id="stopMeasured">0u 00m</strong> geleerd.
+</p>
+
+<p class="modal-hint">
+Timer vergeten uit te zetten? Kort de tijd in, of sla hem niet op.
+</p>
+
+<div
+    id="stopShortenFields"
+    style="display:none"
+>
+
+<div class="stop-shorten-row">
+
+<div class="modal-field">
+<label for="stopHours">Uren</label>
+<input
+    id="stopHours"
+    type="number"
+    min="0"
+    step="1"
+    inputmode="numeric"
+>
+</div>
+
+<div class="modal-field">
+<label for="stopMinutes">Minuten</label>
+<input
+    id="stopMinutes"
+    type="number"
+    min="0"
+    max="59"
+    step="1"
+    inputmode="numeric"
+>
+</div>
+
+</div>
+
+<div
+    id="stopMessage"
+    class="stop-message"
+></div>
+
+</div>
+
+<div class="modal-actions with-delete">
+
+<button
+    id="stopDiscardButton"
+    class="modal-delete"
+>
+    Niet opslaan
+</button>
+
+<div class="modal-actions-right">
+
+<button
+    id="stopShortenButton"
+    class="modal-cancel"
+    onclick="showStopShorten()"
+>
+    Tijd inkorten
+</button>
+
+<button
+    class="modal-save"
+    onclick="confirmStopSave()"
+>
+    Opslaan
+</button>
+
+</div>
 
 </div>
 
@@ -8387,6 +9284,7 @@ let goalType = "checkbox";
 let goalFrequency = "daily";
 let goalSelectedDays = new Set();
 let goalSpecialBehavior = "same";
+let goalTargetMode = "min";
 
 let agendaViewMonth = null;
 let agendaMode = "maand";
@@ -8901,6 +9799,10 @@ function openPage(pageId) {
         initAgenda();
     }
 
+    if (pageId === "leeslijstPage") {
+        loadBooks();
+    }
+
     if (pageId === "suggestiesPage") {
         resetSuggestionsView();
     }
@@ -8969,6 +9871,7 @@ const dashboardCards =
         { key:"cijfers", label:"Cijfers" },
         { key:"doelen", label:"Doelen" },
         { key:"agenda", label:"Agenda" },
+        { key:"leeslijst", label:"Leeslijst" },
         { key:"suggesties", label:"Suggesties" }
     ];
 
@@ -9484,7 +10387,7 @@ const tourSteps =
         {
             target:"#dashboardCards",
             title:"De blokken",
-            text:"Elk blok opent zijn eigen pagina: notities, to-do, deadlines, huiswerk, studietimer, cijfers, doelen, agenda en suggesties. Wat je niet gebruikt kun je later verbergen."
+            text:"Elk blok opent zijn eigen pagina: notities, to-do, deadlines, huiswerk, studietimer, cijfers, doelen, agenda, leeslijst en suggesties. Wat je niet gebruikt kun je later verbergen."
         },
         {
             target:"#shortcutsPanel",
@@ -12159,13 +13062,16 @@ function createEditButton(title, onClick, small) {
    uit. Werkt ook in de app op je telefoon, waar een
    confirm-venster onhandig is. */
 
-function armDeleteButton(button, action) {
+function armDeleteButton(button, action, label) {
+
+    const idleLabel =
+        label || "Verwijderen";
 
     clearTimeout(button.disarmTimer);
 
     button.classList.remove("armed");
 
-    button.textContent = "Verwijderen";
+    button.textContent = idleLabel;
 
     button.onclick =
         () => {
@@ -12182,7 +13088,7 @@ function armDeleteButton(button, action) {
 
                             button.classList.remove("armed");
 
-                            button.textContent = "Verwijderen";
+                            button.textContent = idleLabel;
 
                         },
                         4000
@@ -12962,18 +13868,362 @@ async function stopTimer() {
     display.textContent =
         "00:00:00";
 
+    /* Minder dan vijf seconden is een misklik. */
+
     if (elapsedSeconds < 5) {
         return;
     }
 
+    openStopModal(elapsedSeconds);
+}
+
+
+/* =========================================================
+   STUDIETIMER — STOPVENSTER
+========================================================= */
+
+let pendingStopSeconds = 0;
+
+
+function openStopModal(seconds) {
+
+    pendingStopSeconds = seconds;
+
+    document.getElementById(
+        "stopMeasured"
+    ).textContent =
+        formatDuration(seconds, true);
+
+    document.getElementById(
+        "stopShortenFields"
+    ).style.display = "none";
+
+    document.getElementById(
+        "stopShortenButton"
+    ).style.display = "";
+
+    document.getElementById(
+        "stopHours"
+    ).value =
+        Math.floor(seconds / 3600);
+
+    document.getElementById(
+        "stopMinutes"
+    ).value =
+        Math.floor((seconds % 3600) / 60);
+
+    document.getElementById(
+        "stopMessage"
+    ).textContent = "";
+
+    armDeleteButton(
+        document.getElementById(
+            "stopDiscardButton"
+        ),
+        discardStop,
+        "Niet opslaan"
+    );
+
+    document
+        .getElementById("studyStopModal")
+        .classList.add("show");
+}
+
+
+function closeStopModal() {
+
+    pendingStopSeconds = 0;
+
+    document
+        .getElementById("studyStopModal")
+        .classList.remove("show");
+}
+
+
+function showStopShorten() {
+
+    document.getElementById(
+        "stopShortenFields"
+    ).style.display = "";
+
+    document.getElementById(
+        "stopShortenButton"
+    ).style.display = "none";
+
+    document.getElementById(
+        "stopHours"
+    ).focus();
+}
+
+
+function discardStop() {
+
+    closeStopModal();
+}
+
+
+async function confirmStopSave() {
+
+    let seconds =
+        pendingStopSeconds;
+
+    const shortening =
+        document.getElementById(
+            "stopShortenFields"
+        ).style.display !== "none";
+
+    if (shortening) {
+
+        const hours =
+            parseInt(
+                document.getElementById("stopHours").value,
+                10
+            ) || 0;
+
+        const minutes =
+            parseInt(
+                document.getElementById("stopMinutes").value,
+                10
+            ) || 0;
+
+        const message =
+            document.getElementById("stopMessage");
+
+        if (
+            hours < 0 ||
+            minutes < 0 ||
+            minutes > 59
+        ) {
+
+            message.textContent =
+                "Vul een geldige tijd in.";
+
+            return;
+        }
+
+        seconds =
+            hours * 3600 +
+            minutes * 60;
+
+        if (seconds <= 0) {
+
+            message.textContent =
+                "Kies meer dan 0 minuten, of sla de tijd niet op.";
+
+            return;
+        }
+
+        /* Inkorten, niet verlengen. Voor extra tijd is er
+           Tijd handmatig toevoegen. */
+
+        if (seconds > pendingStopSeconds) {
+
+            message.textContent =
+                "Dat is meer dan de gemeten " +
+                formatDuration(pendingStopSeconds, true) +
+                ". Inkorten kan alleen naar minder.";
+
+            return;
+        }
+
+    }
+
+    closeStopModal();
+
     await saveStudySession(
         getToday(),
-        elapsedSeconds
+        seconds
     );
 }
 
 
+let editingStudySessionId = null;
+
+
+function setStudyModalMode(editing) {
+
+    document.getElementById(
+        "studyModalTitle"
+    ).textContent =
+        editing
+            ? "Studietijd aanpassen"
+            : "Tijd toevoegen";
+
+    document.getElementById(
+        "studyDeleteButton"
+    ).style.display =
+        editing
+            ? ""
+            : "none";
+
+    document.getElementById(
+        "studyModalActions"
+    ).classList.toggle(
+        "with-delete",
+        editing
+    );
+}
+
+
+function openStudyEdit(session) {
+
+    editingStudySessionId = session.id;
+
+    setStudyModalMode(true);
+
+    document.getElementById(
+        "studyDate"
+    ).value = session.session_date;
+
+    document.getElementById(
+        "studyHours"
+    ).value =
+        Math.floor(session.duration_seconds / 3600);
+
+    document.getElementById(
+        "studyMinutes"
+    ).value =
+        Math.floor((session.duration_seconds % 3600) / 60);
+
+    armDeleteButton(
+        document.getElementById(
+            "studyDeleteButton"
+        ),
+        async () => {
+
+            const id = editingStudySessionId;
+
+            closeStudyModal();
+
+            await deleteStudySession(id);
+
+        }
+    );
+
+    document
+        .getElementById("studyModal")
+        .classList.add("show");
+}
+
+
+async function saveStudyModal() {
+
+    if (!editingStudySessionId) {
+
+        await addManualStudyTime();
+
+        return;
+    }
+
+    const date =
+        document.getElementById("studyDate").value;
+
+    const hours =
+        parseInt(
+            document.getElementById("studyHours").value,
+            10
+        ) || 0;
+
+    const minutes =
+        parseInt(
+            document.getElementById("studyMinutes").value,
+            10
+        ) || 0;
+
+    const totalSeconds =
+        hours * 3600 +
+        minutes * 60;
+
+    if (!date) {
+
+        alert("Kies een datum.");
+
+        return;
+    }
+
+    if (totalSeconds <= 0) {
+
+        alert(
+            "Vul een tijdsduur groter dan 0 in. Wil je de sessie weghalen, gebruik dan Verwijderen."
+        );
+
+        return;
+    }
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("study_sessions")
+            .update({
+                session_date:date,
+                duration_seconds:totalSeconds
+            })
+            .eq(
+                "id",
+                editingStudySessionId
+            );
+
+    if (error) {
+
+        console.error(
+            "Studietijd aanpassen:",
+            error
+        );
+
+        alert(
+            "De studietijd kon niet worden aangepast."
+        );
+
+        return;
+    }
+
+    closeStudyModal();
+
+    await loadStudySessions();
+
+    renderQuickStats();
+}
+
+
+async function deleteStudySession(id) {
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("study_sessions")
+            .delete()
+            .eq(
+                "id",
+                id
+            );
+
+    if (error) {
+
+        console.error(
+            "Studietijd verwijderen:",
+            error
+        );
+
+        alert(
+            "De studietijd kon niet worden verwijderd."
+        );
+
+        return;
+    }
+
+    await loadStudySessions();
+
+    renderQuickStats();
+}
+
+
 function openStudyModal() {
+
+    editingStudySessionId = null;
+
+    setStudyModalMode(false);
 
     document.getElementById(
         "studyDate"
@@ -12996,6 +14246,8 @@ function openStudyModal() {
 
 
 function closeStudyModal() {
+
+    editingStudySessionId = null;
 
     document
         .getElementById(
@@ -13102,6 +14354,8 @@ async function saveStudySession(
     }
 
     await loadStudySessions();
+
+    renderQuickStats();
 }
 
 
@@ -13128,6 +14382,24 @@ function renderStudyWeeks() {
     }
 
     const weekTotals = {};
+
+    const weekSessions = {};
+
+    studySessions.forEach(
+        session => {
+
+            const sessionWeek =
+                getWeekStart(
+                    session.session_date
+                );
+
+            (
+                weekSessions[sessionWeek] =
+                    weekSessions[sessionWeek] || []
+            ).push(session);
+
+        }
+    );
 
     studySessions.forEach(
         session => {
@@ -13253,12 +14525,123 @@ function renderStudyWeeks() {
                 track
             );
 
+            card.appendChild(
+                renderStudySessionList(
+                    weekStart,
+                    weekSessions[weekStart] || []
+                )
+            );
+
             list.appendChild(
                 card
             );
 
         }
     );
+}
+
+
+/* Welke weken openstaan onthouden we, anders klapt alles
+   dicht zodra je een sessie aanpast. */
+
+const openStudyWeeks = new Set();
+
+
+function renderStudySessionList(weekStart, sessions) {
+
+    const details =
+        document.createElement("details");
+
+    details.className =
+        "study-sessions";
+
+    details.open =
+        openStudyWeeks.has(weekStart);
+
+    details.addEventListener(
+        "toggle",
+        () => {
+
+            if (details.open) {
+                openStudyWeeks.add(weekStart);
+            } else {
+                openStudyWeeks.delete(weekStart);
+            }
+
+        }
+    );
+
+    const summary =
+        document.createElement("summary");
+
+    summary.textContent =
+        sessions.length === 1
+            ? "1 sessie"
+            : sessions.length + " sessies";
+
+    details.appendChild(summary);
+
+    sessions
+        .slice()
+        .sort((a, b) => {
+
+            const byDate =
+                b.session_date.localeCompare(a.session_date);
+
+            return byDate || (Number(b.id) - Number(a.id));
+
+        })
+        .forEach(session => {
+
+            const row =
+                document.createElement("div");
+
+            row.className =
+                "study-session-row";
+
+            const date =
+                document.createElement("span");
+
+            date.className =
+                "study-session-date";
+
+            date.textContent =
+                formatDeadlineDate(
+                    session.session_date
+                );
+
+            const right =
+                document.createElement("span");
+
+            right.className =
+                "study-session-right";
+
+            right.appendChild(
+                document.createTextNode(
+                    formatDuration(
+                        session.duration_seconds,
+                        true
+                    )
+                )
+            );
+
+            right.appendChild(
+                createEditButton(
+                    "Studietijd aanpassen",
+                    () =>
+                        openStudyEdit(session),
+                    true
+                )
+            );
+
+            row.appendChild(date);
+            row.appendChild(right);
+
+            details.appendChild(row);
+
+        });
+
+    return details;
 }
 
 
@@ -14477,7 +15860,17 @@ async function loadTrackerGoals() {
                 row.special_week_target === null ||
                 row.special_week_target === undefined
                     ? null
-                    : Number(row.special_week_target)
+                    : Number(row.special_week_target),
+            targetMode:
+                row.target_mode === "max"
+                    ? "max"
+                    : "min",
+            showInAgenda:
+                Boolean(row.show_in_agenda),
+            agendaTime:
+                row.agenda_time
+                    ? String(row.agenda_time).slice(0, 5)
+                    : null
         }));
 }
 
@@ -15088,9 +16481,22 @@ function openGoalModal() {
         "goalSpecialTargetInput"
     ).value = "";
 
+    goalTargetMode = "min";
+
     setGoalType("checkbox");
+    setGoalTargetMode("min");
     setGoalFrequency("daily");
     setGoalSpecialBehavior("same");
+
+    document.getElementById(
+        "goalShowInAgenda"
+    ).checked = false;
+
+    document.getElementById(
+        "goalAgendaTime"
+    ).value = "";
+
+    toggleGoalAgendaTime();
 
     goalSelectedDays =
         new Set();
@@ -15206,6 +16612,18 @@ function openGoalEdit(goal) {
 
     setGoalType(goal.type);
 
+    setGoalTargetMode(goal.targetMode);
+
+    document.getElementById(
+        "goalShowInAgenda"
+    ).checked = goal.showInAgenda;
+
+    document.getElementById(
+        "goalAgendaTime"
+    ).value = goal.agendaTime || "";
+
+    toggleGoalAgendaTime();
+
     goalSelectedDays =
         new Set(goal.days || []);
 
@@ -15284,21 +16702,86 @@ function setGoalType(type) {
             ? "block"
             : "none";
 
+    updateGoalTargetLabels();
+
+    updateGoalTargetDefault();
+}
+
+
+/* Minimaal: je moet de eis halen. Maximaal: je mag er niet
+   overheen, zoals hoogstens vijf bakjes chips per week. */
+
+function setGoalTargetMode(mode) {
+
+    goalTargetMode =
+        mode === "max"
+            ? "max"
+            : "min";
+
+    document.getElementById(
+        "goalModeMinOption"
+    ).classList.toggle(
+        "selected",
+        goalTargetMode === "min"
+    );
+
+    document.getElementById(
+        "goalModeMaxOption"
+    ).classList.toggle(
+        "selected",
+        goalTargetMode === "max"
+    );
+
+    updateGoalTargetLabels();
+
+    updateGoalTargetDefault();
+}
+
+
+function updateGoalTargetLabels() {
+
+    const isNumber =
+        goalType === "number";
+
+    const isMax =
+        goalTargetMode === "max";
+
     document.getElementById(
         "goalTargetLabel"
     ).textContent =
-        type === "number"
-            ? "Totaal doel per week"
-            : "Aantal dagen per week (eis)";
+        isMax
+            ? (
+                isNumber
+                    ? "Maximaal totaal per week"
+                    : "Maximaal aantal dagen per week"
+            )
+            : (
+                isNumber
+                    ? "Totaal doel per week"
+                    : "Aantal dagen per week (eis)"
+            );
 
     document.getElementById(
         "goalSpecialTargetLabel"
     ).textContent =
-        type === "number"
-            ? "Aangepast totaal tijdens een bijzondere week"
-            : "Aangepast aantal dagen tijdens een bijzondere week";
+        isMax
+            ? "Aangepast maximum tijdens een bijzondere week"
+            : (
+                isNumber
+                    ? "Aangepast totaal tijdens een bijzondere week"
+                    : "Aangepast aantal dagen tijdens een bijzondere week"
+            );
+}
 
-    updateGoalTargetDefault();
+
+function toggleGoalAgendaTime() {
+
+    document.getElementById(
+        "goalAgendaTimeField"
+    ).style.display =
+        document.getElementById("goalShowInAgenda").checked
+            ? ""
+            : "none";
 }
 
 
@@ -15424,6 +16907,23 @@ function updateGoalTargetDefault() {
             "goalTargetInput"
         );
 
+    if (goalTargetMode === "max") {
+
+        hint.textContent =
+            goalType === "number"
+                ? "Hoeveel je per week hoogstens mag, bijv. 5 (bakjes chips). Blijf je eronder, dan is het goed."
+                : "Op hoeveel dagen per week het hoogstens mag, bijv. 2 als je maximaal twee keer per week snoept. Vink de dagen aan waarop het gebeurd is.";
+
+        /* Bij een maximum is 'alle dagen' geen zinnige
+           standaard. Zelf invullen dus. */
+
+        if (!targetInput.dataset.touched) {
+            targetInput.value = "";
+        }
+
+        return;
+    }
+
     if (goalType === "number") {
 
         hint.textContent =
@@ -15506,7 +17006,9 @@ async function saveGoal() {
     if (isNaN(weeklyTarget) || weeklyTarget < 0) {
 
         alert(
-            "Vul een geldige wekelijkse eis in."
+            goalTargetMode === "max"
+                ? "Vul in wat het maximum per week is."
+                : "Vul een geldige wekelijkse eis in."
         );
 
         return;
@@ -15537,9 +17039,21 @@ async function saveGoal() {
         return;
     }
 
+    const showInAgenda =
+        document.getElementById("goalShowInAgenda").checked;
+
+    const agendaTime =
+        document.getElementById("goalAgendaTime").value;
+
     const fields = {
         category_id:categoryId,
         label:label,
+        target_mode:goalTargetMode,
+        show_in_agenda:showInAgenda,
+        agenda_time:
+            showInAgenda && agendaTime
+                ? agendaTime
+                : null,
         frequency:goalFrequency,
         days:Array.from(goalSelectedDays),
         unit:unit || null,
@@ -15871,6 +17385,32 @@ function renderTrackerDayChecklist() {
                 labelRow
             );
 
+            if (goal.targetMode === "max") {
+
+                const limitNote =
+                    document.createElement("div");
+
+                limitNote.className =
+                    "checklist-item-note limit";
+
+                const limit =
+                    trackerWeekSpecial &&
+                    goal.specialWeekBehavior === "different" &&
+                    goal.specialWeekTarget !== null
+                        ? goal.specialWeekTarget
+                        : goal.weeklyTarget;
+
+                limitNote.textContent =
+                    goal.type === "checkbox"
+                        ? "Hoogstens " + limit + (limit === 1 ? " dag" : " dagen") + " per week"
+                        : "Hoogstens " + limit + (goal.unit ? " " + goal.unit : "") + " per week";
+
+                text.appendChild(
+                    limitNote
+                );
+
+            }
+
             if (trackerWeekSpecial && goal.specialWeekBehavior === "different") {
 
                 const note =
@@ -16143,12 +17683,23 @@ function renderTrackerWeekOverview() {
         header.className =
             "overview-card-header";
 
+        /* Het icoon komt uit een vaste lijst, de naam typt de
+           gebruiker zelf. Die gaat daarom via textContent. */
+
         header.innerHTML =
             '<div class="category-icon"><svg fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#' +
-            category.icon +
-            '"></use></svg></div><h3>' +
-            category.name +
-            "</h3>";
+            String(category.icon || "").replace(/[^a-z0-9-]/gi, "") +
+            '"></use></svg></div>';
+
+        const categoryTitle =
+            document.createElement("h3");
+
+        categoryTitle.textContent =
+            category.name;
+
+        header.appendChild(
+            categoryTitle
+        );
 
         card.appendChild(
             header
@@ -16206,13 +17757,29 @@ function renderTrackerWeekOverview() {
 
             }
 
+            const isMax =
+                goal.targetMode === "max";
+
+            /* Bij een maximum is onder de grens blijven goed en
+               wordt het pas fout als je eroverheen gaat. De balk
+               laat zien hoeveel van je ruimte je al gebruikt. */
+
             const percentage =
                 target > 0
                     ? Math.min((current / target) * 100, 100)
-                    : 100;
+                    : (
+                        isMax
+                            ? (current > 0 ? 100 : 0)
+                            : 100
+                    );
+
+            const over =
+                isMax && current > target;
 
             const reached =
-                current >= target;
+                isMax
+                    ? current <= target
+                    : current >= target;
 
             const unit =
                 goal.type === "checkbox"
@@ -16225,15 +17792,75 @@ function renderTrackerWeekOverview() {
             row.className =
                 "overview-goal-row";
 
-            row.innerHTML =
-                '<div class="overview-goal-top"><span class="overview-goal-label">' +
+            const top =
+                document.createElement("div");
+
+            top.className =
+                "overview-goal-top";
+
+            const labelEl =
+                document.createElement("span");
+
+            labelEl.className =
+                "overview-goal-label";
+
+            labelEl.textContent =
                 goal.label +
-                (usesSpecialTarget ? " (bijzondere week)" : "") +
-                '</span><span class="overview-goal-value">' +
-                current + " / " + target + " " + unit +
-                '</span></div><div class="overview-progress-track"><div class="overview-progress-fill' +
-                (reached ? " reached" : "") +
-                '" style="width:' + percentage + '%"></div></div>';
+                (usesSpecialTarget ? " (bijzondere week)" : "");
+
+            const valueEl =
+                document.createElement("span");
+
+            valueEl.className =
+                "overview-goal-value" +
+                (
+                    over
+                        ? " over"
+                        : ""
+                );
+
+            valueEl.textContent =
+                current +
+                (
+                    isMax
+                        ? " / max " 
+                        : " / "
+                ) +
+                target +
+                (unit ? " " + unit : "") +
+                (
+                    over
+                        ? " (te veel)"
+                        : ""
+                );
+
+            top.appendChild(labelEl);
+            top.appendChild(valueEl);
+
+            const track =
+                document.createElement("div");
+
+            track.className =
+                "overview-progress-track";
+
+            const fill =
+                document.createElement("div");
+
+            fill.className =
+                "overview-progress-fill" +
+                (
+                    reached
+                        ? " reached"
+                        : ""
+                );
+
+            fill.style.width =
+                percentage + "%";
+
+            track.appendChild(fill);
+
+            row.appendChild(top);
+            row.appendChild(track);
 
             card.appendChild(
                 row
@@ -16423,16 +18050,50 @@ function getAgendaItemsForDate(
 
     }
 
+    /* Doelen die je in de agenda wilt zien, op de dagen dat
+       ze gelden. */
+
+    const dayKey =
+        getWeekdayKey(dateString);
+
+    trackerGoals
+        .filter(
+            goal =>
+                goal.showInAgenda &&
+                goalAppliesToDay(goal, dayKey)
+        )
+        .forEach(goal => {
+
+            items.push({
+                type:"goal",
+                label:goal.label,
+                completed:false,
+                meta:
+                    goal.targetMode === "max"
+                        ? "Doel, hoogstens " +
+                          goal.weeklyTarget +
+                          (
+                              goal.type === "checkbox"
+                                  ? " dagen"
+                                  : (goal.unit ? " " + goal.unit : "")
+                          ) +
+                          " per week"
+                        : "Doel",
+                time:goal.agendaTime || null
+            });
+
+        });
+
     /* Alles met een tijd op volgorde, en dat blok onder de
        items zonder tijd zoals deadlines en huiswerk. */
 
     items.sort((a, b) => {
 
         const aTimed =
-            a.type === "event" || a.type === "les";
+            Boolean(a.time);
 
         const bTimed =
-            b.type === "event" || b.type === "les";
+            Boolean(b.time);
 
         if (aTimed && bTimed) {
             return (a.time || "").localeCompare(b.time || "");
@@ -18002,7 +19663,11 @@ function renderAgendaDetail() {
         );
 
         if (
-            (item.type === "event" || item.type === "les") &&
+            (
+                item.type === "event" ||
+                item.type === "les" ||
+                item.type === "goal"
+            ) &&
             item.time
         ) {
 
@@ -18159,6 +19824,1097 @@ async function deleteAgendaEvent(id) {
     }
 
     await loadAgendaEvents();
+}
+
+
+/* =========================================================
+   LEESLIJST
+
+   Boeken staan in de tabel books. Zoeken gaat rechtstreeks
+   naar de gratis zoekdienst van Open Library, die vanaf een
+   andere website aangeroepen mag worden. Daar gaat alleen de
+   zoekterm heen, niets over de gebruiker.
+========================================================= */
+
+let books = [];
+let bookFilter = "alles";
+let bookSearchResults = [];
+let bookSearchTimer = null;
+let bookSearchController = null;
+
+let editingBookId = null;
+let bookModalStatus = "wil_lezen";
+let bookModalRating = null;
+let bookModalCover = null;
+let bookModalKey = null;
+
+const bookStatusLabels =
+    {
+        wil_lezen:"Wil ik lezen",
+        bezig:"Aan het lezen",
+        gelezen:"Gelezen"
+    };
+
+
+async function loadBooks() {
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("books")
+            .select("*")
+            .order("created_at", {
+                ascending:false
+            });
+
+    if (error) {
+
+        console.error(
+            "Boeken laden:",
+            error
+        );
+
+        document.getElementById("bookList").innerHTML =
+            '<div class="empty-state">De leeslijst kon niet geladen worden. Is de SQL van update 1.2 al gedraaid?</div>';
+
+        return;
+    }
+
+    books = data || [];
+
+    renderBooks();
+}
+
+
+/* Alleen een heel getal wordt een plaatje. Zo kan er via een
+   kaftnummer nooit iets anders in de pagina belanden. */
+
+function bookCoverUrl(coverId, size) {
+
+    const id = Number(coverId);
+
+    if (!Number.isInteger(id) || id <= 0) {
+        return null;
+    }
+
+    return "https://covers.openlibrary.org/b/id/" +
+        id + "-" + size + ".jpg";
+}
+
+
+function createBookCover(coverId, title, large) {
+
+    const url =
+        bookCoverUrl(
+            coverId,
+            large ? "M" : "S"
+        );
+
+    if (url) {
+
+        const img =
+            document.createElement("img");
+
+        img.className =
+            "book-cover" +
+            (
+                large
+                    ? " large"
+                    : ""
+            );
+
+        img.alt = "";
+        img.loading = "lazy";
+
+        /* Geen kaft beschikbaar of geen internet: dan de
+           beginletter, net als bij een boek zonder kaft. */
+
+        img.onerror =
+            () =>
+                img.replaceWith(
+                    createBookCover(
+                        null,
+                        title,
+                        large
+                    )
+                );
+
+        img.src = url;
+
+        return img;
+    }
+
+    const placeholder =
+        document.createElement("div");
+
+    placeholder.className =
+        "book-cover book-cover-placeholder" +
+        (
+            large
+                ? " large"
+                : ""
+        );
+
+    placeholder.textContent =
+        String(title || "?")
+            .trim()
+            .slice(0, 1)
+            .toUpperCase();
+
+    return placeholder;
+}
+
+
+/* ---------- Zoeken ---------- */
+
+function onBookSearchInput() {
+
+    clearTimeout(bookSearchTimer);
+
+    bookSearchTimer =
+        setTimeout(
+            () =>
+                searchBooks(
+                    document
+                        .getElementById("bookSearchInput")
+                        .value
+                        .trim()
+                ),
+            400
+        );
+}
+
+
+async function searchBooks(query) {
+
+    const status =
+        document.getElementById("bookSearchStatus");
+
+    const results =
+        document.getElementById("bookSearchResults");
+
+    if (bookSearchController) {
+        bookSearchController.abort();
+    }
+
+    if (query.length < 2) {
+
+        status.textContent = "";
+
+        results.innerHTML = "";
+
+        bookSearchResults = [];
+
+        return;
+    }
+
+    bookSearchController =
+        new AbortController();
+
+    status.textContent = "Zoeken...";
+
+    const url =
+        "https://openlibrary.org/search.json?q=" +
+        encodeURIComponent(query) +
+        "&fields=key,title,author_name,first_publish_year,number_of_pages_median,cover_i" +
+        "&lang=nl&limit=8";
+
+    try {
+
+        const response =
+            await fetch(
+                url,
+                {
+                    signal:bookSearchController.signal
+                }
+            );
+
+        if (!response.ok) {
+            throw new Error("status " + response.status);
+        }
+
+        const data =
+            await response.json();
+
+        bookSearchResults =
+            (data.docs || []).map(doc => ({
+                title:doc.title || "",
+                author:
+                    Array.isArray(doc.author_name)
+                        ? doc.author_name.slice(0, 2).join(", ")
+                        : "",
+                year:doc.first_publish_year || null,
+                pages:doc.number_of_pages_median || null,
+                cover:doc.cover_i || null,
+                key:doc.key || null
+            }));
+
+        renderBookSearchResults(query);
+
+    } catch (error) {
+
+        if (error.name === "AbortError") {
+            return;
+        }
+
+        console.error(
+            "Boek zoeken:",
+            error
+        );
+
+        results.innerHTML = "";
+
+        status.textContent =
+            "Zoeken lukt nu niet. Vul het boek zelf in met Zelf invullen.";
+
+    }
+}
+
+
+function renderBookSearchResults(query) {
+
+    const status =
+        document.getElementById("bookSearchStatus");
+
+    const results =
+        document.getElementById("bookSearchResults");
+
+    results.innerHTML = "";
+
+    if (!bookSearchResults.length) {
+
+        status.textContent =
+            "Niets gevonden voor “" + query +
+            "”. Probeer een andere spelling of vul het boek zelf in.";
+
+        return;
+    }
+
+    status.textContent =
+        "Kies het juiste boek. Gegevens van Open Library.";
+
+    const knownKeys =
+        new Set(
+            books
+                .map(book => book.ol_key)
+                .filter(Boolean)
+        );
+
+    bookSearchResults.forEach(result => {
+
+        const row =
+            document.createElement("div");
+
+        row.className = "book-result";
+
+        row.appendChild(
+            createBookCover(
+                result.cover,
+                result.title,
+                false
+            )
+        );
+
+        const main =
+            document.createElement("div");
+
+        main.className = "book-result-main";
+
+        const title =
+            document.createElement("div");
+
+        title.className = "book-result-title";
+
+        title.textContent = result.title;
+
+        const meta =
+            document.createElement("div");
+
+        meta.className = "book-result-meta";
+
+        meta.textContent =
+            [
+                result.author,
+                result.year,
+                result.pages
+                    ? result.pages + " blz."
+                    : ""
+            ]
+                .filter(Boolean)
+                .join(" · ");
+
+        main.appendChild(title);
+        main.appendChild(meta);
+
+        row.appendChild(main);
+
+        const button =
+            document.createElement("button");
+
+        button.type = "button";
+        button.className = "secondary-button";
+        button.style.height = "36px";
+
+        if (result.key && knownKeys.has(result.key)) {
+
+            button.textContent = "Staat erop";
+
+            button.disabled = true;
+
+        } else {
+
+            button.textContent = "Toevoegen";
+
+            button.onclick =
+                () =>
+                    openBookModal(
+                        null,
+                        result
+                    );
+
+        }
+
+        row.appendChild(button);
+
+        results.appendChild(row);
+
+    });
+}
+
+
+/* ---------- Lijst ---------- */
+
+function renderBookFilters() {
+
+    const row =
+        document.getElementById("bookFilterRow");
+
+    row.innerHTML = "";
+
+    const counts = {
+        alles:books.length,
+        bezig:books.filter(b => b.status === "bezig").length,
+        wil_lezen:books.filter(b => b.status === "wil_lezen").length,
+        gelezen:books.filter(b => b.status === "gelezen").length,
+        school:books.filter(b => b.for_school).length
+    };
+
+    [
+        ["alles", "Alles"],
+        ["bezig", "Aan het lezen"],
+        ["wil_lezen", "Wil ik lezen"],
+        ["gelezen", "Gelezen"],
+        ["school", "Voor school"]
+    ].forEach(pair => {
+
+        const button =
+            document.createElement("button");
+
+        button.type = "button";
+
+        button.className =
+            "book-filter" +
+            (
+                bookFilter === pair[0]
+                    ? " active"
+                    : ""
+            );
+
+        button.textContent =
+            pair[1] + " (" + counts[pair[0]] + ")";
+
+        button.onclick =
+            () => {
+
+                bookFilter = pair[0];
+
+                renderBooks();
+
+            };
+
+        row.appendChild(button);
+
+    });
+}
+
+
+function renderBookStats() {
+
+    const read =
+        books.filter(b => b.status === "gelezen");
+
+    const pages =
+        read.reduce(
+            (sum, b) =>
+                sum + (Number(b.pages) || 0),
+            0
+        );
+
+    const reading =
+        books.filter(b => b.status === "bezig").length;
+
+    const stats =
+        document.getElementById("bookStats");
+
+    stats.innerHTML = "";
+
+    if (!books.length) {
+        return;
+    }
+
+    const parts = [
+        [read.length, read.length === 1 ? " boek gelezen" : " boeken gelezen"],
+        [pages.toLocaleString("nl-NL"), " pagina's"],
+        [reading, " aan het lezen"]
+    ];
+
+    parts.forEach((part, index) => {
+
+        if (index > 0) {
+            stats.appendChild(
+                document.createTextNode(" · ")
+            );
+        }
+
+        const strong =
+            document.createElement("strong");
+
+        strong.textContent = part[0];
+
+        stats.appendChild(strong);
+
+        stats.appendChild(
+            document.createTextNode(part[1])
+        );
+
+    });
+}
+
+
+function renderBooks() {
+
+    renderBookFilters();
+
+    renderBookStats();
+
+    const list =
+        document.getElementById("bookList");
+
+    list.innerHTML = "";
+
+    const statusOrder =
+        {
+            bezig:0,
+            wil_lezen:1,
+            gelezen:2
+        };
+
+    const visible =
+        books
+            .filter(book => {
+
+                if (bookFilter === "alles") return true;
+                if (bookFilter === "school") return book.for_school;
+
+                return book.status === bookFilter;
+
+            })
+            .sort((a, b) => {
+
+                const byStatus =
+                    statusOrder[a.status] - statusOrder[b.status];
+
+                if (byStatus) return byStatus;
+
+                /* Gelezen boeken: meest recent uitgelezen eerst. */
+
+                const aDate = a.finished_on || a.created_at || "";
+                const bDate = b.finished_on || b.created_at || "";
+
+                return String(bDate).localeCompare(String(aDate));
+
+            });
+
+    if (!visible.length) {
+
+        list.innerHTML =
+            books.length
+                ? '<div class="empty-state">Geen boeken in deze selectie.</div>'
+                : '<div class="empty-state">Je leeslijst is nog leeg. Zoek hierboven een boek om te beginnen.</div>';
+
+        return;
+    }
+
+    visible.forEach(book => {
+
+        const card =
+            document.createElement("div");
+
+        card.className = "book-card";
+
+        card.appendChild(
+            createBookCover(
+                book.cover_id,
+                book.title,
+                true
+            )
+        );
+
+        const main =
+            document.createElement("div");
+
+        main.className = "book-card-main";
+
+        const title =
+            document.createElement("div");
+
+        title.className = "book-card-title";
+
+        title.textContent = book.title;
+
+        main.appendChild(title);
+
+        const metaText =
+            [
+                book.author,
+                book.year,
+                book.pages
+                    ? book.pages + " blz."
+                    : ""
+            ]
+                .filter(Boolean)
+                .join(" · ");
+
+        if (metaText) {
+
+            const meta =
+                document.createElement("div");
+
+            meta.className = "book-card-meta";
+
+            meta.textContent = metaText;
+
+            main.appendChild(meta);
+
+        }
+
+        const pills =
+            document.createElement("div");
+
+        pills.className = "book-pills";
+
+        const statusPill =
+            document.createElement("span");
+
+        statusPill.className =
+            "book-pill " + book.status;
+
+        statusPill.textContent =
+            bookStatusLabels[book.status] || book.status;
+
+        if (book.status === "gelezen" && book.finished_on) {
+
+            statusPill.textContent +=
+                " op " + formatDeadlineDate(book.finished_on);
+
+        }
+
+        pills.appendChild(statusPill);
+
+        if (book.for_school) {
+
+            const school =
+                document.createElement("span");
+
+            school.className = "book-pill school";
+
+            school.textContent =
+                "Voor school" +
+                (
+                    book.school_subject
+                        ? ": " + book.school_subject
+                        : ""
+                );
+
+            pills.appendChild(school);
+
+        }
+
+        main.appendChild(pills);
+
+        if (book.rating) {
+
+            const stars =
+                document.createElement("div");
+
+            stars.className = "book-stars";
+
+            stars.textContent =
+                "★".repeat(book.rating) +
+                "☆".repeat(5 - book.rating);
+
+            stars.title =
+                book.rating + " van de 5";
+
+            main.appendChild(stars);
+
+        }
+
+        if (book.notes) {
+
+            const notes =
+                document.createElement("div");
+
+            notes.className = "book-notes";
+
+            notes.textContent = book.notes;
+
+            main.appendChild(notes);
+
+        }
+
+        card.appendChild(main);
+
+        card.appendChild(
+            createEditButton(
+                "Boek aanpassen",
+                () =>
+                    openBookModal(book)
+            )
+        );
+
+        list.appendChild(card);
+
+    });
+}
+
+
+/* ---------- Venster ---------- */
+
+function setBookStatus(status) {
+
+    bookModalStatus = status;
+
+    [
+        ["wil_lezen", "bookStatusWil"],
+        ["bezig", "bookStatusBezig"],
+        ["gelezen", "bookStatusGelezen"]
+    ].forEach(pair => {
+
+        document
+            .getElementById(pair[1])
+            .classList.toggle(
+                "selected",
+                status === pair[0]
+            );
+
+    });
+
+    document.getElementById(
+        "bookDatesField"
+    ).style.display =
+        status === "wil_lezen"
+            ? "none"
+            : "";
+
+    document.getElementById(
+        "bookFinishedField"
+    ).style.display =
+        status === "gelezen"
+            ? ""
+            : "none";
+
+    document.getElementById(
+        "bookRatingField"
+    ).style.display =
+        status === "wil_lezen"
+            ? "none"
+            : "";
+
+    /* Handig: bij de eerste keer op gelezen of bezig zetten
+       vult de datum van vandaag zich alvast in. */
+
+    const started =
+        document.getElementById("bookStartedInput");
+
+    const finished =
+        document.getElementById("bookFinishedInput");
+
+    if (status !== "wil_lezen" && !started.value) {
+        started.value = getToday();
+    }
+
+    if (status === "gelezen" && !finished.value) {
+        finished.value = getToday();
+    }
+}
+
+
+function renderBookStars() {
+
+    const row =
+        document.getElementById("bookStarRow");
+
+    row.innerHTML = "";
+
+    for (let i = 1; i <= 5; i++) {
+
+        const star =
+            document.createElement("button");
+
+        star.type = "button";
+
+        star.className =
+            "star-button" +
+            (
+                bookModalRating && i <= bookModalRating
+                    ? " on"
+                    : ""
+            );
+
+        star.textContent = "★";
+
+        star.title =
+            i + (i === 1 ? " ster" : " sterren");
+
+        /* Nog een keer op dezelfde ster zet de beoordeling
+           weer uit. */
+
+        star.onclick =
+            () => {
+
+                bookModalRating =
+                    bookModalRating === i
+                        ? null
+                        : i;
+
+                renderBookStars();
+
+            };
+
+        row.appendChild(star);
+
+    }
+}
+
+
+function toggleBookSchool() {
+
+    const checked =
+        document.getElementById("bookSchoolInput").checked;
+
+    const subject =
+        document.getElementById("bookSubjectInput");
+
+    subject.style.display =
+        checked
+            ? ""
+            : "none";
+
+    if (checked) {
+        subject.focus();
+    }
+}
+
+
+function renderBookModalHead() {
+
+    const head =
+        document.getElementById("bookModalHead");
+
+    head.innerHTML = "";
+
+    if (!bookCoverUrl(bookModalCover, "M")) {
+
+        head.style.display = "none";
+
+        return;
+    }
+
+    head.style.display = "";
+
+    head.appendChild(
+        createBookCover(
+            bookModalCover,
+            "",
+            true
+        )
+    );
+
+    const hint =
+        document.createElement("p");
+
+    hint.className = "modal-hint";
+
+    hint.textContent =
+        "Titel, schrijver, jaar en pagina's komen van Open Library. Pas ze gerust aan als iets niet klopt.";
+
+    head.appendChild(hint);
+}
+
+
+/* Zonder argumenten: leeg venster. Met een boek: aanpassen.
+   Met een zoekresultaat: nieuw boek, alvast ingevuld. */
+
+function openBookModal(book, result) {
+
+    editingBookId =
+        book
+            ? book.id
+            : null;
+
+    const source =
+        book ||
+        (
+            result
+                ? {
+                    title:result.title,
+                    author:result.author,
+                    year:result.year,
+                    pages:result.pages,
+                    cover_id:result.cover,
+                    ol_key:result.key
+                }
+                : {}
+        );
+
+    document.getElementById("bookModalTitle").textContent =
+        book
+            ? "Boek aanpassen"
+            : "Boek toevoegen";
+
+    document.getElementById("bookTitleInput").value = source.title || "";
+    document.getElementById("bookAuthorInput").value = source.author || "";
+    document.getElementById("bookYearInput").value = source.year || "";
+    document.getElementById("bookPagesInput").value = source.pages || "";
+    document.getElementById("bookStartedInput").value = source.started_on || "";
+    document.getElementById("bookFinishedInput").value = source.finished_on || "";
+    document.getElementById("bookSchoolInput").checked = Boolean(source.for_school);
+    document.getElementById("bookSubjectInput").value = source.school_subject || "";
+    document.getElementById("bookNotesInput").value = source.notes || "";
+
+    toggleBookSchool();
+
+    bookModalCover = source.cover_id || null;
+    bookModalKey = source.ol_key || null;
+    bookModalRating = source.rating || null;
+
+    renderBookModalHead();
+
+    renderBookStars();
+
+    setBookStatus(
+        source.status || "wil_lezen"
+    );
+
+    document.getElementById(
+        "bookDeleteButton"
+    ).style.display =
+        book
+            ? ""
+            : "none";
+
+    document.getElementById(
+        "bookModalActions"
+    ).classList.toggle(
+        "with-delete",
+        Boolean(book)
+    );
+
+    if (book) {
+
+        armDeleteButton(
+            document.getElementById("bookDeleteButton"),
+            async () => {
+
+                const id = editingBookId;
+
+                closeBookModal();
+
+                await deleteBook(id);
+
+            }
+        );
+
+    }
+
+    document
+        .getElementById("bookModal")
+        .classList.add("show");
+
+    if (!source.title) {
+
+        document.getElementById("bookTitleInput").focus();
+
+    }
+}
+
+
+function closeBookModal() {
+
+    editingBookId = null;
+
+    document
+        .getElementById("bookModal")
+        .classList.remove("show");
+}
+
+
+function readPositiveInt(id) {
+
+    const value =
+        parseInt(
+            document.getElementById(id).value,
+            10
+        );
+
+    return Number.isInteger(value) && value > 0
+        ? value
+        : null;
+}
+
+
+async function saveBook() {
+
+    const title =
+        document.getElementById("bookTitleInput").value.trim();
+
+    if (!title) {
+
+        alert("Vul een titel in.");
+
+        document.getElementById("bookTitleInput").focus();
+
+        return;
+    }
+
+    const forSchool =
+        document.getElementById("bookSchoolInput").checked;
+
+    const status =
+        bookModalStatus;
+
+    const fields = {
+        title:title,
+        author:document.getElementById("bookAuthorInput").value.trim() || null,
+        year:readPositiveInt("bookYearInput"),
+        pages:readPositiveInt("bookPagesInput"),
+        cover_id:bookCoverUrl(bookModalCover, "S") ? Number(bookModalCover) : null,
+        ol_key:bookModalKey,
+        status:status,
+        for_school:forSchool,
+        school_subject:
+            forSchool
+                ? (document.getElementById("bookSubjectInput").value.trim() || null)
+                : null,
+        rating:
+            status === "wil_lezen"
+                ? null
+                : bookModalRating,
+        started_on:
+            status === "wil_lezen"
+                ? null
+                : (document.getElementById("bookStartedInput").value || null),
+        finished_on:
+            status === "gelezen"
+                ? (document.getElementById("bookFinishedInput").value || null)
+                : null,
+        notes:document.getElementById("bookNotesInput").value.trim() || null
+    };
+
+    let error = null;
+
+    if (editingBookId) {
+
+        ({ error } =
+            await supabaseClient
+                .from("books")
+                .update(fields)
+                .eq("id", editingBookId));
+
+    } else {
+
+        const user =
+            await getCurrentUser();
+
+        if (!user) {
+            return;
+        }
+
+        ({ error } =
+            await supabaseClient
+                .from("books")
+                .insert(
+                    Object.assign(
+                        { user_id:user.id },
+                        fields
+                    )
+                ));
+
+    }
+
+    if (error) {
+
+        console.error(
+            "Boek opslaan:",
+            error
+        );
+
+        alert(
+            "Het boek kon niet worden opgeslagen."
+        );
+
+        return;
+    }
+
+    const wasNew =
+        !editingBookId;
+
+    closeBookModal();
+
+    if (wasNew) {
+
+        /* Zoekresultaten weg, zodat je ziet dat hij erop staat. */
+
+        document.getElementById("bookSearchInput").value = "";
+        document.getElementById("bookSearchResults").innerHTML = "";
+        document.getElementById("bookSearchStatus").textContent = "";
+
+        bookSearchResults = [];
+
+    }
+
+    await loadBooks();
+}
+
+
+async function deleteBook(id) {
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("books")
+            .delete()
+            .eq("id", id);
+
+    if (error) {
+
+        console.error(
+            "Boek verwijderen:",
+            error
+        );
+
+        alert(
+            "Het boek kon niet worden verwijderd."
+        );
+
+        return;
+    }
+
+    await loadBooks();
 }
 
 
@@ -18333,9 +21089,13 @@ async function countIncompleteGoalsToday() {
             getToday()
         );
 
+    /* Doelen met een maximum tellen niet mee: niets invullen
+       is daar juist goed. */
+
     const applicableGoals =
         trackerGoals.filter(
             goal =>
+                goal.targetMode !== "max" &&
                 goalAppliesToDay(
                     goal,
                     todayKey
@@ -20093,7 +22853,7 @@ document
             if (
                 event.key === "Enter"
             ) {
-                addManualStudyTime();
+                saveStudyModal();
             }
 
         }
