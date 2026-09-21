@@ -747,6 +747,46 @@ main {
     font-size:18px;
 }
 
+/* Toevoegen en verwijderen verschijnen pas na een klik op
+   Bewerken. Zo tik je niet per ongeluk een link weg. */
+
+.shortcuts-actions {
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+.shortcuts-edit-button {
+    height:36px;
+    padding:0 13px;
+    border:1px solid var(--border);
+    border-radius:7px;
+    background:var(--white);
+    color:var(--anthracite);
+    font-size:13px;
+    font-weight:600;
+}
+
+.shortcuts-edit-button:hover {
+    border-color:var(--olive);
+}
+
+.shortcuts-panel.editing .shortcuts-edit-button {
+    border-color:var(--olive);
+    background:var(--olive);
+    color:#fff;
+}
+
+.shortcuts-panel:not(.editing) .add-shortcut-button,
+.shortcuts-panel:not(.editing) .delete-shortcut {
+    display:none;
+}
+
+.shortcuts-panel.editing .shortcut-link {
+    pointer-events:none;
+    opacity:.75;
+}
+
 .add-shortcut-button {
     width:36px;
     height:36px;
@@ -2308,6 +2348,12 @@ main {
     color:var(--muted);
 }
 
+.checklist-label-row {
+    display:flex;
+    align-items:center;
+    gap:4px;
+}
+
 .checklist-item-controls {
     display:flex;
     align-items:center;
@@ -3593,6 +3639,85 @@ main {
     color:var(--accent-text);
 }
 
+/* Updatemelding: zelfde venster als welkom, maar links
+   uitgelijnd omdat het een lijstje is. */
+
+.update-box {
+    text-align:left;
+    max-width:460px;
+}
+
+.update-version {
+    display:inline-flex;
+    align-items:center;
+    margin-bottom:12px;
+    padding:4px 11px;
+    border-radius:20px;
+    background:var(--badge-bg);
+    border:1px solid var(--badge-border);
+    color:var(--accent-text);
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:.2px;
+}
+
+.update-box h2 {
+    padding-right:28px;
+}
+
+.update-notes {
+    max-height:min(52vh,420px);
+    overflow-y:auto;
+    margin-top:4px;
+    color:var(--anthracite);
+    font-size:14px;
+    line-height:1.55;
+}
+
+.update-notes p {
+    margin:8px 0;
+    color:var(--muted);
+}
+
+.update-notes ul {
+    margin:8px 0;
+    padding:0;
+    list-style:none;
+}
+
+.update-notes li {
+    position:relative;
+    padding:6px 0 6px 18px;
+    border-bottom:1px solid var(--border);
+}
+
+.update-notes li:last-child {
+    border-bottom:none;
+}
+
+.update-notes li::before {
+    content:"";
+    position:absolute;
+    left:2px;
+    top:14px;
+    width:7px;
+    height:7px;
+    border-radius:50%;
+    background:var(--olive);
+}
+
+.about-row {
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:12px;
+}
+
+.about-version {
+    font-size:14px;
+    font-weight:700;
+}
+
 /* De rondleiding. De donkere laag is de slagschaduw van het
    uitgelichte vak, zo hoeft er nergens een gat geknipt te
    worden. */
@@ -4181,6 +4306,113 @@ main {
 }
 
 /* =========================================================
+   AANPASSEN EN VERWIJDEREN
+
+   Verwijderen zit niet meer naast het vinkje, maar in het
+   bewerkvenster. Daar moet je er ook nog twee keer op
+   drukken, zodat een misser niets kapotmaakt.
+========================================================= */
+
+.edit-item-button {
+    width:32px;
+    height:32px;
+    flex-shrink:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border:none;
+    border-radius:6px;
+    background:transparent;
+    color:var(--muted);
+}
+
+.edit-item-button:hover {
+    background:var(--badge-bg);
+    color:var(--accent-text);
+}
+
+.edit-item-button svg {
+    width:16px;
+    height:16px;
+}
+
+.edit-item-button.small {
+    width:26px;
+    height:26px;
+}
+
+.edit-item-button.small svg {
+    width:14px;
+    height:14px;
+}
+
+.modal-actions.with-delete {
+    justify-content:space-between;
+}
+
+.modal-actions-right {
+    display:flex;
+    gap:8px;
+}
+
+.modal-delete {
+    height:40px;
+    padding:0 14px;
+    border:1px solid var(--border);
+    border-radius:7px;
+    background:var(--white);
+    color:var(--danger);
+    font-weight:600;
+    transition:background-color .15s, color .15s, border-color .15s;
+}
+
+.modal-delete:hover {
+    border-color:var(--danger);
+}
+
+/* Tweede stap: de knop is scherp gezet. */
+
+.modal-delete.armed {
+    border-color:var(--danger);
+    background:var(--danger);
+    color:#fff;
+}
+
+.goal-locked-hint {
+    margin-top:6px;
+    font-size:12px;
+    color:var(--muted);
+    line-height:1.5;
+}
+
+.modal-radio-option.locked {
+    opacity:.45;
+    pointer-events:none;
+}
+
+/* Op een smal scherm passen drie knoppen niet naast elkaar.
+   Verwijderen gaat dan onderaan, apart van opslaan. */
+
+@media(max-width:520px) {
+
+    .modal-actions.with-delete {
+        flex-direction:column-reverse;
+        align-items:stretch;
+        gap:10px;
+    }
+
+    .modal-actions.with-delete .modal-actions-right {
+        display:grid;
+        grid-template-columns:1fr 1fr;
+    }
+
+    .modal-actions.with-delete .modal-delete {
+        width:100%;
+    }
+
+}
+
+/* =========================================================
    MOBIEL
 ========================================================= */
 
@@ -4608,6 +4840,11 @@ main {
     <path d="M12 3.6 21 19.4H3z"></path>
     <path d="M12 10v4"></path>
     <path d="M12 16.6v.4"></path>
+</symbol>
+
+<symbol id="pencil" viewBox="0 0 24 24">
+    <path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16z"></path>
+    <path d="M13.5 6.5l4 4"></path>
 </symbol>
 
 <symbol id="close" viewBox="0 0 24 24">
@@ -5392,6 +5629,8 @@ Je hebt alle blokken verborgen. Zet ze weer aan bij
 
 <h2>Snelkoppelingen</h2>
 
+<div class="shortcuts-actions">
+
 <button
     class="add-shortcut-button"
     onclick="openShortcutModal()"
@@ -5405,6 +5644,16 @@ Je hebt alle blokken verborgen. Zet ze weer aan bij
         <use href="#plus"></use>
     </svg>
 </button>
+
+<button
+    id="shortcutsEditButton"
+    class="shortcuts-edit-button"
+    onclick="toggleShortcutsEditing()"
+>
+    Bewerken
+</button>
+
+</div>
 
 </div>
 
@@ -6482,62 +6731,6 @@ Koppelen
 
 </div>
 
-<hr class="suggestion-divider">
-
-<div id="suggestionLockPanel" class="suggestion-lock-panel">
-
-<div class="suggestion-lock-icon">
-<svg fill="none"
-     stroke="currentColor"
-     stroke-width="1.8"
-     stroke-linecap="round"
-     stroke-linejoin="round">
-    <use href="#lock"></use>
-</svg>
-</div>
-
-<div class="day-panel-title" style="justify-content:center">Suggesties bekijken</div>
-<p style="color:var(--muted);font-size:13px">Alleen voor de eigenaar. Voer het wachtwoord in.</p>
-
-<div class="suggestion-password-row">
-
-<input
-    id="suggestionPasswordInput"
-    type="password"
-    maxlength="10"
-    placeholder="Wachtwoord"
->
-
-<button
-    class="suggestion-unlock-button"
-    onclick="unlockSuggestions()"
->
-    Ontgrendelen
-</button>
-
-</div>
-
-<div
-    id="suggestionError"
-    class="suggestion-error"
->
-    Onjuist wachtwoord.
-</div>
-
-</div>
-
-<div
-    id="suggestionContentPanel"
-    class="content-panel"
-    style="display:none"
->
-
-<div
-    id="suggestionList"
-    class="suggestion-list"
-></div>
-
-</div>
 
 </section>
 
@@ -6745,6 +6938,29 @@ Pushnotificaties inschakelen op dit apparaat
 >
 Alles weer tonen
 </button>
+
+</div>
+
+<div class="content-panel">
+<h2 style="font-size:16px;margin-bottom:12px">Over deze app</h2>
+
+<div class="about-row">
+
+<span
+    id="aboutVersion"
+    class="about-version"
+>Versie onbekend</span>
+
+<button
+    id="aboutWhatsNewButton"
+    class="secondary-button"
+    style="display:none"
+    onclick="showUpdatePopup()"
+>
+Wat is er nieuw?
+</button>
+
+</div>
 
 </div>
 
@@ -7247,7 +7463,7 @@ Op Android werken meldingen ook in een gewoon tabblad, maar als app op je starts
 
 <div id="goalModal" class="modal">
 <div class="modal-box">
-<h2>Nieuw doel</h2>
+<h2 id="goalModalTitle">Nieuw doel</h2>
 
 <div class="modal-field">
 <label for="goalCategorySelect">Categorie</label>
@@ -7281,6 +7497,13 @@ Op Android werken meldingen ook in een gewoon tabblad, maar als app op je starts
 >
     Invulbaar
 </div>
+</div>
+<div
+    id="goalTypeLockedHint"
+    class="goal-locked-hint"
+    style="display:none"
+>
+    Het type ligt vast zodra een doel bestaat. Anders kloppen de dagen die je al hebt ingevuld niet meer.
 </div>
 </div>
 
@@ -7395,7 +7618,18 @@ Op Android werken meldingen ook in een gewoon tabblad, maar als app op je starts
 >
 </div>
 
-<div class="modal-actions">
+<div
+    id="goalModalActions"
+    class="modal-actions"
+>
+<button
+    id="goalDeleteButton"
+    class="modal-delete"
+    style="display:none"
+>
+    Verwijderen
+</button>
+<div class="modal-actions-right">
 <button
     class="modal-cancel"
     onclick="closeGoalModal()"
@@ -7403,11 +7637,13 @@ Op Android werken meldingen ook in een gewoon tabblad, maar als app op je starts
     Annuleren
 </button>
 <button
+    id="goalSaveButton"
     class="modal-save"
     onclick="saveGoal()"
 >
     Toevoegen
 </button>
+</div>
 </div>
 
 </div>
@@ -7464,6 +7700,59 @@ Geef me een rondleiding
     onclick="dismissWelcome()"
 >
 Rondleiding overslaan
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- =========================================================
+     UPDATEMELDING
+
+     De tekst komt uit de tabel app_updates en wordt gemaakt op
+     de beheerpagina (/admin).
+========================================================= -->
+
+<div id="updateOverlay" class="welcome-overlay">
+
+<div class="welcome-box update-box">
+
+<button
+    class="welcome-close"
+    onclick="closeUpdatePopup()"
+    title="Sluiten"
+>
+<svg fill="none"
+     stroke="currentColor"
+     stroke-width="2"
+     stroke-linecap="round"
+     stroke-linejoin="round">
+    <use href="#close"></use>
+</svg>
+</button>
+
+<div
+    id="updateVersion"
+    class="update-version"
+></div>
+
+<h2 id="updateTitle"></h2>
+
+<div
+    id="updateNotes"
+    class="update-notes"
+></div>
+
+<div class="welcome-actions">
+
+<button
+    class="welcome-primary"
+    onclick="closeUpdatePopup()"
+>
+Begrepen
 </button>
 
 </div>
@@ -7617,7 +7906,7 @@ Website
 
 <div class="modal-box">
 
-<h2>
+<h2 id="huiswerkModalTitle">
 Huiswerk toevoegen
 </h2>
 
@@ -7664,7 +7953,20 @@ Deadline
 
 </div>
 
-<div class="modal-actions">
+<div
+    id="huiswerkModalActions"
+    class="modal-actions"
+>
+
+<button
+    id="huiswerkDeleteButton"
+    class="modal-delete"
+    style="display:none"
+>
+    Verwijderen
+</button>
+
+<div class="modal-actions-right">
 
 <button
     class="modal-cancel"
@@ -7675,10 +7977,88 @@ Deadline
 
 <button
     class="modal-save"
-    onclick="addHuiswerk()"
+    onclick="saveHuiswerk()"
 >
     Opslaan
 </button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- =========================================================
+     DEADLINE AANPASSEN MODAL
+========================================================= -->
+
+<div
+    id="deadlineModal"
+    class="modal"
+>
+
+<div class="modal-box">
+
+<h2>
+Deadline aanpassen
+</h2>
+
+<div class="modal-field">
+
+<label for="deadlineEditTitle">
+Titel
+</label>
+
+<input
+    id="deadlineEditTitle"
+    type="text"
+    maxlength="120"
+>
+
+</div>
+
+<div class="modal-field">
+
+<label for="deadlineEditDate">
+Datum
+</label>
+
+<input
+    id="deadlineEditDate"
+    type="date"
+>
+
+</div>
+
+<div class="modal-actions with-delete">
+
+<button
+    id="deadlineDeleteButton"
+    class="modal-delete"
+>
+    Verwijderen
+</button>
+
+<div class="modal-actions-right">
+
+<button
+    class="modal-cancel"
+    onclick="closeDeadlineModal()"
+>
+    Annuleren
+</button>
+
+<button
+    class="modal-save"
+    onclick="saveDeadlineEdit()"
+>
+    Opslaan
+</button>
+
+</div>
 
 </div>
 
@@ -8014,7 +8394,6 @@ let roosterLessons = [];
 let agendaSelectedDate = null;
 let agendaEvents = [];
 
-let suggestions = [];
 
 let notificationSettings = null;
 let dueReminders = [];
@@ -8836,6 +9215,258 @@ function showAllCards() {
 
 
 /* =========================================================
+   UPDATEMELDING
+
+   Na elke update ziet iedereen één keer wat er nieuw is. De
+   nieuwste gepubliceerde melding uit app_updates wordt
+   vergeleken met last_seen_version in user_settings.
+
+   Nieuwe gebruikers krijgen de rondleiding en geen
+   updatemelding: voor hen is alles nieuw.
+========================================================= */
+
+let latestUpdate = null;
+
+
+async function loadLatestUpdate() {
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("app_updates")
+            .select("version, title, notes, created_at")
+            .eq("published", true)
+            .order("created_at", {
+                ascending:false
+            })
+            .limit(1)
+            .maybeSingle();
+
+    if (error) {
+
+        /* Bestaat de tabel nog niet, dan is er gewoon geen
+           melding. De rest van de site werkt door. */
+
+        console.error(
+            "Updatemelding laden:",
+            error
+        );
+
+        latestUpdate = null;
+
+        return;
+    }
+
+    latestUpdate = data || null;
+}
+
+
+/* Regels die met een streepje beginnen worden een lijst,
+   de rest een alinea. Alles gaat via textContent, dus een
+   melding kan nooit code in de pagina zetten. */
+
+function renderUpdateNotes(container, notes) {
+
+    container.innerHTML = "";
+
+    let list = null;
+
+    String(notes || "")
+        .split(/\r?\n/)
+        .forEach(raw => {
+
+            const line = raw.trim();
+
+            if (!line) {
+
+                list = null;
+
+                return;
+            }
+
+            const bullet =
+                line.match(/^[-*•]\s+(.*)$/);
+
+            if (bullet) {
+
+                if (!list) {
+
+                    list =
+                        document.createElement("ul");
+
+                    container.appendChild(list);
+
+                }
+
+                const item =
+                    document.createElement("li");
+
+                item.textContent = bullet[1];
+
+                list.appendChild(item);
+
+                return;
+            }
+
+            list = null;
+
+            const paragraph =
+                document.createElement("p");
+
+            paragraph.textContent = line;
+
+            container.appendChild(paragraph);
+
+        });
+}
+
+
+function showUpdatePopup() {
+
+    if (!latestUpdate) {
+        return;
+    }
+
+    document.getElementById(
+        "updateVersion"
+    ).textContent =
+        "Versie " + latestUpdate.version;
+
+    document.getElementById(
+        "updateTitle"
+    ).textContent =
+        latestUpdate.title || "Wat is er nieuw";
+
+    renderUpdateNotes(
+        document.getElementById("updateNotes"),
+        latestUpdate.notes
+    );
+
+    document
+        .getElementById("updateOverlay")
+        .classList.add("show");
+}
+
+
+function maybeShowUpdate() {
+
+    if (!latestUpdate || !userSettings) {
+        return;
+    }
+
+    if (!userSettings.onboarding_done) {
+
+        markUpdateSeen();
+
+        return;
+    }
+
+    if (
+        userSettings.last_seen_version ===
+        latestUpdate.version
+    ) {
+        return;
+    }
+
+    showUpdatePopup();
+}
+
+
+async function closeUpdatePopup() {
+
+    document
+        .getElementById("updateOverlay")
+        .classList.remove("show");
+
+    await markUpdateSeen();
+}
+
+
+/* Los opgeslagen en niet via saveUserSettings. Mocht de
+   kolom ontbreken, dan mislukt alleen dit en blijven alle
+   andere instellingen gewoon werken. */
+
+async function markUpdateSeen() {
+
+    if (!latestUpdate || !userSettings) {
+        return;
+    }
+
+    if (
+        userSettings.last_seen_version ===
+        latestUpdate.version
+    ) {
+        return;
+    }
+
+    userSettings.last_seen_version =
+        latestUpdate.version;
+
+    const user =
+        await getCurrentUser();
+
+    if (!user) {
+        return;
+    }
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("user_settings")
+            .upsert(
+                {
+                    user_id:user.id,
+                    last_seen_version:latestUpdate.version
+                },
+                {
+                    onConflict:"user_id"
+                }
+            );
+
+    if (error) {
+
+        console.error(
+            "Gezien-versie opslaan:",
+            error
+        );
+
+    }
+}
+
+
+function renderAboutPanel() {
+
+    const version =
+        document.getElementById("aboutVersion");
+
+    const button =
+        document.getElementById("aboutWhatsNewButton");
+
+    if (!version || !button) {
+        return;
+    }
+
+    if (latestUpdate) {
+
+        version.textContent =
+            "Versie " + latestUpdate.version;
+
+        button.style.display = "";
+
+    } else {
+
+        version.textContent = "Versie onbekend";
+
+        button.style.display = "none";
+
+    }
+}
+
+
+/* =========================================================
    WELKOM EN RONDLEIDING
 
    De welkomstboodschap verschijnt één keer, bij de eerste
@@ -8858,7 +9489,7 @@ const tourSteps =
         {
             target:"#shortcutsPanel",
             title:"Snelkoppelingen",
-            text:"Zet hier links naar sites die je vaak nodig hebt, zoals Magister of je schoolmail. Met de plusknop voeg je er een toe."
+            text:"Zet hier links naar sites die je vaak nodig hebt, zoals Magister of je schoolmail. Via Bewerken voeg je er een toe of haal je er een weg."
         },
         {
             target:"#notificationBellButton",
@@ -9197,6 +9828,17 @@ document.addEventListener(
         if (event.key === "Escape" && tourActive) {
 
             endTour();
+
+        }
+
+        if (
+            event.key === "Escape" &&
+            document
+                .getElementById("updateOverlay")
+                .classList.contains("show")
+        ) {
+
+            closeUpdatePopup();
 
         }
 
@@ -10068,6 +10710,8 @@ function renderCardVisibilityOptions() {
 
 function renderSettingsPage() {
 
+    renderAboutPanel();
+
     renderAccentOptions();
 
     renderCardVisibilityOptions();
@@ -10141,7 +10785,8 @@ async function loadAllData() {
         loadNotificationSettings(),
         loadTrackerCategories(),
         loadTrackerGoals(),
-        loadRoosterLessons()
+        loadRoosterLessons(),
+        loadLatestUpdate()
     ]);
 
     renderQuickStats();
@@ -10150,6 +10795,8 @@ async function loadAllData() {
        rondleiding lege blokken uit. */
 
     maybeShowWelcome();
+
+    maybeShowUpdate();
 
     /* Het rooster op de achtergrond bijwerken. Gaat dat mis,
        dan blijft het laatst opgehaalde rooster staan. */
@@ -11404,30 +12051,14 @@ function renderDeadlines() {
         main.appendChild(title);
         main.appendChild(date);
 
-        const deleteButton =
-            document.createElement("button");
-
-        deleteButton.className =
-            "delete-deadline";
-
-        deleteButton.title =
-            "Deadline verwijderen";
-
-        deleteButton.innerHTML = `
-            <svg fill="none"
-                 stroke="currentColor"
-                 stroke-width="1.8"
-                 stroke-linecap="round"
-                 stroke-linejoin="round">
-                <use href="#trash"></use>
-            </svg>
-        `;
-
-        deleteButton.onclick =
-            () =>
-                deleteDeadline(
-                    deadline.id
-                );
+        const editButton =
+            createEditButton(
+                "Deadline aanpassen",
+                () =>
+                    openDeadlineModal(
+                        deadline
+                    )
+            );
 
         item.appendChild(
             checkbox
@@ -11438,7 +12069,7 @@ function renderDeadlines() {
         );
 
         item.appendChild(
-            deleteButton
+            editButton
         );
 
         list.appendChild(
@@ -11476,6 +12107,198 @@ async function toggleDeadline(
 
         return;
     }
+
+    await loadDeadlines();
+}
+
+
+/* =========================================================
+   AANPASSEN EN VERWIJDEREN — GEDEELD
+========================================================= */
+
+function createEditButton(title, onClick, small) {
+
+    const button =
+        document.createElement("button");
+
+    button.type = "button";
+
+    button.className =
+        "edit-item-button" +
+        (
+            small
+                ? " small"
+                : ""
+        );
+
+    button.title = title;
+
+    button.setAttribute(
+        "aria-label",
+        title
+    );
+
+    button.innerHTML = `
+        <svg fill="none"
+             stroke="currentColor"
+             stroke-width="1.8"
+             stroke-linecap="round"
+             stroke-linejoin="round">
+            <use href="#pencil"></use>
+        </svg>
+    `;
+
+    button.onclick = onClick;
+
+    return button;
+}
+
+
+/* Verwijderen in twee stappen. De eerste klik zet de knop
+   scherp, pas een tweede klik binnen vier seconden voert het
+   uit. Werkt ook in de app op je telefoon, waar een
+   confirm-venster onhandig is. */
+
+function armDeleteButton(button, action) {
+
+    clearTimeout(button.disarmTimer);
+
+    button.classList.remove("armed");
+
+    button.textContent = "Verwijderen";
+
+    button.onclick =
+        () => {
+
+            if (!button.classList.contains("armed")) {
+
+                button.classList.add("armed");
+
+                button.textContent = "Zeker weten?";
+
+                button.disarmTimer =
+                    setTimeout(
+                        () => {
+
+                            button.classList.remove("armed");
+
+                            button.textContent = "Verwijderen";
+
+                        },
+                        4000
+                    );
+
+                return;
+            }
+
+            clearTimeout(button.disarmTimer);
+
+            action();
+
+        };
+}
+
+
+/* =========================================================
+   DEADLINES — AANPASSEN
+========================================================= */
+
+let editingDeadlineId = null;
+
+
+function openDeadlineModal(deadline) {
+
+    editingDeadlineId = deadline.id;
+
+    document.getElementById(
+        "deadlineEditTitle"
+    ).value = deadline.title;
+
+    document.getElementById(
+        "deadlineEditDate"
+    ).value = deadline.deadline_date;
+
+    armDeleteButton(
+        document.getElementById(
+            "deadlineDeleteButton"
+        ),
+        async () => {
+
+            const id = editingDeadlineId;
+
+            closeDeadlineModal();
+
+            await deleteDeadline(id);
+
+        }
+    );
+
+    document
+        .getElementById("deadlineModal")
+        .classList.add("show");
+}
+
+
+function closeDeadlineModal() {
+
+    editingDeadlineId = null;
+
+    document
+        .getElementById("deadlineModal")
+        .classList.remove("show");
+}
+
+
+async function saveDeadlineEdit() {
+
+    const title =
+        document.getElementById(
+            "deadlineEditTitle"
+        ).value.trim();
+
+    const date =
+        document.getElementById(
+            "deadlineEditDate"
+        ).value;
+
+    if (!title || !date) {
+
+        alert(
+            "Vul een titel en een datum in."
+        );
+
+        return;
+    }
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("deadlines")
+            .update({
+                title:title,
+                deadline_date:date
+            })
+            .eq(
+                "id",
+                editingDeadlineId
+            );
+
+    if (error) {
+
+        console.error(
+            "Deadline aanpassen:",
+            error
+        );
+
+        alert(
+            "De deadline kon niet worden aangepast."
+        );
+
+        return;
+    }
+
+    closeDeadlineModal();
 
     await loadDeadlines();
 }
@@ -11561,7 +12384,42 @@ async function loadHuiswerk() {
 }
 
 
+let editingHuiswerkId = null;
+
+
+/* Hetzelfde venster doet toevoegen en aanpassen. Bij
+   aanpassen komt er een verwijderknop bij. */
+
+function setHuiswerkModalMode(editing) {
+
+    document.getElementById(
+        "huiswerkModalTitle"
+    ).textContent =
+        editing
+            ? "Huiswerk aanpassen"
+            : "Huiswerk toevoegen";
+
+    document.getElementById(
+        "huiswerkDeleteButton"
+    ).style.display =
+        editing
+            ? ""
+            : "none";
+
+    document.getElementById(
+        "huiswerkModalActions"
+    ).classList.toggle(
+        "with-delete",
+        editing
+    );
+}
+
+
 function openHuiswerkModal() {
+
+    editingHuiswerkId = null;
+
+    setHuiswerkModalMode(false);
 
     document
         .getElementById(
@@ -11577,7 +12435,118 @@ function openHuiswerkModal() {
 }
 
 
+function openHuiswerkEdit(item) {
+
+    editingHuiswerkId = item.id;
+
+    setHuiswerkModalMode(true);
+
+    document.getElementById(
+        "huiswerkSubject"
+    ).value = item.subject;
+
+    document.getElementById(
+        "huiswerkTask"
+    ).value = item.task;
+
+    document.getElementById(
+        "huiswerkDate"
+    ).value = item.deadline_date;
+
+    armDeleteButton(
+        document.getElementById(
+            "huiswerkDeleteButton"
+        ),
+        async () => {
+
+            const id = editingHuiswerkId;
+
+            closeHuiswerkModal();
+
+            await deleteHuiswerk(id);
+
+        }
+    );
+
+    document
+        .getElementById(
+            "huiswerkModal"
+        )
+        .classList.add("show");
+}
+
+
+async function saveHuiswerk() {
+
+    if (!editingHuiswerkId) {
+
+        await addHuiswerk();
+
+        return;
+    }
+
+    const subject =
+        document.getElementById(
+            "huiswerkSubject"
+        ).value.trim();
+
+    const task =
+        document.getElementById(
+            "huiswerkTask"
+        ).value.trim();
+
+    const date =
+        document.getElementById(
+            "huiswerkDate"
+        ).value;
+
+    if (!subject || !task || !date) {
+
+        alert(
+            "Vul een vak, het huiswerk en een deadline in."
+        );
+
+        return;
+    }
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("huiswerk")
+            .update({
+                subject:subject,
+                task:task,
+                deadline_date:date
+            })
+            .eq(
+                "id",
+                editingHuiswerkId
+            );
+
+    if (error) {
+
+        console.error(
+            "Huiswerk aanpassen:",
+            error
+        );
+
+        alert(
+            "Het huiswerk kon niet worden aangepast."
+        );
+
+        return;
+    }
+
+    closeHuiswerkModal();
+
+    await loadHuiswerk();
+}
+
+
 function closeHuiswerkModal() {
+
+    editingHuiswerkId = null;
 
     document
         .getElementById(
@@ -11780,30 +12749,14 @@ function renderHuiswerk() {
         main.appendChild(task);
         main.appendChild(date);
 
-        const deleteButton =
-            document.createElement("button");
-
-        deleteButton.className =
-            "delete-huiswerk";
-
-        deleteButton.title =
-            "Huiswerk verwijderen";
-
-        deleteButton.innerHTML = `
-            <svg fill="none"
-                 stroke="currentColor"
-                 stroke-width="1.8"
-                 stroke-linecap="round"
-                 stroke-linejoin="round">
-                <use href="#trash"></use>
-            </svg>
-        `;
-
-        deleteButton.onclick =
-            () =>
-                deleteHuiswerk(
-                    item.id
-                );
+        const editButton =
+            createEditButton(
+                "Huiswerk aanpassen",
+                () =>
+                    openHuiswerkEdit(
+                        item
+                    )
+            );
 
         el.appendChild(
             checkbox
@@ -11814,7 +12767,7 @@ function renderHuiswerk() {
         );
 
         el.appendChild(
-            deleteButton
+            editButton
         );
 
         list.appendChild(
@@ -11858,14 +12811,6 @@ async function toggleHuiswerk(
 
 
 async function deleteHuiswerk(id) {
-
-    if (
-        !confirm(
-            "Dit huiswerk verwijderen?"
-        )
-    ) {
-        return;
-    }
 
     const {
         error
@@ -14095,6 +15040,8 @@ function openGoalModal() {
         return;
     }
 
+    setGoalModalMode(false);
+
     const select =
         document.getElementById(
             "goalCategorySelect"
@@ -14159,7 +15106,150 @@ function openGoalModal() {
 }
 
 
+let editingGoalId = null;
+
+
+/* Hetzelfde venster doet een nieuw doel en een bestaand
+   doel. Bij aanpassen ligt het type vast en komt er een
+   verwijderknop bij. */
+
+function setGoalModalMode(editing) {
+
+    if (!editing) {
+
+        editingGoalId = null;
+
+    }
+
+    document.getElementById(
+        "goalModalTitle"
+    ).textContent =
+        editing
+            ? "Doel aanpassen"
+            : "Nieuw doel";
+
+    document.getElementById(
+        "goalSaveButton"
+    ).textContent =
+        editing
+            ? "Opslaan"
+            : "Toevoegen";
+
+    document.getElementById(
+        "goalDeleteButton"
+    ).style.display =
+        editing
+            ? ""
+            : "none";
+
+    document.getElementById(
+        "goalModalActions"
+    ).classList.toggle(
+        "with-delete",
+        editing
+    );
+
+    document.getElementById(
+        "goalTypeLockedHint"
+    ).style.display =
+        editing
+            ? ""
+            : "none";
+
+    [
+        "goalTypeCheckboxOption",
+        "goalTypeNumberOption"
+    ].forEach(id => {
+
+        document
+            .getElementById(id)
+            .classList.toggle(
+                "locked",
+                editing
+            );
+
+    });
+}
+
+
+function openGoalEdit(goal) {
+
+    /* Eerst het gewone venster openen, dat vult ook de
+       categorieën. Daarna alles overschrijven met het doel. */
+
+    openGoalModal();
+
+    editingGoalId = goal.id;
+
+    setGoalModalMode(true);
+
+    document.getElementById(
+        "goalCategorySelect"
+    ).value = goal.categoryId;
+
+    document.getElementById(
+        "goalLabelInput"
+    ).value = goal.label;
+
+    document.getElementById(
+        "goalUnitInput"
+    ).value = goal.unit || "";
+
+    const targetInput =
+        document.getElementById(
+            "goalTargetInput"
+        );
+
+    /* Zo overschrijft de standaardwaarde de echte eis niet. */
+
+    targetInput.dataset.touched = "1";
+
+    setGoalType(goal.type);
+
+    goalSelectedDays =
+        new Set(goal.days || []);
+
+    setGoalFrequency(goal.frequency);
+
+    renderGoalDayPicker();
+
+    setGoalSpecialBehavior(
+        goal.specialWeekBehavior || "same"
+    );
+
+    targetInput.value =
+        goal.weeklyTarget;
+
+    document.getElementById(
+        "goalSpecialTargetInput"
+    ).value =
+        goal.specialWeekTarget === null ||
+        goal.specialWeekTarget === undefined
+            ? ""
+            : goal.specialWeekTarget;
+
+    updateGoalTargetDefault();
+
+    armDeleteButton(
+        document.getElementById(
+            "goalDeleteButton"
+        ),
+        async () => {
+
+            const id = editingGoalId;
+
+            closeGoalModal();
+
+            await deleteTrackerGoal(id);
+
+        }
+    );
+}
+
+
 function closeGoalModal() {
+
+    editingGoalId = null;
 
     document
         .getElementById(
@@ -14447,33 +15537,56 @@ async function saveGoal() {
         return;
     }
 
+    const fields = {
+        category_id:categoryId,
+        label:label,
+        frequency:goalFrequency,
+        days:Array.from(goalSelectedDays),
+        unit:unit || null,
+        weekly_target:weeklyTarget,
+        special_week_behavior:goalSpecialBehavior,
+        special_week_target:specialWeekTarget
+    };
+
+    /* Het type wordt alleen bij een nieuw doel opgeslagen.
+       Bij aanpassen ligt het vast. */
+
+    const query =
+        editingGoalId
+            ? supabaseClient
+                .from("tracker_goals")
+                .update(fields)
+                .eq("id", editingGoalId)
+            : supabaseClient
+                .from("tracker_goals")
+                .insert(
+                    Object.assign(
+                        {
+                            user_id:user.id,
+                            type:goalType
+                        },
+                        fields
+                    )
+                );
+
     const {
         error
     } =
-        await supabaseClient
-            .from("tracker_goals")
-            .insert({
-                user_id:user.id,
-                category_id:categoryId,
-                label:label,
-                type:goalType,
-                frequency:goalFrequency,
-                days:Array.from(goalSelectedDays),
-                unit:unit || null,
-                weekly_target:weeklyTarget,
-                special_week_behavior:goalSpecialBehavior,
-                special_week_target:specialWeekTarget
-            });
+        await query;
 
     if (error) {
 
         console.error(
-            "Doel toevoegen:",
+            editingGoalId
+                ? "Doel aanpassen:"
+                : "Doel toevoegen:",
             error
         );
 
         alert(
-            "Het doel kon niet worden toegevoegd."
+            editingGoalId
+                ? "Het doel kon niet worden aangepast."
+                : "Het doel kon niet worden toegevoegd."
         );
 
         return;
@@ -14730,8 +15843,32 @@ function renderTrackerDayChecklist() {
             label.textContent =
                 goal.label;
 
-            text.appendChild(
+            /* Het potlood staat bij de naam, ver weg van het
+               vinkje. Een misser opent hooguit een venster. */
+
+            const labelRow =
+                document.createElement("div");
+
+            labelRow.className =
+                "checklist-label-row";
+
+            labelRow.appendChild(
                 label
+            );
+
+            labelRow.appendChild(
+                createEditButton(
+                    "Doel aanpassen",
+                    () =>
+                        openGoalEdit(
+                            goal
+                        ),
+                    true
+                )
+            );
+
+            text.appendChild(
+                labelRow
             );
 
             if (trackerWeekSpecial && goal.specialWeekBehavior === "different") {
@@ -14852,28 +15989,6 @@ function renderTrackerDayChecklist() {
                 );
 
             }
-
-            const deleteButton =
-                document.createElement("button");
-
-            deleteButton.className =
-                "delete-goal-button";
-
-            deleteButton.title =
-                "Doel verwijderen";
-
-            deleteButton.innerHTML =
-                '<svg fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#trash"></use></svg>';
-
-            deleteButton.onclick =
-                () =>
-                    deleteTrackerGoal(
-                        goal.id
-                    );
-
-            controls.appendChild(
-                deleteButton
-            );
 
             row.appendChild(
                 controls
@@ -17051,23 +18166,10 @@ async function deleteAgendaEvent(id) {
    SUGGESTIES
 ========================================================= */
 
+/* Ingestuurde suggesties lees je in de beheerpagina op
+   /admin, niet meer hier. */
+
 function resetSuggestionsView() {
-
-    document.getElementById(
-        "suggestionLockPanel"
-    ).style.display = "block";
-
-    document.getElementById(
-        "suggestionContentPanel"
-    ).style.display = "none";
-
-    document.getElementById(
-        "suggestionPasswordInput"
-    ).value = "";
-
-    document.getElementById(
-        "suggestionError"
-    ).classList.remove("show");
 
     document.getElementById(
         "suggestionSuccess"
@@ -17145,198 +18247,6 @@ async function submitSuggestion() {
             success.classList.remove("show"),
         4000
     );
-}
-
-
-function unlockSuggestions() {
-
-    const passwordInput =
-        document.getElementById(
-            "suggestionPasswordInput"
-        );
-
-    const error =
-        document.getElementById(
-            "suggestionError"
-        );
-
-    if (passwordInput.value !== "2791") {
-
-        error.classList.add(
-            "show"
-        );
-
-        passwordInput.value = "";
-        passwordInput.focus();
-
-        return;
-    }
-
-    error.classList.remove(
-        "show"
-    );
-
-    document.getElementById(
-        "suggestionLockPanel"
-    ).style.display = "none";
-
-    document.getElementById(
-        "suggestionContentPanel"
-    ).style.display = "block";
-
-    loadSuggestions();
-}
-
-
-async function loadSuggestions() {
-
-    const {
-        data,
-        error
-    } =
-        await supabaseClient
-            .from("suggestions")
-            .select("*")
-            .order("created_at", {
-                ascending:false
-            });
-
-    if (error) {
-
-        console.error(
-            "Suggesties laden:",
-            error
-        );
-
-        return;
-    }
-
-    suggestions =
-        data || [];
-
-    renderSuggestionList();
-}
-
-
-function renderSuggestionList() {
-
-    const list =
-        document.getElementById(
-            "suggestionList"
-        );
-
-    list.innerHTML = "";
-
-    if (!suggestions.length) {
-
-        list.innerHTML =
-            '<div class="empty-state">Nog geen suggesties binnengekomen.</div>';
-
-        return;
-    }
-
-    suggestions.forEach(suggestion => {
-
-        const item =
-            document.createElement("div");
-
-        item.className =
-            "suggestion-item";
-
-        const top =
-            document.createElement("div");
-
-        top.className =
-            "suggestion-item-top";
-
-        const meta =
-            document.createElement("div");
-
-        meta.className =
-            "suggestion-item-meta";
-
-        meta.textContent =
-            (suggestion.user_email || "Onbekend account") +
-            " — " +
-            formatDeadlineDate(
-                suggestion.created_at.slice(0, 10)
-            );
-
-        top.appendChild(
-            meta
-        );
-
-        const deleteButton =
-            document.createElement("button");
-
-        deleteButton.className =
-            "delete-suggestion-button";
-
-        deleteButton.title =
-            "Suggestie verwijderen";
-
-        deleteButton.innerHTML =
-            '<svg fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#trash"></use></svg>';
-
-        deleteButton.onclick =
-            () =>
-                deleteSuggestion(
-                    suggestion.id
-                );
-
-        top.appendChild(
-            deleteButton
-        );
-
-        item.appendChild(
-            top
-        );
-
-        const message =
-            document.createElement("div");
-
-        message.className =
-            "suggestion-item-message";
-
-        message.textContent =
-            suggestion.message;
-
-        item.appendChild(
-            message
-        );
-
-        list.appendChild(
-            item
-        );
-
-    });
-}
-
-
-async function deleteSuggestion(id) {
-
-    const {
-        error
-    } =
-        await supabaseClient
-            .from("suggestions")
-            .delete()
-            .eq(
-                "id",
-                id
-            );
-
-    if (error) {
-
-        console.error(
-            "Suggestie verwijderen:",
-            error
-        );
-
-        return;
-    }
-
-    await loadSuggestions();
 }
 
 
@@ -18478,7 +19388,7 @@ function renderShortcuts() {
         list.innerHTML = `
             <div class="empty-shortcuts">
                 Nog geen snelkoppelingen.
-                Gebruik + om een website toe te voegen.
+                Klik op Bewerken en dan op + om een website toe te voegen.
             </div>
         `;
 
@@ -18587,6 +19497,25 @@ function renderShortcuts() {
 
         list.appendChild(item);
     });
+}
+
+
+function toggleShortcutsEditing() {
+
+    const panel =
+        document.getElementById(
+            "shortcutsPanel"
+        );
+
+    const editing =
+        panel.classList.toggle("editing");
+
+    document.getElementById(
+        "shortcutsEditButton"
+    ).textContent =
+        editing
+            ? "Klaar"
+            : "Bewerken";
 }
 
 
@@ -18850,24 +19779,6 @@ document
                 event.key === "Enter"
             ) {
                 addAgendaEvent();
-            }
-
-        }
-    );
-
-
-document
-    .getElementById(
-        "suggestionPasswordInput"
-    )
-    .addEventListener(
-        "keydown",
-        event => {
-
-            if (
-                event.key === "Enter"
-            ) {
-                unlockSuggestions();
             }
 
         }
@@ -19164,7 +20075,7 @@ document
             if (
                 event.key === "Enter"
             ) {
-                addHuiswerk();
+                saveHuiswerk();
             }
 
         }
