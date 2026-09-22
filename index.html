@@ -5557,6 +5557,218 @@ main {
         width:auto;
     }
 }
+
+/* =========================================================
+   NOTITIES — OPMAAK
+========================================================= */
+
+.note-editor {
+    min-width:0;
+}
+
+.note-toolbar {
+    max-width:100%;
+    display:flex;
+    align-items:center;
+    gap:4px;
+    margin-bottom:8px;
+    padding:5px;
+    border:1px solid var(--border);
+    border-radius:8px;
+    background:var(--light);
+    overflow-x:auto;
+    scrollbar-width:none;
+}
+
+.note-toolbar::-webkit-scrollbar {
+    display:none;
+}
+
+.note-toolbar.disabled {
+    opacity:.45;
+    pointer-events:none;
+}
+
+.note-tool {
+    flex-shrink:0;
+    min-width:36px;
+    height:34px;
+    padding:0 8px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    border:1px solid transparent;
+    border-radius:6px;
+    background:none;
+    color:var(--anthracite);
+    font-size:15px;
+}
+
+.note-tool.wide {
+    font-size:13px;
+    font-weight:700;
+}
+
+.note-tool svg {
+    width:18px;
+    height:18px;
+}
+
+.note-tool:hover {
+    background:var(--white);
+    border-color:var(--border);
+}
+
+.note-tool.active {
+    background:var(--white);
+    border-color:var(--olive);
+    color:var(--accent-text);
+}
+
+.note-tool-mark {
+    padding:0 5px;
+    border-radius:3px;
+    background:#ffe98a;
+    color:#343833;
+    font-weight:700;
+}
+
+.note-tool-sep {
+    flex-shrink:0;
+    width:1px;
+    height:20px;
+    margin:0 3px;
+    background:var(--border);
+}
+
+.note-rich {
+    overflow:auto;
+    white-space:pre-wrap;
+    overflow-wrap:break-word;
+    cursor:text;
+}
+
+.note-rich[contenteditable="false"] {
+    cursor:default;
+    background:var(--light);
+}
+
+.note-rich {
+    position:relative;
+}
+
+.note-rich.is-empty::before {
+    content:attr(data-placeholder);
+    position:absolute;
+    top:16px;
+    left:16px;
+    color:var(--muted);
+    pointer-events:none;
+}
+
+.note-rich p,
+.note-rich div {
+    margin:0;
+}
+
+.note-rich h2 {
+    margin:.7em 0 .25em;
+    font-size:21px;
+    line-height:1.3;
+}
+
+.note-rich h3 {
+    margin:.6em 0 .2em;
+    font-size:17px;
+    line-height:1.35;
+}
+
+.note-rich > :first-child {
+    margin-top:0;
+}
+
+.note-rich ul,
+.note-rich ol {
+    margin:.2em 0;
+    padding-left:26px;
+}
+
+.note-rich mark {
+    padding:0 1px;
+    border-radius:2px;
+    background:#ffe98a;
+    color:#343833;
+}
+
+[data-theme="dark"] .note-rich mark {
+    background:#6b5a1f;
+    color:#f6eed6;
+}
+
+.note-rich ul.checklist {
+    list-style:none;
+    padding-left:2px;
+}
+
+.note-rich ul.checklist li {
+    position:relative;
+    padding-left:28px;
+}
+
+.note-rich ul.checklist li::before {
+    content:"";
+    position:absolute;
+    left:0;
+    top:.25em;
+    width:17px;
+    height:17px;
+    box-sizing:border-box;
+    border:1.8px solid var(--muted);
+    border-radius:4px;
+    background:var(--white);
+    cursor:pointer;
+}
+
+.note-rich ul.checklist li[data-checked="true"]::before {
+    border-color:var(--olive);
+    background:var(--olive) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5'/%3E%3C/svg%3E") center / 13px no-repeat;
+}
+
+.note-rich ul.checklist li[data-checked="true"] {
+    color:var(--muted);
+    text-decoration:line-through;
+}
+
+.note-save-status {
+    color:var(--muted);
+    font-size:13px;
+    font-weight:600;
+}
+
+.note-save-status.saved {
+    color:var(--accent-text);
+}
+
+.note-save-status.error {
+    color:var(--danger);
+}
+
+@media(max-width:620px) {
+
+    .note-title {
+        flex:none;
+    }
+
+    .note-toolbar {
+        flex-wrap:wrap;
+        overflow-x:visible;
+    }
+
+    .note-footer-status-center,
+    .note-save-status {
+        text-align:center;
+    }
+}
 </style>
 </head>
 
@@ -6779,6 +6991,7 @@ Je hebt alle blokken verborgen. Zet ze weer aan bij
     type="text"
     placeholder="Titel van de notitie"
     maxlength="100"
+    oninput="noteContentChanged()"
 >
 
 <button
@@ -6798,11 +7011,122 @@ Je hebt alle blokken verborgen. Zet ze weer aan bij
 
 </div>
 
-<textarea
+<div
+    id="noteToolbar"
+    class="note-toolbar"
+    role="toolbar"
+    aria-label="Opmaak"
+>
+<button
+    type="button"
+    class="note-tool"
+    data-cmd="bold"
+    title="Vet (Ctrl+B)"
+    aria-label="Vet (Ctrl+B)"
+    onmousedown="event.preventDefault()"
+    onclick="noteFormat('bold')"
+><b>B</b></button>
+<button
+    type="button"
+    class="note-tool"
+    data-cmd="italic"
+    title="Schuin (Ctrl+I)"
+    aria-label="Schuin (Ctrl+I)"
+    onmousedown="event.preventDefault()"
+    onclick="noteFormat('italic')"
+><i>I</i></button>
+<button
+    type="button"
+    class="note-tool"
+    data-cmd="underline"
+    title="Onderstreept (Ctrl+U)"
+    aria-label="Onderstreept (Ctrl+U)"
+    onmousedown="event.preventDefault()"
+    onclick="noteFormat('underline')"
+><u>U</u></button>
+<span class="note-tool-sep"></span>
+<button
+    type="button"
+    class="note-tool wide"
+    data-cmd="h2"
+    title="Kop"
+    aria-label="Kop"
+    onmousedown="event.preventDefault()"
+    onclick="noteFormat('h2')"
+>Kop</button>
+<button
+    type="button"
+    class="note-tool wide"
+    data-cmd="h3"
+    title="Subkop"
+    aria-label="Subkop"
+    onmousedown="event.preventDefault()"
+    onclick="noteFormat('h3')"
+>Subkop</button>
+<span class="note-tool-sep"></span>
+<button
+    type="button"
+    class="note-tool"
+    data-cmd="ul"
+    title="Opsomming"
+    aria-label="Opsomming"
+    onmousedown="event.preventDefault()"
+    onclick="noteFormat('ul')"
+><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1"/><circle cx="4.5" cy="12" r="1"/><circle cx="4.5" cy="18" r="1"/></svg></button>
+<button
+    type="button"
+    class="note-tool"
+    data-cmd="ol"
+    title="Genummerde lijst"
+    aria-label="Genummerde lijst"
+    onmousedown="event.preventDefault()"
+    onclick="noteFormat('ol')"
+><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 6h10M10 12h10M10 18h10"/><path d="M4 4.5l1.5-1v5"/><path d="M3.5 13.5c0-1 .8-1.5 1.5-1.5s1.5.5 1.5 1.3c0 1.2-3 2.2-3 3.7h3"/></svg></button>
+<button
+    type="button"
+    class="note-tool"
+    data-cmd="check"
+    title="Afvinklijst"
+    aria-label="Afvinklijst"
+    onmousedown="event.preventDefault()"
+    onclick="noteFormat('check')"
+><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="6" height="6" rx="1.5"/><path d="M4.5 16.5l1.5 1.5 3-3.5"/><path d="M12 7h9M12 17h9"/></svg></button>
+<button
+    type="button"
+    class="note-tool"
+    data-cmd="mark"
+    title="Markeren"
+    aria-label="Markeren"
+    onmousedown="event.preventDefault()"
+    onclick="noteFormat('mark')"
+><span class="note-tool-mark">A</span></button>
+<span class="note-tool-sep"></span>
+<button
+    type="button"
+    class="note-tool"
+    data-cmd="clear"
+    title="Opmaak wissen"
+    aria-label="Opmaak wissen"
+    onmousedown="event.preventDefault()"
+    onclick="noteFormat('clear')"
+><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 5h11M11.5 5L8 19"/><path d="M15 14l5 5M20 14l-5 5"/></svg></button>
+</div>
+
+<div
     id="noteContent"
-    class="note-content"
-    placeholder="Begin met typen..."
-></textarea>
+    class="note-content note-rich"
+    contenteditable="true"
+    role="textbox"
+    aria-multiline="true"
+    aria-label="Inhoud van de notitie"
+    spellcheck="true"
+    data-placeholder="Begin met typen..."
+    oninput="onNoteInput(event)"
+    onpaste="onNotePaste(event)"
+    onclick="onNoteClick(event)"
+    onkeydown="onNoteKeydown(event)"
+    onfocus="ensureNoteBlock()"
+></div>
 
 <div class="note-editor-footer">
 
@@ -6815,10 +7139,9 @@ Je hebt alle blokken verborgen. Zet ze weer aan bij
 
 <span
     id="noteSavedMessage"
-    class="saved-message"
->
-    Opgeslagen
-</span>
+    class="note-save-status"
+    aria-live="polite"
+></span>
 
 </div>
 
@@ -10475,6 +10798,8 @@ async function showWebsite() {
 
 async function logout() {
 
+    await flushNoteSave();
+
     /* Dit apparaat afmelden voor push, zodat er geen
        meldingen meer binnenkomen na het uitloggen. */
     await removePushSubscription();
@@ -10596,6 +10921,13 @@ supabaseClient.auth.onAuthStateChange(
 ========================================================= */
 
 function openPage(pageId) {
+
+    /* Weg van de notities: niet opgeslagen tekst meteen
+       bewaren. */
+
+    if (pageId !== "notesPage") {
+        flushNoteSave();
+    }
 
     document
         .querySelectorAll(".page")
@@ -12884,6 +13216,11 @@ function getDaysUntil(
 
 async function loadNotes() {
 
+    /* Eerst wachten tot lopende opslagen klaar zijn, anders
+       komt er een oudere versie terug in de editor. */
+
+    await noteSaveChain;
+
     const {
         data,
         error
@@ -12920,6 +13257,13 @@ async function loadNotes() {
     }
 
     renderNotesList();
+
+    /* Nog niet opgeslagen typwerk niet overschrijven. */
+
+    if (noteDirty && notes.some(note => note.id === currentNoteId)) {
+        return;
+    }
+
     renderCurrentNote();
 }
 
@@ -12983,6 +13327,12 @@ function renderNotesList() {
 
         button.onclick = () => {
 
+            if (note.id === currentNoteId) {
+                return;
+            }
+
+            flushNoteSave();
+
             currentNoteId =
                 note.id;
 
@@ -12996,6 +13346,8 @@ function renderNotesList() {
 
 
 async function createNote() {
+
+    await flushNoteSave();
 
     const user =
         await getCurrentUser();
@@ -13065,16 +13417,36 @@ function renderCurrentNote() {
             "deleteNoteButton"
         );
 
+    const toolbar =
+        document.getElementById(
+            "noteToolbar"
+        );
+
     const note =
         notes.find(
             note =>
                 note.id === currentNoteId
         );
 
+    clearTimeout(noteSaveTimer);
+
+    noteDirty = false;
+
+    setNoteStatus("");
+
     if (!note) {
 
         title.value = "";
-        content.value = "";
+        content.innerHTML = "";
+
+        content.setAttribute("contenteditable", "false");
+
+        content.classList.add("is-empty");
+
+        content.dataset.placeholder =
+            "Maak een notitie met de knop +";
+
+        toolbar.classList.add("disabled");
 
         deleteButton.style.display =
             "none";
@@ -13085,19 +13457,44 @@ function renderCurrentNote() {
     deleteButton.style.display =
         "flex";
 
+    content.setAttribute("contenteditable", "true");
+
+    content.dataset.placeholder =
+        "Begin met typen...";
+
+    toolbar.classList.remove("disabled");
+
     title.value =
         note.title || "";
 
-    content.value =
-        note.content || "";
+    content.innerHTML =
+        noteContentToHtml(note.content) || "<p><br></p>";
+
+    updateNotePlaceholder();
+
+    updateNoteToolbarState();
 }
 
 
-async function saveCurrentNote() {
+/* De titel en inhoud worden meteen vastgelegd, zodat je al
+   verder kunt typen of van notitie kunt wisselen terwijl het
+   opslaan nog bezig is. Opslagen lopen netjes na elkaar. */
+
+let noteSavesPending = 0;
+
+function saveCurrentNote() {
+
+    clearTimeout(noteSaveTimer);
 
     if (currentNoteId === null) {
-        return;
+        return noteSaveChain;
     }
+
+    const noteId =
+        currentNoteId;
+
+    const version =
+        noteEditVersion;
 
     const title =
         document
@@ -13106,54 +13503,89 @@ async function saveCurrentNote() {
             .trim();
 
     const content =
-        document
-            .getElementById("noteContent")
-            .value;
+        getNoteEditorContent();
 
-    const {
-        error
-    } =
-        await supabaseClient
-            .from("notes")
-            .update({
-                title:title,
-                content:content,
-                updated_at:
-                    new Date().toISOString()
-            })
-            .eq(
-                "id",
-                currentNoteId
-            );
+    noteDirty = false;
 
-    if (error) {
+    noteSavesPending++;
 
-        console.error(
-            "Notitie opslaan:",
-            error
-        );
+    setNoteStatus("Opslaan...");
 
-        alert(
-            "De notitie kon niet worden opgeslagen."
-        );
+    noteSaveChain =
+        noteSaveChain.then(async () => {
 
-        return;
-    }
+            const updatedAt =
+                new Date().toISOString();
 
-    await loadNotes();
+            const {
+                error
+            } =
+                await supabaseClient
+                    .from("notes")
+                    .update({
+                        title:title,
+                        content:content,
+                        updated_at:updatedAt
+                    })
+                    .eq(
+                        "id",
+                        noteId
+                    );
 
-    const message =
-        document.getElementById(
-            "noteSavedMessage"
-        );
+            noteSavesPending--;
 
-    message.classList.add("show");
+            if (error) {
 
-    setTimeout(() => {
+                console.error(
+                    "Notitie opslaan:",
+                    error
+                );
 
-        message.classList.remove("show");
+                if (noteId === currentNoteId) {
 
-    },1800);
+                    noteDirty = true;
+
+                    setNoteStatus(
+                        "Opslaan mislukt. Je tekst staat er nog, probeer het opnieuw.",
+                        "error"
+                    );
+
+                } else {
+
+                    setNoteStatus(
+                        "Een andere notitie kon niet worden opgeslagen.",
+                        "error"
+                    );
+
+                }
+
+                return;
+            }
+
+            const note =
+                notes.find(
+                    item => item.id === noteId
+                );
+
+            if (note) {
+                note.title = title;
+                note.content = content;
+                note.updated_at = updatedAt;
+            }
+
+            if (
+                noteId === currentNoteId &&
+                version === noteEditVersion &&
+                !noteDirty
+            ) {
+                setNoteStatus("Opgeslagen", "saved");
+            }
+
+            renderNotesList();
+
+        });
+
+    return noteSaveChain;
 }
 
 
@@ -13170,6 +13602,14 @@ async function deleteCurrentNote() {
     ) {
         return;
     }
+
+    /* Niet meer opslaan wat toch weg moet. */
+
+    clearTimeout(noteSaveTimer);
+
+    noteDirty = false;
+
+    await noteSaveChain;
 
     const {
         error
@@ -13200,6 +13640,1027 @@ async function deleteCurrentNote() {
 
     await loadNotes();
 }
+
+
+/* =========================================================
+   NOTITIES — OPMAAK
+
+   De inhoud staat als HTML in dezelfde kolom content. Een
+   notitie met opmaak begint met een herkenningsteken, oude
+   notities zonder dat teken zijn gewone tekst en worden bij
+   het openen omgezet.
+
+   Alles wat de editor in gaat, gaat eerst door een filter
+   met een vaste lijst toegestane onderdelen. Geplakte tekst
+   van een website kan zo nooit code of plaatjes meenemen.
+========================================================= */
+
+const NOTE_RICH_MARKER = "<!--rt-->";
+
+const noteTagMap =
+    {
+        P:"p",
+        BR:"br",
+        B:"strong",
+        STRONG:"strong",
+        I:"em",
+        EM:"em",
+        U:"u",
+        H1:"h2",
+        H2:"h2",
+        H3:"h3",
+        H4:"h3",
+        UL:"ul",
+        OL:"ol",
+        LI:"li",
+        MARK:"mark"
+    };
+
+/* Blokken die een eigen regel worden, maar verder geen
+   opmaak houden. */
+
+const noteBlockTags =
+    new Set([
+        "DIV", "SECTION", "ARTICLE", "BLOCKQUOTE", "PRE",
+        "HEADER", "FOOTER", "ADDRESS", "FIGURE", "H5", "H6",
+        "TR", "DT", "DD"
+    ]);
+
+/* Deze worden met inhoud en al weggegooid. */
+
+const noteDropTags =
+    new Set([
+        "SCRIPT", "STYLE", "TEMPLATE", "IFRAME", "OBJECT",
+        "EMBED", "NOSCRIPT", "SVG", "MATH", "IMG", "VIDEO",
+        "AUDIO", "CANVAS", "INPUT", "BUTTON", "SELECT",
+        "TEXTAREA", "LINK", "META", "HEAD", "TITLE"
+    ]);
+
+const noteBlockOutput =
+    new Set(["p", "h2", "h3", "ul", "ol", "li"]);
+
+let noteSaveTimer = null;
+let noteDirty = false;
+let noteEditVersion = 0;
+let noteSaveChain = Promise.resolve();
+
+/* Enter maakt een nieuwe alinea (p), geen losse div. */
+
+document.execCommand(
+    "defaultParagraphSeparator",
+    false,
+    "p"
+);
+
+
+function escapeNoteText(text) {
+
+    return String(text)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+}
+
+
+function plainTextToNoteHtml(text) {
+
+    if (!text) {
+        return "";
+    }
+
+    return String(text)
+        .split(/\r?\n/)
+        .map(line =>
+            line
+                ? "<p>" + escapeNoteText(line) + "</p>"
+                : "<p><br></p>"
+        )
+        .join("");
+}
+
+
+function sanitizeNoteNodes(source, target) {
+
+    source.childNodes.forEach(node => {
+
+        if (node.nodeType === Node.TEXT_NODE) {
+
+            target.appendChild(
+                document.createTextNode(node.nodeValue)
+            );
+
+            return;
+        }
+
+        if (node.nodeType !== Node.ELEMENT_NODE) {
+            return;
+        }
+
+        const tag =
+            node.tagName.toUpperCase();
+
+        if (noteDropTags.has(tag)) {
+            return;
+        }
+
+        let mapped =
+            noteTagMap[tag];
+
+        /* Opmaak uit Google Docs en Word zit vaak in een span
+           met een style. Die zetten we om naar gewone tags. */
+
+        if (tag === "SPAN" || tag === "FONT") {
+
+            const style =
+                node.style || {};
+
+            let wrapper = target;
+
+            const wrap =
+                name => {
+
+                    const element =
+                        document.createElement(name);
+
+                    wrapper.appendChild(element);
+
+                    wrapper = element;
+                };
+
+            const weight =
+                String(style.fontWeight || "");
+
+            if (weight === "bold" || Number(weight) >= 600) {
+                wrap("strong");
+            }
+
+            if (style.fontStyle === "italic") {
+                wrap("em");
+            }
+
+            if (String(style.textDecoration || style.textDecorationLine || "").includes("underline")) {
+                wrap("u");
+            }
+
+            sanitizeNoteNodes(node, wrapper);
+
+            return;
+        }
+
+        if (!mapped && noteBlockTags.has(tag)) {
+
+            /* Een blok met blokken erin: alleen de inhoud
+               houden, anders ontstaan alinea's in alinea's. */
+
+            const hasBlockChild =
+                Array.from(node.children).some(child =>
+                    noteBlockTags.has(child.tagName.toUpperCase()) ||
+                    noteBlockOutput.has(noteTagMap[child.tagName.toUpperCase()])
+                );
+
+            mapped =
+                hasBlockChild
+                    ? null
+                    : "p";
+        }
+
+        if (!mapped) {
+
+            sanitizeNoteNodes(node, target);
+
+            return;
+        }
+
+        const element =
+            document.createElement(mapped);
+
+        if (mapped === "ul" && node.classList.contains("checklist")) {
+            element.className = "checklist";
+        }
+
+        if (mapped === "li" && node.getAttribute("data-checked") === "true") {
+            element.setAttribute("data-checked", "true");
+        }
+
+        if (mapped !== "br") {
+            sanitizeNoteNodes(node, element);
+        }
+
+        /* Een lege regel zonder br heeft geen hoogte en is dan
+           niet meer aan te klikken. */
+
+        if (
+            (mapped === "p" || mapped === "h2" || mapped === "h3" || mapped === "li") &&
+            !element.firstChild
+        ) {
+            element.appendChild(document.createElement("br"));
+        }
+
+        target.appendChild(element);
+
+    });
+}
+
+
+/* Een template wordt niet uitgevoerd: scripts draaien niet en
+   plaatjes laden niet, ook niet tijdens het filteren. */
+
+function sanitizeNoteHtml(html) {
+
+    const template =
+        document.createElement("template");
+
+    template.innerHTML =
+        String(html || "");
+
+    const output =
+        document.createElement("div");
+
+    sanitizeNoteNodes(
+        template.content,
+        output
+    );
+
+    return output.innerHTML;
+}
+
+
+function noteContentToHtml(content) {
+
+    const text =
+        String(content || "");
+
+    if (text.startsWith(NOTE_RICH_MARKER)) {
+        return sanitizeNoteHtml(
+            text.slice(NOTE_RICH_MARKER.length)
+        );
+    }
+
+    return plainTextToNoteHtml(text);
+}
+
+
+/* De editor heeft altijd minstens één alinea. Zonder alinea
+   wordt de eerste regel losse tekst en werkt een kop of lijst
+   daar niet goed. */
+
+function ensureNoteBlock() {
+
+    const editor =
+        document.getElementById("noteContent");
+
+    if (editor.getAttribute("contenteditable") !== "true") {
+        return;
+    }
+
+    const hasBlock =
+        Array.from(editor.childNodes).some(node =>
+            node.nodeType === Node.ELEMENT_NODE &&
+            node.tagName !== "BR"
+        );
+
+    if (hasBlock) {
+        return;
+    }
+
+    const paragraph =
+        document.createElement("p");
+
+    while (editor.firstChild) {
+        paragraph.appendChild(editor.firstChild);
+    }
+
+    if (!paragraph.textContent) {
+        paragraph.innerHTML = "<br>";
+    }
+
+    editor.appendChild(paragraph);
+
+    if (document.activeElement === editor) {
+
+        const range =
+            document.createRange();
+
+        range.selectNodeContents(paragraph);
+
+        range.collapse(false);
+
+        const selection =
+            window.getSelection();
+
+        selection.removeAllRanges();
+
+        selection.addRange(range);
+
+    }
+}
+
+
+function updateNotePlaceholder() {
+
+    const editor =
+        document.getElementById("noteContent");
+
+    editor.classList.toggle(
+        "is-empty",
+        noteEditorIsEmpty(editor) &&
+        editor.querySelectorAll("p, h2, h3").length <= 1 &&
+        !editor.querySelector("h2, h3")
+    );
+}
+
+
+function noteEditorIsEmpty(editor) {
+
+    return (
+        !editor.textContent.trim() &&
+        !editor.querySelector("li")
+    );
+}
+
+
+function getNoteEditorContent() {
+
+    const editor =
+        document.getElementById("noteContent");
+
+    if (noteEditorIsEmpty(editor)) {
+        return "";
+    }
+
+    return NOTE_RICH_MARKER +
+        sanitizeNoteHtml(editor.innerHTML);
+}
+
+
+/* =========================================================
+   NOTITIES — WERKBALK
+========================================================= */
+
+function noteSelectionElement() {
+
+    const editor =
+        document.getElementById("noteContent");
+
+    const selection =
+        window.getSelection();
+
+    if (!selection || !selection.rangeCount) {
+        return null;
+    }
+
+    let node =
+        selection.anchorNode;
+
+    if (node && node.nodeType === Node.TEXT_NODE) {
+        node = node.parentNode;
+    }
+
+    if (!node || !editor.contains(node)) {
+        return null;
+    }
+
+    return node;
+}
+
+
+function closestInNote(selector) {
+
+    const editor =
+        document.getElementById("noteContent");
+
+    const element =
+        noteSelectionElement();
+
+    if (!element) {
+        return null;
+    }
+
+    const found =
+        element.closest(selector);
+
+    return found && editor.contains(found) && found !== editor
+        ? found
+        : null;
+}
+
+
+function unwrapNoteElement(element) {
+
+    const parent =
+        element.parentNode;
+
+    while (element.firstChild) {
+        parent.insertBefore(element.firstChild, element);
+    }
+
+    parent.removeChild(element);
+}
+
+
+/* Markeren gaat per stukje tekst. Zo blijft de opbouw van
+   alinea's en lijsten heel, ook als je over meerdere regels
+   selecteert. */
+
+function toggleNoteMark() {
+
+    const existing =
+        closestInNote("mark");
+
+    const selection =
+        window.getSelection();
+
+    if (existing && selection.isCollapsed) {
+
+        unwrapNoteElement(existing);
+
+        return;
+    }
+
+    if (!selection.rangeCount || selection.isCollapsed) {
+        return;
+    }
+
+    const range =
+        selection.getRangeAt(0);
+
+    const editor =
+        document.getElementById("noteContent");
+
+    /* Staat de selectie al helemaal in markeringen, dan
+       halen we ze weg. */
+
+    const root =
+        range.commonAncestorContainer.nodeType === Node.TEXT_NODE
+            ? range.commonAncestorContainer.parentNode
+            : range.commonAncestorContainer;
+
+    const walker =
+        document.createTreeWalker(
+            root,
+            NodeFilter.SHOW_TEXT
+        );
+
+    const textNodes = [];
+
+    if (root.nodeType === Node.TEXT_NODE) {
+        textNodes.push(root);
+    }
+
+    while (walker.nextNode()) {
+
+        const node =
+            walker.currentNode;
+
+        if (range.intersectsNode(node) && node.nodeValue.length) {
+            textNodes.push(node);
+        }
+
+    }
+
+    const inMark =
+        node => {
+
+            const mark =
+                node.parentNode.closest("mark");
+
+            return mark && editor.contains(mark)
+                ? mark
+                : null;
+        };
+
+    if (textNodes.length && textNodes.every(inMark)) {
+
+        new Set(textNodes.map(inMark)).forEach(unwrapNoteElement);
+
+        return;
+    }
+
+    let first = null;
+    let last = null;
+
+    textNodes.forEach(node => {
+
+        if (inMark(node)) {
+            return;
+        }
+
+        let start =
+            node === range.startContainer
+                ? range.startOffset
+                : 0;
+
+        let end =
+            node === range.endContainer
+                ? range.endOffset
+                : node.nodeValue.length;
+
+        if (end <= start) {
+            return;
+        }
+
+        let target = node;
+
+        if (start > 0) {
+            target = target.splitText(start);
+            end -= start;
+        }
+
+        if (end < target.nodeValue.length) {
+            target.splitText(end);
+        }
+
+        const mark =
+            document.createElement("mark");
+
+        target.parentNode.insertBefore(mark, target);
+
+        mark.appendChild(target);
+
+        first = first || mark;
+        last = mark;
+
+    });
+
+    if (first) {
+
+        const newRange =
+            document.createRange();
+
+        newRange.setStart(first.firstChild, 0);
+        newRange.setEnd(last.lastChild, last.lastChild.nodeValue.length);
+
+        selection.removeAllRanges();
+        selection.addRange(newRange);
+
+    }
+}
+
+
+function noteFormat(command) {
+
+    const editor =
+        document.getElementById("noteContent");
+
+    if (editor.getAttribute("contenteditable") !== "true") {
+        return;
+    }
+
+    if (!noteSelectionElement()) {
+        editor.focus();
+    }
+
+    ensureNoteBlock();
+
+    if (command === "bold" || command === "italic" || command === "underline") {
+
+        document.execCommand(command);
+
+    } else if (command === "h2" || command === "h3") {
+
+        const current =
+            closestInNote("h2, h3");
+
+        document.execCommand(
+            "formatBlock",
+            false,
+            current && current.tagName.toLowerCase() === command
+                ? "p"
+                : command
+        );
+
+    } else if (command === "ul") {
+
+        const list =
+            closestInNote("ul");
+
+        if (list && list.classList.contains("checklist")) {
+
+            list.classList.remove("checklist");
+
+            list
+                .querySelectorAll(":scope > li")
+                .forEach(li => li.removeAttribute("data-checked"));
+
+        } else {
+
+            document.execCommand("insertUnorderedList");
+
+        }
+
+    } else if (command === "ol") {
+
+        document.execCommand("insertOrderedList");
+
+    } else if (command === "check") {
+
+        const list =
+            closestInNote("ul, ol");
+
+        if (list && list.classList.contains("checklist")) {
+
+            document.execCommand("insertUnorderedList");
+
+        } else {
+
+            if (!list || list.tagName === "OL") {
+                document.execCommand("insertUnorderedList");
+            }
+
+            const newList =
+                closestInNote("ul");
+
+            if (newList) {
+                newList.classList.add("checklist");
+            }
+
+        }
+
+    } else if (command === "mark") {
+
+        toggleNoteMark();
+
+    } else if (command === "clear") {
+
+        document.execCommand("removeFormat");
+
+        const mark =
+            closestInNote("mark");
+
+        if (mark) {
+            unwrapNoteElement(mark);
+        }
+
+        if (closestInNote("h2, h3")) {
+            document.execCommand("formatBlock", false, "p");
+        }
+
+    }
+
+    updateNotePlaceholder();
+
+    noteContentChanged();
+
+    updateNoteToolbarState();
+}
+
+
+function updateNoteToolbarState() {
+
+    const toolbar =
+        document.getElementById("noteToolbar");
+
+    if (!toolbar) {
+        return;
+    }
+
+    const inside =
+        Boolean(noteSelectionElement());
+
+    const heading =
+        inside
+            ? closestInNote("h2, h3")
+            : null;
+
+    const list =
+        inside
+            ? closestInNote("ul, ol")
+            : null;
+
+    const state = {
+        bold:inside && document.queryCommandState("bold"),
+        italic:inside && document.queryCommandState("italic"),
+        underline:inside && document.queryCommandState("underline"),
+        h2:Boolean(heading && heading.tagName === "H2"),
+        h3:Boolean(heading && heading.tagName === "H3"),
+        ul:Boolean(list && list.tagName === "UL" && !list.classList.contains("checklist")),
+        ol:Boolean(list && list.tagName === "OL"),
+        check:Boolean(list && list.classList.contains("checklist")),
+        mark:Boolean(inside && closestInNote("mark"))
+    };
+
+    toolbar
+        .querySelectorAll(".note-tool")
+        .forEach(button => {
+
+            const active =
+                Boolean(state[button.dataset.cmd]);
+
+            button.classList.toggle("active", active);
+
+            button.setAttribute(
+                "aria-pressed",
+                active ? "true" : "false"
+            );
+
+        });
+}
+
+
+document.addEventListener(
+    "selectionchange",
+    () => {
+
+        if (document.getElementById("notesPage").classList.contains("active")) {
+            updateNoteToolbarState();
+        }
+
+    }
+);
+
+
+/* =========================================================
+   NOTITIES — TYPEN, PLAKKEN EN AFVINKEN
+========================================================= */
+
+function onNoteInput(event) {
+
+    const editor =
+        document.getElementById("noteContent");
+
+    /* Na Enter in een afvinklijst is de nieuwe regel nog niet
+       afgevinkt, ook al was de vorige dat wel. */
+
+    if (event && event.inputType === "insertParagraph") {
+
+        const item =
+            closestInNote("ul.checklist > li");
+
+        if (item && !item.textContent.trim()) {
+            item.removeAttribute("data-checked");
+        }
+
+        /* Markeren loopt niet door naar een nieuwe regel. */
+
+        const block =
+            closestInNote("p, li, h2, h3");
+
+        if (block && !block.textContent && block.querySelector("mark")) {
+
+            block.innerHTML = "<br>";
+
+            const range =
+                document.createRange();
+
+            range.setStart(block, 0);
+
+            range.collapse(true);
+
+            const selection =
+                window.getSelection();
+
+            selection.removeAllRanges();
+
+            selection.addRange(range);
+
+        }
+
+    }
+
+    ensureNoteBlock();
+
+    updateNotePlaceholder();
+
+    noteContentChanged();
+}
+
+
+/* Typ je direct achter gemarkeerde tekst, dan komt de nieuwe
+   tekst buiten de markering. Net als bij een markeerstift. */
+
+document
+    .getElementById("noteContent")
+    .addEventListener(
+        "beforeinput",
+        event => {
+
+            if (event.inputType !== "insertText" || !event.data) {
+                return;
+            }
+
+            const selection =
+                window.getSelection();
+
+            if (!selection.rangeCount || !selection.isCollapsed) {
+                return;
+            }
+
+            const mark =
+                closestInNote("mark");
+
+            if (!mark) {
+                return;
+            }
+
+            const rest =
+                document.createRange();
+
+            rest.selectNodeContents(mark);
+
+            rest.setStart(
+                selection.anchorNode,
+                selection.anchorOffset
+            );
+
+            if (rest.toString().length) {
+                return;
+            }
+
+            event.preventDefault();
+
+            const text =
+                document.createTextNode(event.data);
+
+            mark.parentNode.insertBefore(
+                text,
+                mark.nextSibling
+            );
+
+            const range =
+                document.createRange();
+
+            range.setStart(text, text.nodeValue.length);
+
+            range.collapse(true);
+
+            selection.removeAllRanges();
+
+            selection.addRange(range);
+
+            onNoteInput({});
+
+        }
+    );
+
+
+function onNotePaste(event) {
+
+    const data =
+        event.clipboardData;
+
+    if (!data) {
+        return;
+    }
+
+    event.preventDefault();
+
+    const html =
+        data.getData("text/html");
+
+    const clean =
+        html
+            ? sanitizeNoteHtml(html)
+            : plainTextToNoteHtml(data.getData("text/plain"));
+
+    if (clean) {
+        document.execCommand("insertHTML", false, clean);
+    }
+
+    noteContentChanged();
+}
+
+
+function onNoteClick(event) {
+
+    const item =
+        event.target.closest &&
+        event.target.closest("ul.checklist > li");
+
+    if (!item) {
+        return;
+    }
+
+    /* Alleen een klik op het vakje zelf vinkt af. */
+
+    const box =
+        item.getBoundingClientRect();
+
+    if (event.clientX - box.left > 24) {
+        return;
+    }
+
+    event.preventDefault();
+
+    if (item.getAttribute("data-checked") === "true") {
+        item.removeAttribute("data-checked");
+    } else {
+        item.setAttribute("data-checked", "true");
+    }
+
+    noteContentChanged();
+}
+
+
+function onNoteKeydown(event) {
+
+    /* Tab in een lijst: een niveau dieper of terug. */
+
+    if (event.key === "Tab" && closestInNote("li")) {
+
+        event.preventDefault();
+
+        document.execCommand(
+            event.shiftKey
+                ? "outdent"
+                : "indent"
+        );
+
+        noteContentChanged();
+
+        return;
+    }
+
+    /* Ctrl+S slaat meteen op in plaats van de pagina. */
+
+    if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "s") {
+
+        event.preventDefault();
+
+        saveCurrentNote();
+
+    }
+}
+
+
+/* =========================================================
+   NOTITIES — AUTOMATISCH OPSLAAN
+
+   Een seconde nadat je stopt met typen wordt de notitie
+   opgeslagen. Wissel je van notitie of pagina, dan meteen.
+========================================================= */
+
+function setNoteStatus(text, kind) {
+
+    const status =
+        document.getElementById("noteSavedMessage");
+
+    status.textContent = text || "";
+
+    status.className =
+        "note-save-status" +
+        (kind ? " " + kind : "");
+}
+
+
+function noteContentChanged() {
+
+    if (currentNoteId === null) {
+        return;
+    }
+
+    noteDirty = true;
+
+    noteEditVersion++;
+
+    setNoteStatus("Opslaan...");
+
+    clearTimeout(noteSaveTimer);
+
+    noteSaveTimer =
+        setTimeout(
+            saveCurrentNote,
+            1000
+        );
+}
+
+
+function flushNoteSave() {
+
+    if (noteDirty) {
+        saveCurrentNote();
+    }
+
+    return noteSaveChain;
+}
+
+
+document.addEventListener(
+    "visibilitychange",
+    () => {
+
+        if (document.visibilityState === "hidden") {
+            flushNoteSave();
+        }
+
+    }
+);
+
+
+window.addEventListener(
+    "beforeunload",
+    event => {
+
+        if (!noteDirty && !noteSavesPending) {
+            return;
+        }
+
+        flushNoteSave();
+
+        event.preventDefault();
+
+        event.returnValue = "";
+    }
+);
 
 
 /* =========================================================
