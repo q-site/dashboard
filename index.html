@@ -3392,6 +3392,29 @@ main {
     opacity:.5;
 }
 
+.notif-detail.off {
+    opacity:.45;
+    pointer-events:none;
+}
+
+.notif-time-row {
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-top:12px;
+    font-size:13.5px;
+    font-weight:600;
+}
+
+.notif-time-row select {
+    min-width:110px;
+    font-size:14px;
+}
+
+.notif-detail .notif-time-row:first-child {
+    margin-top:0;
+}
+
 /* TIJDELIJK — testknop pushnotificaties */
 .notif-test-button {
     height:40px;
@@ -8469,51 +8492,129 @@ Aantal open huiswerk en deadlines
 
 <div class="notif-setting-group">
 <h3>Deadlines</h3>
-<p>Wanneer wil je hieraan herinnerd worden?</p>
+<p>Op welke dagen en hoe laat wil je een herinnering?</p>
+
+<label class="notif-toggle-row">
+<input
+    id="deadlineNotifEnabled"
+    type="checkbox"
+    onchange="toggleNotifCategory('deadline', this.checked)"
+>
+Herinneringen voor deadlines
+</label>
+
+<div
+    id="deadlineNotifDetail"
+    class="notif-detail"
+>
 <div
     id="deadlineOffsetChips"
     class="offset-chip-row"
 ></div>
+
+<div class="notif-time-row">
+<label for="deadlineNotifTime">Om</label>
+<select
+    id="deadlineNotifTime"
+    class="notif-time-input"
+    onchange="saveNotifCategoryTime('deadline', this.value)"
+></select>
+</div>
+</div>
 </div>
 
 <div class="notif-setting-group">
 <h3>Huiswerk</h3>
-<p>Wanneer wil je hieraan herinnerd worden?</p>
+<p>Op welke dagen en hoe laat wil je een herinnering?</p>
+
+<label class="notif-toggle-row">
+<input
+    id="huiswerkNotifEnabled"
+    type="checkbox"
+    onchange="toggleNotifCategory('huiswerk', this.checked)"
+>
+Herinneringen voor huiswerk
+</label>
+
+<div
+    id="huiswerkNotifDetail"
+    class="notif-detail"
+>
 <div
     id="huiswerkOffsetChips"
     class="offset-chip-row"
 ></div>
+
+<div class="notif-time-row">
+<label for="huiswerkNotifTime">Om</label>
+<select
+    id="huiswerkNotifTime"
+    class="notif-time-input"
+    onchange="saveNotifCategoryTime('huiswerk', this.value)"
+></select>
+</div>
+</div>
 </div>
 
 <div class="notif-setting-group">
 <h3>Agenda-afspraken</h3>
-<p>Wanneer wil je hieraan herinnerd worden?</p>
+<p>Op welke dagen en hoe laat wil je een herinnering?</p>
+
+<label class="notif-toggle-row">
+<input
+    id="agendaNotifEnabled"
+    type="checkbox"
+    onchange="toggleNotifCategory('agenda', this.checked)"
+>
+Herinneringen voor afspraken
+</label>
+
+<div
+    id="agendaNotifDetail"
+    class="notif-detail"
+>
 <div
     id="agendaOffsetChips"
     class="offset-chip-row"
 ></div>
+
+<div class="notif-time-row">
+<label for="agendaNotifTime">Om</label>
+<select
+    id="agendaNotifTime"
+    class="notif-time-input"
+    onchange="saveNotifCategoryTime('agenda', this.value)"
+></select>
+</div>
+</div>
 </div>
 
 <div class="notif-setting-group">
 <h3>Doelen</h3>
-<p>Dagelijkse herinnering als je die dag je doelen nog niet hebt ingevuld.</p>
+<p>Elke dag een herinnering als je die dag je doelen nog niet hebt ingevuld.</p>
 
 <label class="notif-toggle-row">
 <input
-    id="goalsReminderEnabled"
+    id="goalsNotifEnabled"
     type="checkbox"
-    onchange="toggleGoalsReminderEnabled()"
+    onchange="toggleNotifCategory('goals', this.checked)"
 >
-Dagelijkse herinnering aan
+Dagelijkse herinnering voor doelen
 </label>
 
-<input
-    id="goalsReminderTimeInput"
-    class="notif-time-input"
-    type="time"
-    onchange="saveGoalsReminderTime()"
-    disabled
+<div
+    id="goalsNotifDetail"
+    class="notif-detail"
 >
+<div class="notif-time-row">
+<label for="goalsNotifTime">Om</label>
+<select
+    id="goalsNotifTime"
+    class="notif-time-input"
+    onchange="saveNotifCategoryTime('goals', this.value)"
+></select>
+</div>
+</div>
 </div>
 
 <div class="notif-setting-group">
@@ -25525,7 +25626,13 @@ function defaultNotificationSettings() {
         huiswerk_offsets:[3, 1, 0],
         agenda_offsets:[1, 0],
         goals_reminder_time:null,
-        browser_notifications_enabled:false
+        browser_notifications_enabled:false,
+        deadline_enabled:true,
+        huiswerk_enabled:true,
+        agenda_enabled:true,
+        deadline_time:"18:00",
+        huiswerk_time:"16:00",
+        agenda_time:"07:30"
     };
 }
 
@@ -25694,24 +25801,59 @@ async function saveNotificationSettings() {
         return;
     }
 
-    const {
+    const row = {
+        user_id:user.id,
+        deadline_offsets:notificationSettings.deadline_offsets,
+        huiswerk_offsets:notificationSettings.huiswerk_offsets,
+        agenda_offsets:notificationSettings.agenda_offsets,
+        goals_reminder_time:notificationSettings.goals_reminder_time,
+        browser_notifications_enabled:notificationSettings.browser_notifications_enabled
+    };
+
+    const extended =
+        Object.assign(
+            {},
+            row,
+            {
+                deadline_enabled:notifCategoryEnabled("deadline"),
+                huiswerk_enabled:notifCategoryEnabled("huiswerk"),
+                agenda_enabled:notifCategoryEnabled("agenda"),
+                deadline_time:notifCategoryTime("deadline"),
+                huiswerk_time:notifCategoryTime("huiswerk"),
+                agenda_time:notifCategoryTime("agenda")
+            }
+        );
+
+    let {
         error
     } =
         await supabaseClient
             .from("notification_settings")
             .upsert(
-                {
-                    user_id:user.id,
-                    deadline_offsets:notificationSettings.deadline_offsets,
-                    huiswerk_offsets:notificationSettings.huiswerk_offsets,
-                    agenda_offsets:notificationSettings.agenda_offsets,
-                    goals_reminder_time:notificationSettings.goals_reminder_time,
-                    browser_notifications_enabled:notificationSettings.browser_notifications_enabled
-                },
+                extended,
                 {
                     onConflict:"user_id"
                 }
             );
+
+    /* Staan de nieuwe kolommen nog niet in de database (SQL van
+       update 1.4 nog niet gedraaid), dan de rest wel opslaan. */
+
+    if (error && (error.code === "PGRST204" || /column/i.test(error.message || ""))) {
+
+        ({
+            error
+        } =
+            await supabaseClient
+                .from("notification_settings")
+                .upsert(
+                    row,
+                    {
+                        onConflict:"user_id"
+                    }
+                ));
+
+    }
 
     if (error) {
 
@@ -25739,7 +25881,7 @@ async function computeDueReminders() {
         .filter(deadline => !deadline.completed)
         .forEach(deadline => {
 
-            (settings.deadline_offsets || []).forEach(offset => {
+            (notifCategoryEnabled("deadline") ? (settings.deadline_offsets || []) : []).forEach(offset => {
 
                 if (
                     addDaysToDate(deadline.deadline_date, -offset) ===
@@ -25763,7 +25905,7 @@ async function computeDueReminders() {
         .filter(item => !item.completed)
         .forEach(item => {
 
-            (settings.huiswerk_offsets || []).forEach(offset => {
+            (notifCategoryEnabled("huiswerk") ? (settings.huiswerk_offsets || []) : []).forEach(offset => {
 
                 if (
                     addDaysToDate(item.deadline_date, -offset) ===
@@ -25785,7 +25927,7 @@ async function computeDueReminders() {
 
     agendaEvents.forEach(event => {
 
-        (settings.agenda_offsets || []).forEach(offset => {
+        (notifCategoryEnabled("agenda") ? (settings.agenda_offsets || []) : []).forEach(offset => {
 
             if (
                 addDaysToDate(event.event_date, -offset) ===
@@ -26044,46 +26186,175 @@ async function toggleOffset(
    MELDINGEN — DOELEN EN SYSTEEMMELDINGEN
 ========================================================= */
 
-async function toggleGoalsReminderEnabled() {
+/* Per onderdeel: aan of uit en hoe laat. De tijden gaan per
+   kwartier, want de server kijkt elk kwartier of er iets
+   verstuurd moet worden. Bij doelen betekent 'uit' dat er
+   geen tijd is ingesteld, net als voorheen. */
+
+const notifCategories =
+    {
+        deadline:{
+            enabledKey:"deadline_enabled",
+            timeKey:"deadline_time",
+            defaultTime:"18:00"
+        },
+        huiswerk:{
+            enabledKey:"huiswerk_enabled",
+            timeKey:"huiswerk_time",
+            defaultTime:"16:00"
+        },
+        agenda:{
+            enabledKey:"agenda_enabled",
+            timeKey:"agenda_time",
+            defaultTime:"07:30"
+        },
+        goals:{
+            enabledKey:null,
+            timeKey:"goals_reminder_time",
+            defaultTime:"20:00"
+        }
+    };
+
+const notifCategoryKeys =
+    Object.keys(notifCategories);
+
+
+/* 20:10 wordt 20:15. Oude tijden die niet op een kwartier
+   vallen, komen zo toch in de lijst. */
+
+function roundToQuarter(time) {
+
+    const match =
+        /^(\d{1,2}):(\d{2})/.exec(String(time || ""));
+
+    if (!match) {
+        return null;
+    }
+
+    let minutes =
+        Math.round(
+            (Number(match[1]) * 60 + Number(match[2])) / 15
+        ) * 15;
+
+    minutes =
+        Math.min(minutes, 23 * 60 + 45);
+
+    return (
+        String(Math.floor(minutes / 60)).padStart(2, "0") +
+        ":" +
+        String(minutes % 60).padStart(2, "0")
+    );
+}
+
+
+function notifCategoryEnabled(category) {
+
+    const config =
+        notifCategories[category];
+
+    const settings =
+        notificationSettings ||
+        defaultNotificationSettings();
+
+    if (!config.enabledKey) {
+        return Boolean(settings[config.timeKey]);
+    }
+
+    return settings[config.enabledKey] !== false;
+}
+
+
+function notifCategoryTime(category) {
+
+    const config =
+        notifCategories[category];
+
+    const settings =
+        notificationSettings ||
+        defaultNotificationSettings();
+
+    return roundToQuarter(settings[config.timeKey]) ||
+        config.defaultTime;
+}
+
+
+function renderNotifCategory(category) {
 
     const enabled =
-        document.getElementById(
-            "goalsReminderEnabled"
-        ).checked;
+        notifCategoryEnabled(category);
 
-    const timeInput =
+    document.getElementById(
+        category + "NotifEnabled"
+    ).checked = enabled;
+
+    document.getElementById(
+        category + "NotifDetail"
+    ).classList.toggle("off", !enabled);
+
+    const select =
         document.getElementById(
-            "goalsReminderTimeInput"
+            category + "NotifTime"
         );
 
-    timeInput.disabled = !enabled;
+    if (!select.options.length) {
 
-    if (!enabled) {
+        for (let minutes = 0; minutes < 24 * 60; minutes += 15) {
 
-        notificationSettings.goals_reminder_time = null;
+            const value =
+                String(Math.floor(minutes / 60)).padStart(2, "0") +
+                ":" +
+                String(minutes % 60).padStart(2, "0");
+
+            select.appendChild(
+                new Option(value, value)
+            );
+
+        }
+
+    }
+
+    select.value =
+        notifCategoryTime(category);
+
+    select.disabled = !enabled;
+}
+
+
+async function toggleNotifCategory(category, enabled) {
+
+    const config =
+        notifCategories[category];
+
+    if (config.enabledKey) {
+
+        notificationSettings[config.enabledKey] =
+            enabled;
+
+        /* De tijd vastleggen, zodat de server hem kent. */
+
+        notificationSettings[config.timeKey] =
+            notifCategoryTime(category);
 
     } else {
 
-        if (!timeInput.value) {
-            timeInput.value = "20:00";
-        }
-
-        notificationSettings.goals_reminder_time =
-            timeInput.value;
+        notificationSettings[config.timeKey] =
+            enabled
+                ? notifCategoryTime(category)
+                : null;
 
     }
+
+    renderNotifCategory(category);
 
     await saveNotificationSettings();
     await refreshDueReminders();
 }
 
 
-async function saveGoalsReminderTime() {
+async function saveNotifCategoryTime(category, value) {
 
-    notificationSettings.goals_reminder_time =
-        document.getElementById(
-            "goalsReminderTimeInput"
-        ).value;
+    notificationSettings[notifCategories[category].timeKey] =
+        roundToQuarter(value);
 
     await saveNotificationSettings();
     await refreshDueReminders();
@@ -26582,20 +26853,7 @@ async function initMeldingen() {
     renderOffsetChips("huiswerk");
     renderOffsetChips("agenda");
 
-    document.getElementById(
-        "goalsReminderEnabled"
-    ).checked =
-        !!notificationSettings.goals_reminder_time;
-
-    document.getElementById(
-        "goalsReminderTimeInput"
-    ).value =
-        notificationSettings.goals_reminder_time || "20:00";
-
-    document.getElementById(
-        "goalsReminderTimeInput"
-    ).disabled =
-        !notificationSettings.goals_reminder_time;
+    notifCategoryKeys.forEach(renderNotifCategory);
 
     document.getElementById(
         "browserNotificationsEnabled"
