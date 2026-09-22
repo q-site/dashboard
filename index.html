@@ -5035,6 +5035,528 @@ main {
         flex:1;
     }
 }
+
+/* =========================================================
+   VRIENDEN
+========================================================= */
+
+.dashboard-card {
+    position:relative;
+}
+
+.card-count-badge {
+    position:absolute;
+    top:18px;
+    right:18px;
+    min-width:22px;
+    height:22px;
+    padding:0 7px;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    border-radius:11px;
+    background:var(--danger);
+    color:#fff;
+    font-size:11.5px;
+    font-weight:700;
+}
+
+.card-count-badge.show {
+    display:inline-flex;
+}
+
+#vriendenPage .content-panel {
+    margin-bottom:18px;
+}
+
+.friend-panel-title {
+    font-size:16px;
+    margin-bottom:12px;
+}
+
+.friend-panel-hint {
+    color:var(--muted);
+    font-size:13px;
+    line-height:1.5;
+    margin-bottom:12px;
+}
+
+.friend-input-row {
+    display:flex;
+    gap:8px;
+}
+
+.friend-input {
+    flex:1;
+    min-width:0;
+    height:44px;
+    padding:0 13px;
+    border:1px solid var(--border);
+    border-radius:8px;
+    background:var(--white);
+    color:var(--anthracite);
+    font-size:15px;
+}
+
+.friend-input:focus {
+    outline:none;
+    border-color:var(--olive);
+}
+
+.friend-input.code {
+    text-transform:uppercase;
+    letter-spacing:2px;
+    font-weight:700;
+}
+
+.friend-input-row .primary-button {
+    height:44px;
+    padding:0 18px;
+    white-space:nowrap;
+}
+
+.friend-status {
+    min-height:18px;
+    margin-top:8px;
+    font-size:13px;
+    color:var(--muted);
+}
+
+.friend-status.ok {
+    color:var(--success);
+}
+
+.friend-status.error {
+    color:var(--danger);
+}
+
+.friend-code-box {
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:10px 14px;
+    padding:14px 16px;
+    border:1px dashed var(--olive);
+    border-radius:10px;
+    background:var(--badge-bg);
+}
+
+.friend-code {
+    font-size:24px;
+    font-weight:800;
+    letter-spacing:3px;
+    color:var(--accent-text);
+    font-variant-numeric:tabular-nums;
+}
+
+.friend-code-actions {
+    display:flex;
+    flex-wrap:wrap;
+    gap:7px;
+    margin-left:auto;
+}
+
+.friend-code-actions .secondary-button {
+    height:36px;
+    padding:0 12px;
+}
+
+.friend-share-grid {
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:4px 18px;
+}
+
+.friend-share-grid .notif-toggle-row {
+    margin:0;
+    padding:8px 0;
+}
+
+.friend-share-note {
+    margin-top:10px;
+    color:var(--muted);
+    font-size:12.5px;
+    line-height:1.5;
+}
+
+.friend-request {
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:10px 0;
+    border-top:1px solid var(--border);
+}
+
+.friend-request:first-of-type {
+    border-top:none;
+}
+
+.friend-request-name {
+    flex:1;
+    min-width:0;
+    font-weight:700;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+
+.friend-request-name small {
+    display:block;
+    color:var(--muted);
+    font-weight:500;
+    font-size:12px;
+}
+
+.friend-request .secondary-button,
+.friend-request .primary-button {
+    height:34px;
+    padding:0 12px;
+    font-size:13px;
+}
+
+.friend-small-danger {
+    height:34px;
+    padding:0 12px;
+    border:1px solid var(--border);
+    border-radius:8px;
+    background:var(--white);
+    color:var(--danger);
+    font-size:13px;
+    font-weight:600;
+}
+
+.friend-small-danger.armed {
+    border-color:var(--danger);
+    background:var(--danger);
+    color:#fff;
+}
+
+.leaderboard {
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+}
+
+.leaderboard-row {
+    display:grid;
+    grid-template-columns:30px minmax(0,1fr) auto;
+    align-items:center;
+    gap:4px 10px;
+}
+
+.leaderboard-rank {
+    width:28px;
+    height:28px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:50%;
+    background:var(--badge-bg);
+    color:var(--accent-text);
+    font-size:13px;
+    font-weight:800;
+}
+
+.leaderboard-row.first .leaderboard-rank {
+    background:var(--olive);
+    color:#fff;
+}
+
+.leaderboard-name {
+    font-weight:700;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+
+.leaderboard-row.me .leaderboard-name::after {
+    content:" (jij)";
+    color:var(--muted);
+    font-weight:500;
+}
+
+.leaderboard-time {
+    font-weight:700;
+    font-variant-numeric:tabular-nums;
+}
+
+.leaderboard-bar {
+    grid-column:2 / 4;
+    height:6px;
+    border-radius:3px;
+    background:var(--badge-bg);
+    overflow:hidden;
+}
+
+.leaderboard-bar div {
+    height:100%;
+    border-radius:3px;
+    background:var(--olive);
+}
+
+.friend-list {
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+.friend-card {
+    border:1px solid var(--border);
+    border-radius:10px;
+    background:var(--white);
+    overflow:hidden;
+}
+
+.friend-card-head {
+    width:100%;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:12px 14px;
+    border:none;
+    background:none;
+    color:var(--anthracite);
+    text-align:left;
+}
+
+.friend-avatar {
+    width:38px;
+    height:38px;
+    flex-shrink:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:50%;
+    background:var(--badge-bg);
+    color:var(--accent-text);
+    font-weight:800;
+    font-size:15px;
+}
+
+.friend-card-title {
+    flex:1;
+    min-width:0;
+}
+
+.friend-card-title strong {
+    display:block;
+    font-size:15px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+
+.friend-card-title small {
+    color:var(--muted);
+    font-size:12.5px;
+}
+
+.friend-chevron {
+    width:18px;
+    height:18px;
+    flex-shrink:0;
+    color:var(--muted);
+    transition:transform .2s;
+}
+
+.friend-card.open .friend-chevron {
+    transform:rotate(90deg);
+}
+
+.friend-card-body {
+    display:none;
+    padding:4px 14px 14px;
+    border-top:1px solid var(--border);
+}
+
+.friend-card.open .friend-card-body {
+    display:block;
+}
+
+.friend-section {
+    margin-top:12px;
+}
+
+.friend-section h4 {
+    margin-bottom:6px;
+    color:var(--muted);
+    font-size:11.5px;
+    font-weight:700;
+    letter-spacing:.6px;
+    text-transform:uppercase;
+}
+
+.friend-goal {
+    margin-bottom:8px;
+}
+
+.friend-goal-top {
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    font-size:13.5px;
+}
+
+.friend-goal-top span:last-child {
+    color:var(--muted);
+    white-space:nowrap;
+}
+
+.friend-goal-bar {
+    height:6px;
+    margin-top:4px;
+    border-radius:3px;
+    background:var(--badge-bg);
+    overflow:hidden;
+}
+
+.friend-goal-bar div {
+    height:100%;
+    background:var(--olive);
+}
+
+.friend-goal-bar div.reached {
+    background:var(--success);
+}
+
+.friend-goal-bar div.over {
+    background:var(--danger);
+}
+
+.friend-books {
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+}
+
+.friend-book {
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:13.5px;
+}
+
+.friend-book .book-cover {
+    width:34px;
+    height:50px;
+}
+
+.friend-book small {
+    display:block;
+    color:var(--muted);
+    font-size:12px;
+}
+
+.friend-stat-line {
+    font-size:13.5px;
+    line-height:1.6;
+}
+
+.friend-stat-line strong {
+    font-variant-numeric:tabular-nums;
+}
+
+.friend-cheer-row {
+    display:flex;
+    flex-wrap:wrap;
+    gap:7px;
+}
+
+.friend-cheer {
+    height:34px;
+    padding:0 12px;
+    border:1px solid var(--border);
+    border-radius:18px;
+    background:var(--white);
+    color:var(--anthracite);
+    font-size:13px;
+    font-weight:600;
+}
+
+.friend-cheer:hover {
+    border-color:var(--olive);
+}
+
+.friend-cheer.sent {
+    border-color:var(--olive);
+    background:var(--olive);
+    color:#fff;
+    cursor:default;
+}
+
+.friend-card-foot {
+    display:flex;
+    justify-content:flex-end;
+    margin-top:14px;
+}
+
+.cheer-list {
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+}
+
+.cheer-item {
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    gap:10px;
+    padding:8px 10px;
+    border-radius:8px;
+    background:var(--badge-bg);
+    font-size:13.5px;
+}
+
+.cheer-item.new {
+    background:var(--success-bg);
+}
+
+.cheer-item small {
+    color:var(--muted);
+    font-size:12px;
+    white-space:nowrap;
+}
+
+@media(max-width:620px) {
+
+    .friend-share-grid {
+        grid-template-columns:1fr;
+    }
+
+    .friend-input-row {
+        flex-direction:column;
+    }
+
+    .friend-input {
+        flex:none;
+        width:100%;
+    }
+
+    .friend-input-row .primary-button {
+        width:100%;
+    }
+
+    .friend-code-actions {
+        margin-left:0;
+        width:100%;
+    }
+
+    .friend-code-actions .secondary-button {
+        flex:1;
+    }
+
+    .friend-request {
+        flex-wrap:wrap;
+    }
+
+    .friend-request-name {
+        flex-basis:100%;
+    }
+
+    .friend-request .primary-button {
+        width:auto;
+    }
+}
 </style>
 </head>
 
@@ -6010,6 +6532,47 @@ Houd bij welke boeken je leest, wilt lezen en voor school gelezen hebt.
 <button
     class="card-button"
     onclick="openPage('leeslijstPage')"
+>
+    Openen
+
+    <svg fill="none"
+         stroke="currentColor"
+         stroke-width="1.8"
+         stroke-linecap="round"
+         stroke-linejoin="round">
+        <use href="#arrow-right"></use>
+    </svg>
+</button>
+
+</article>
+
+
+<article class="dashboard-card" data-card="vrienden">
+
+<span
+    id="friendsCardBadge"
+    class="card-count-badge"
+></span>
+
+<div class="card-icon">
+<svg fill="none"
+     stroke="currentColor"
+     stroke-width="1.8"
+     stroke-linecap="round"
+     stroke-linejoin="round">
+    <use href="#people"></use>
+</svg>
+</div>
+
+<h2>Vrienden</h2>
+
+<p>
+Voeg vrienden toe met een code, vergelijk je studietijd en moedig elkaar aan.
+</p>
+
+<button
+    class="card-button"
+    onclick="openPage('vriendenPage')"
 >
     Openen
 
@@ -7222,6 +7785,274 @@ Koppelen
 
 
 <!-- =========================================================
+     VRIENDEN
+========================================================= -->
+
+<section id="vriendenPage" class="page">
+
+<button
+    class="back-button"
+    onclick="openPage('homePage')"
+>
+    <svg fill="none"
+         stroke="currentColor"
+         stroke-width="1.8"
+         stroke-linecap="round"
+         stroke-linejoin="round">
+        <use href="#arrow-left"></use>
+    </svg>
+
+    Terug naar overzicht
+</button>
+
+<div class="page-header">
+<h1>Vrienden</h1>
+<p>Voeg vrienden toe, vergelijk je studietijd en moedig elkaar aan.</p>
+</div>
+
+<div
+    id="friendsUnavailable"
+    class="content-panel"
+    style="display:none"
+>
+<div class="empty-state">
+Vrienden kon niet geladen worden. Is de SQL van update 1.3 al gedraaid?
+</div>
+</div>
+
+
+<!-- Eerste keer: een naam kiezen -->
+
+<div
+    id="friendsSetupPanel"
+    class="content-panel"
+    style="display:none"
+>
+<h2 class="friend-panel-title">Kies je naam</h2>
+<p class="friend-panel-hint">
+Deze naam zien je vrienden. Je e-mailadres blijft verborgen. Daarna krijg je een eigen vriendcode.
+</p>
+<div class="friend-input-row">
+<input
+    id="friendsSetupName"
+    class="friend-input"
+    type="text"
+    maxlength="30"
+    placeholder="Bijvoorbeeld je voornaam"
+    autocomplete="nickname"
+    onkeydown="if (event.key === 'Enter') createFriendProfile()"
+>
+<button
+    class="primary-button"
+    onclick="createFriendProfile()"
+>
+    Aan de slag
+</button>
+</div>
+<div
+    id="friendsSetupStatus"
+    class="friend-status"
+></div>
+</div>
+
+
+<div
+    id="friendsMain"
+    style="display:none"
+>
+
+<div class="content-panel">
+
+<h2 class="friend-panel-title">Jouw vriendcode</h2>
+<p class="friend-panel-hint">
+Geef deze code aan iemand die je wilt toevoegen. Alleen wie jij accepteert, ziet wat je deelt.
+</p>
+
+<div class="friend-code-box">
+<span
+    id="friendCodeValue"
+    class="friend-code"
+></span>
+<div class="friend-code-actions">
+<button
+    id="friendCodeCopyButton"
+    class="secondary-button"
+    onclick="copyFriendCode()"
+>
+    Kopiëren
+</button>
+<button
+    id="friendCodeShareButton"
+    class="secondary-button"
+    style="display:none"
+    onclick="shareFriendCode()"
+>
+    Delen
+</button>
+<button
+    id="friendCodeNewButton"
+    class="secondary-button"
+>
+    Nieuwe code
+</button>
+</div>
+</div>
+
+<h2
+    class="friend-panel-title"
+    style="margin-top:22px"
+>
+    Vriend toevoegen
+</h2>
+
+<div class="friend-input-row">
+<input
+    id="friendCodeInput"
+    class="friend-input code"
+    type="text"
+    maxlength="12"
+    placeholder="Code van je vriend"
+    autocomplete="off"
+    autocapitalize="characters"
+    spellcheck="false"
+    onkeydown="if (event.key === 'Enter') sendFriendRequest()"
+>
+<button
+    class="primary-button"
+    onclick="sendFriendRequest()"
+>
+    Verzoek sturen
+</button>
+</div>
+<div
+    id="friendRequestStatus"
+    class="friend-status"
+></div>
+
+<div
+    id="friendRequestsBlock"
+    style="display:none;margin-top:16px"
+>
+<h2 class="friend-panel-title">Verzoeken</h2>
+<div id="friendRequestsList"></div>
+</div>
+
+</div>
+
+
+<div
+    id="cheerPanel"
+    class="content-panel"
+    style="display:none"
+>
+<h2 class="friend-panel-title">Aanmoedigingen voor jou</h2>
+<div
+    id="cheerList"
+    class="cheer-list"
+></div>
+</div>
+
+
+<div class="content-panel">
+<h2 class="friend-panel-title">Ranglijst studietijd deze week</h2>
+<div
+    id="friendsLeaderboard"
+    class="leaderboard"
+></div>
+</div>
+
+
+<div class="content-panel">
+<h2 class="friend-panel-title">Je vrienden</h2>
+<div
+    id="friendsList"
+    class="friend-list"
+></div>
+</div>
+
+
+<div class="content-panel">
+
+<h2 class="friend-panel-title">Wat deel je?</h2>
+<p class="friend-panel-hint">
+Je vrienden zien alleen wat je hier aanzet. Een samenvatting, nooit je notities, cijfers of huiswerk zelf.
+</p>
+
+<div class="friend-share-grid">
+<label class="notif-toggle-row">
+<input
+    id="shareStudyToggle"
+    type="checkbox"
+    onchange="toggleFriendShare('share_study', this.checked)"
+>
+Studietijd deze week
+</label>
+<label class="notif-toggle-row">
+<input
+    id="shareGoalsToggle"
+    type="checkbox"
+    onchange="toggleFriendShare('share_goals', this.checked)"
+>
+Doelen die je deelt
+</label>
+<label class="notif-toggle-row">
+<input
+    id="shareBooksToggle"
+    type="checkbox"
+    onchange="toggleFriendShare('share_books', this.checked)"
+>
+Leeslijst (titels, geen notities)
+</label>
+<label class="notif-toggle-row">
+<input
+    id="shareTasksToggle"
+    type="checkbox"
+    onchange="toggleFriendShare('share_tasks', this.checked)"
+>
+Aantal open huiswerk en deadlines
+</label>
+</div>
+
+<div
+    id="shareGoalsNote"
+    class="friend-share-note"
+></div>
+
+<h2
+    class="friend-panel-title"
+    style="margin-top:20px"
+>
+    Je naam
+</h2>
+<div class="friend-input-row">
+<input
+    id="friendsNameInput"
+    class="friend-input"
+    type="text"
+    maxlength="30"
+    onkeydown="if (event.key === 'Enter') saveFriendName()"
+>
+<button
+    class="secondary-button"
+    style="height:44px"
+    onclick="saveFriendName()"
+>
+    Opslaan
+</button>
+</div>
+<div
+    id="friendsNameStatus"
+    class="friend-status"
+></div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =========================================================
      SUGGESTIES
 ========================================================= -->
 
@@ -8202,6 +9033,21 @@ Laat dit doel in mijn agenda zien
 >
 <div class="modal-hint">Met een tijdstip staat het doel op die tijd in de week- en dagweergave. Zonder tijdstip staat het bij 'hele dag'.</div>
 </div>
+</div>
+
+<div
+    id="goalShareField"
+    class="modal-field"
+    style="display:none"
+>
+<label class="notif-toggle-row">
+<input
+    id="goalShareWithFriends"
+    type="checkbox"
+>
+Deel dit doel met vrienden
+</label>
+<div class="modal-hint">Vrienden zien de naam van het doel en hoe ver je deze week bent. Dit werkt als je bij Vrienden 'Doelen' deelt.</div>
 </div>
 
 <div
@@ -9665,6 +10511,8 @@ async function logout() {
         notificationCheckInterval = null;
     }
 
+    resetFriendsState();
+
     showLoginForm();
 
     openPage("homePage");
@@ -9803,6 +10651,10 @@ function openPage(pageId) {
         loadBooks();
     }
 
+    if (pageId === "vriendenPage") {
+        initFriendsPage();
+    }
+
     if (pageId === "suggestiesPage") {
         resetSuggestionsView();
     }
@@ -9872,6 +10724,7 @@ const dashboardCards =
         { key:"doelen", label:"Doelen" },
         { key:"agenda", label:"Agenda" },
         { key:"leeslijst", label:"Leeslijst" },
+        { key:"vrienden", label:"Vrienden" },
         { key:"suggesties", label:"Suggesties" }
     ];
 
@@ -10387,7 +11240,7 @@ const tourSteps =
         {
             target:"#dashboardCards",
             title:"De blokken",
-            text:"Elk blok opent zijn eigen pagina: notities, to-do, deadlines, huiswerk, studietimer, cijfers, doelen, agenda, leeslijst en suggesties. Wat je niet gebruikt kun je later verbergen."
+            text:"Elk blok opent zijn eigen pagina: notities, to-do, deadlines, huiswerk, studietimer, cijfers, doelen, agenda, leeslijst, vrienden en suggesties. Wat je niet gebruikt kun je later verbergen."
         },
         {
             target:"#shortcutsPanel",
@@ -11689,10 +12542,18 @@ async function loadAllData() {
         loadTrackerCategories(),
         loadTrackerGoals(),
         loadRoosterLessons(),
-        loadLatestUpdate()
+        loadLatestUpdate(),
+        loadFriendsData()
     ]);
 
     renderQuickStats();
+
+    /* Nu alles geladen is, mag de samenvatting voor vrienden
+       worden bijgewerkt. */
+
+    appDataLoaded = true;
+
+    schedulePublishSharedStats();
 
     /* Pas tonen als het dashboard gevuld is, anders licht de
        rondleiding lege blokken uit. */
@@ -12865,6 +13726,8 @@ async function addDeadline() {
 
 function renderDeadlines() {
 
+    schedulePublishSharedStats();
+
     renderSortControl("deadlines");
 
     const list =
@@ -13555,6 +14418,8 @@ async function addHuiswerk() {
 
 
 function renderHuiswerk() {
+
+    schedulePublishSharedStats();
 
     renderSortControl("huiswerk");
 
@@ -14360,6 +15225,8 @@ async function saveStudySession(
 
 
 function renderStudyWeeks() {
+
+    schedulePublishSharedStats();
 
     renderStudyGoalInput();
 
@@ -15870,7 +16737,9 @@ async function loadTrackerGoals() {
             agendaTime:
                 row.agenda_time
                     ? String(row.agenda_time).slice(0, 5)
-                    : null
+                    : null,
+            shareWithFriends:
+                Boolean(row.share_with_friends)
         }));
 }
 
@@ -16493,6 +17362,17 @@ function openGoalModal() {
     ).checked = false;
 
     document.getElementById(
+        "goalShareWithFriends"
+    ).checked = false;
+
+    document.getElementById(
+        "goalShareField"
+    ).style.display =
+        friendsAvailable
+            ? "block"
+            : "none";
+
+    document.getElementById(
         "goalAgendaTime"
     ).value = "";
 
@@ -16617,6 +17497,17 @@ function openGoalEdit(goal) {
     document.getElementById(
         "goalShowInAgenda"
     ).checked = goal.showInAgenda;
+
+    document.getElementById(
+        "goalShareWithFriends"
+    ).checked = goal.shareWithFriends;
+
+    document.getElementById(
+        "goalShareField"
+    ).style.display =
+        friendsAvailable
+            ? "block"
+            : "none";
 
     document.getElementById(
         "goalAgendaTime"
@@ -17061,6 +17952,16 @@ async function saveGoal() {
         special_week_behavior:goalSpecialBehavior,
         special_week_target:specialWeekTarget
     };
+
+    /* Alleen meesturen als update 1.3 al in de database staat,
+       anders mislukt het opslaan van elk doel. */
+
+    if (friendsAvailable) {
+
+        fields.share_with_friends =
+            document.getElementById("goalShareWithFriends").checked;
+
+    }
 
     /* Het type wordt alleen bij een nieuw doel opgeslagen.
        Bij aanpassen ligt het vast. */
@@ -17630,7 +18531,58 @@ async function saveTrackerEntry(
    DOELEN — WEEKOVERZICHT
 ========================================================= */
 
+/* Hoe ver een doel deze week is. Ook gebruikt voor wat je
+   met vrienden deelt, zodat beide hetzelfde laten zien. */
+
+function goalWeekProgress(goal, dates, dayData, special) {
+
+    const applicableDates =
+        dates.filter(
+            date =>
+                goalAppliesToDay(
+                    goal,
+                    getWeekdayKey(date)
+                )
+        );
+
+    const usesSpecialTarget =
+        special &&
+        goal.specialWeekBehavior === "different" &&
+        goal.specialWeekTarget !== null;
+
+    const target =
+        usesSpecialTarget
+            ? goal.specialWeekTarget
+            : goal.weeklyTarget;
+
+    const current =
+        goal.type === "checkbox"
+            ? applicableDates.filter(
+                date =>
+                    dayData(date)[goal.id] === true
+            ).length
+            : applicableDates.reduce(
+                (sum, date) =>
+                    sum +
+                    (
+                        Number(
+                            dayData(date)[goal.id]
+                        ) || 0
+                    ),
+                0
+            );
+
+    return {
+        current,
+        target,
+        usesSpecialTarget
+    };
+}
+
+
 function renderTrackerWeekOverview() {
+
+    schedulePublishSharedStats();
 
     const dates =
         getWeekDates(
@@ -17707,55 +18659,17 @@ function renderTrackerWeekOverview() {
 
         categoryGoals.forEach(goal => {
 
-            const applicableDates =
-                dates.filter(
-                    date =>
-                        goalAppliesToDay(
-                            goal,
-                            getWeekdayKey(date)
-                        )
+            const {
+                current,
+                target,
+                usesSpecialTarget
+            } =
+                goalWeekProgress(
+                    goal,
+                    dates,
+                    dayData,
+                    special
                 );
-
-            const usesSpecialTarget =
-                special &&
-                goal.specialWeekBehavior === "different" &&
-                goal.specialWeekTarget !== null;
-
-            let current, target;
-
-            if (goal.type === "checkbox") {
-
-                current =
-                    applicableDates.filter(
-                        date =>
-                            dayData(date)[goal.id] === true
-                    ).length;
-
-                target =
-                    usesSpecialTarget
-                        ? goal.specialWeekTarget
-                        : goal.weeklyTarget;
-
-            } else {
-
-                current =
-                    applicableDates.reduce(
-                        (sum, date) =>
-                            sum +
-                            (
-                                Number(
-                                    dayData(date)[goal.id]
-                                ) || 0
-                            ),
-                        0
-                    );
-
-                target =
-                    usesSpecialTarget
-                        ? goal.specialWeekTarget
-                        : goal.weeklyTarget;
-
-            }
 
             const isMax =
                 goal.targetMode === "max";
@@ -19884,6 +20798,8 @@ async function loadBooks() {
 
     books = data || [];
 
+    booksLoaded = true;
+
     renderBooks();
 }
 
@@ -20294,6 +21210,8 @@ function renderBookStats() {
 
 
 function renderBooks() {
+
+    schedulePublishSharedStats();
 
     renderBookFilters();
 
@@ -20915,6 +21833,2135 @@ async function deleteBook(id) {
     }
 
     await loadBooks();
+}
+
+
+/* =========================================================
+   VRIENDEN
+
+   Vrienden lezen nooit je eigen tabellen. De app zet zelf een
+   korte samenvatting in shared_stats, met alleen de onderdelen
+   die je deelt. Alleen geaccepteerde vrienden kunnen die lezen.
+   De database controleert dat, niet deze pagina.
+========================================================= */
+
+let friendsAvailable = false;
+let friendsUserId = null;
+let friendProfile = null;
+let friendRows = [];
+let friendStats = {};
+let receivedCheers = [];
+let sentCheersToday = new Set();
+let openFriendCards = new Set();
+
+let appDataLoaded = false;
+let booksLoaded = false;
+
+let publishTimer = null;
+let publishRunning = false;
+let publishAgain = false;
+let lastPublishedKey = null;
+
+const cheerOptions =
+    [
+        { kind:"duim", label:"Duim omhoog" },
+        { kind:"goed_bezig", label:"Goed bezig!" },
+        { kind:"zet_hem_op", label:"Zet hem op!" },
+        { kind:"knap", label:"Knap gedaan!" }
+    ];
+
+const shareToggleIds =
+    {
+        share_study:"shareStudyToggle",
+        share_goals:"shareGoalsToggle",
+        share_books:"shareBooksToggle",
+        share_tasks:"shareTasksToggle"
+    };
+
+
+function resetFriendsState() {
+
+    friendsAvailable = false;
+    friendsUserId = null;
+    friendProfile = null;
+    friendRows = [];
+    friendStats = {};
+    receivedCheers = [];
+    sentCheersToday = new Set();
+    openFriendCards = new Set();
+
+    appDataLoaded = false;
+    booksLoaded = false;
+
+    clearTimeout(publishTimer);
+
+    lastPublishedKey = null;
+
+    updateFriendsBadge();
+}
+
+
+/* =========================================================
+   VRIENDEN — HULPFUNCTIES
+========================================================= */
+
+/* Alles wat een ander heeft ingetypt (namen, doelen, titels)
+   gaat via textContent de pagina in, nooit als HTML. */
+
+function friendEl(tag, className, text) {
+
+    const element =
+        document.createElement(tag);
+
+    if (className) {
+        element.className = className;
+    }
+
+    if (text !== undefined && text !== null) {
+        element.textContent = text;
+    }
+
+    return element;
+}
+
+
+function formatFriendCode(code) {
+
+    if (!code) {
+        return "";
+    }
+
+    return code.slice(0, 4) + "-" + code.slice(4);
+}
+
+
+/* De datum zoals de database die gebruikt voor 'vandaag'. */
+
+function utcToday() {
+    return new Date().toISOString().slice(0, 10);
+}
+
+
+/* JSON met de sleutels op volgorde. De database bewaart de
+   sleutels in een eigen volgorde, zo zijn ze toch te
+   vergelijken. */
+
+function stableStringify(value) {
+
+    if (Array.isArray(value)) {
+        return "[" + value.map(stableStringify).join(",") + "]";
+    }
+
+    if (value && typeof value === "object") {
+
+        return "{" +
+            Object.keys(value)
+                .sort()
+                .map(key =>
+                    JSON.stringify(key) + ":" + stableStringify(value[key])
+                )
+                .join(",") +
+            "}";
+    }
+
+    return JSON.stringify(value === undefined ? null : value);
+}
+
+
+function formatFriendTime(isoString) {
+
+    if (!isoString) {
+        return "";
+    }
+
+    const date =
+        new Date(isoString);
+
+    const minutes =
+        Math.round((Date.now() - date.getTime()) / 60000);
+
+    if (minutes < 1) {
+        return "zojuist";
+    }
+
+    if (minutes < 60) {
+        return minutes + " min geleden";
+    }
+
+    const time =
+        String(date.getHours()).padStart(2, "0") +
+        ":" +
+        String(date.getMinutes()).padStart(2, "0");
+
+    const today =
+        new Date();
+
+    const yesterday =
+        new Date();
+
+    yesterday.setDate(yesterday.getDate() - 1);
+
+    if (date.toDateString() === today.toDateString()) {
+        return "vandaag om " + time;
+    }
+
+    if (date.toDateString() === yesterday.toDateString()) {
+        return "gisteren om " + time;
+    }
+
+    return date.toLocaleDateString(
+        "nl-NL",
+        {
+            day:"numeric",
+            month:"short"
+        }
+    );
+}
+
+
+function friendNameById(userId) {
+
+    const row =
+        friendRows.find(r => r.other_id === userId);
+
+    return row
+        ? row.display_name
+        : "Een oud-vriend";
+}
+
+
+function ownStudySecondsThisWeek() {
+
+    const currentWeekStart =
+        getWeekStart(getToday());
+
+    return studySessions
+        .filter(
+            session =>
+                getWeekStart(session.session_date) === currentWeekStart
+        )
+        .reduce(
+            (total, session) =>
+                total + (Number(session.duration_seconds) || 0),
+            0
+        );
+}
+
+
+/* =========================================================
+   VRIENDEN — LADEN
+========================================================= */
+
+async function loadFriendsData() {
+
+    const user =
+        await getCurrentUser();
+
+    if (!user) {
+        return false;
+    }
+
+    friendsUserId = user.id;
+
+    const {
+        data: profile,
+        error
+    } =
+        await supabaseClient
+            .from("profiles")
+            .select("*")
+            .eq("user_id", user.id)
+            .maybeSingle();
+
+    if (error) {
+
+        console.error(
+            "Vriendenprofiel laden:",
+            error
+        );
+
+        friendsAvailable = false;
+        friendProfile = null;
+
+        updateFriendsBadge();
+
+        return false;
+    }
+
+    friendsAvailable = true;
+
+    friendProfile =
+        profile || null;
+
+    if (!friendProfile) {
+
+        friendRows = [];
+        friendStats = {};
+        receivedCheers = [];
+        sentCheersToday = new Set();
+        lastPublishedKey = "none";
+
+        updateFriendsBadge();
+
+        return true;
+    }
+
+    const [
+        friendsResult,
+        statsResult,
+        receivedResult,
+        sentResult
+    ] =
+        await Promise.all([
+            supabaseClient.rpc("my_friends"),
+            supabaseClient
+                .from("shared_stats")
+                .select("*"),
+            supabaseClient
+                .from("encouragements")
+                .select("*")
+                .eq("to_user", user.id)
+                .order("created_at", {
+                    ascending:false
+                })
+                .limit(30),
+            supabaseClient
+                .from("encouragements")
+                .select("to_user, kind")
+                .eq("from_user", user.id)
+                .eq("sent_on", utcToday())
+        ]);
+
+    if (friendsResult.error) {
+        console.error("Vrienden laden:", friendsResult.error);
+    }
+
+    if (statsResult.error) {
+        console.error("Gedeelde stats laden:", statsResult.error);
+    }
+
+    if (receivedResult.error) {
+        console.error("Aanmoedigingen laden:", receivedResult.error);
+    }
+
+    friendRows =
+        friendsResult.data || [];
+
+    friendStats = {};
+
+    (statsResult.data || []).forEach(row => {
+        friendStats[row.user_id] = row;
+    });
+
+    receivedCheers =
+        receivedResult.data || [];
+
+    sentCheersToday =
+        new Set(
+            (sentResult.data || []).map(
+                row => row.to_user + ":" + row.kind
+            )
+        );
+
+    /* Wat er nu online staat, zodat de app niet opnieuw
+       opslaat als er niets veranderd is. */
+
+    const own =
+        friendStats[user.id];
+
+    if (!statsResult.error) {
+
+        lastPublishedKey =
+            own
+                ? String(own.week_start) + stableStringify(own.payload)
+                : "none";
+
+    }
+
+    updateFriendsBadge();
+
+    return true;
+}
+
+
+function updateFriendsBadge() {
+
+    const badge =
+        document.getElementById("friendsCardBadge");
+
+    if (!badge) {
+        return;
+    }
+
+    const incoming =
+        friendRows.filter(
+            row => row.direction === "incoming"
+        ).length;
+
+    const unseen =
+        receivedCheers.filter(
+            cheer => !cheer.seen
+        ).length;
+
+    const count =
+        incoming + unseen;
+
+    badge.textContent =
+        count > 9
+            ? "9+"
+            : String(count);
+
+    badge.classList.toggle(
+        "show",
+        count > 0
+    );
+
+    badge.title =
+        count > 0
+            ? "Nieuw bij Vrienden"
+            : "";
+}
+
+
+async function initFriendsPage() {
+
+    await loadFriendsData();
+
+    renderFriendsPage();
+
+    markCheersSeen();
+}
+
+
+/* Wat je hebt gezien, telt niet meer mee in het getal op het
+   blok. Op de pagina blijft het nog even groen staan. */
+
+async function markCheersSeen() {
+
+    if (!friendsUserId) {
+        return;
+    }
+
+    const unseen =
+        receivedCheers.filter(
+            cheer => !cheer.seen
+        );
+
+    if (!unseen.length) {
+        return;
+    }
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("encouragements")
+            .update({
+                seen:true
+            })
+            .eq("to_user", friendsUserId)
+            .eq("seen", false);
+
+    if (error) {
+
+        console.error(
+            "Aanmoedigingen gezien:",
+            error
+        );
+
+        return;
+    }
+
+    unseen.forEach(cheer => {
+        cheer.seen = true;
+        cheer.justSeen = true;
+    });
+
+    updateFriendsBadge();
+}
+
+
+/* =========================================================
+   VRIENDEN — PAGINA TEKENEN
+========================================================= */
+
+function renderFriendsPage() {
+
+    const unavailable =
+        document.getElementById("friendsUnavailable");
+
+    const setup =
+        document.getElementById("friendsSetupPanel");
+
+    const main =
+        document.getElementById("friendsMain");
+
+    unavailable.style.display =
+        friendsAvailable
+            ? "none"
+            : "block";
+
+    setup.style.display =
+        friendsAvailable && !friendProfile
+            ? "block"
+            : "none";
+
+    main.style.display =
+        friendsAvailable && friendProfile
+            ? "block"
+            : "none";
+
+    if (!friendsAvailable || !friendProfile) {
+        return;
+    }
+
+    document.getElementById("friendCodeValue").textContent =
+        formatFriendCode(friendProfile.friend_code);
+
+    document.getElementById("friendCodeShareButton").style.display =
+        navigator.share
+            ? ""
+            : "none";
+
+    armDeleteButton(
+        document.getElementById("friendCodeNewButton"),
+        regenerateFriendCode,
+        "Nieuwe code"
+    );
+
+    Object.keys(shareToggleIds).forEach(field => {
+        document.getElementById(shareToggleIds[field]).checked =
+            Boolean(friendProfile[field]);
+    });
+
+    document.getElementById("friendsNameInput").value =
+        friendProfile.display_name || "";
+
+    renderShareGoalsNote();
+    renderFriendRequests();
+    renderCheers();
+    renderLeaderboard();
+    renderFriendsList();
+}
+
+
+function renderShareGoalsNote() {
+
+    const note =
+        document.getElementById("shareGoalsNote");
+
+    const sharedGoals =
+        trackerGoals.filter(
+            goal => goal.shareWithFriends
+        ).length;
+
+    if (!friendProfile || !friendProfile.share_goals) {
+
+        note.textContent =
+            "Bij Doelen kies je per doel met het potloodje of je het deelt.";
+
+        return;
+    }
+
+    note.textContent =
+        sharedGoals === 0
+            ? "Je deelt nog geen enkel doel. Open een doel met het potloodje en zet 'Deel dit doel met vrienden' aan."
+            : (
+                sharedGoals === 1
+                    ? "Je deelt 1 doel. Per doel pas je dat aan met het potloodje."
+                    : "Je deelt " + sharedGoals + " doelen. Per doel pas je dat aan met het potloodje."
+            );
+}
+
+
+function renderFriendRequests() {
+
+    const block =
+        document.getElementById("friendRequestsBlock");
+
+    const list =
+        document.getElementById("friendRequestsList");
+
+    list.innerHTML = "";
+
+    const incoming =
+        friendRows.filter(row => row.direction === "incoming");
+
+    const outgoing =
+        friendRows.filter(row => row.direction === "outgoing");
+
+    block.style.display =
+        incoming.length || outgoing.length
+            ? "block"
+            : "none";
+
+    incoming.forEach(row => {
+
+        const item =
+            friendEl("div", "friend-request");
+
+        const name =
+            friendEl("div", "friend-request-name", row.display_name);
+
+        name.appendChild(
+            friendEl("small", null, "wil je vriend worden")
+        );
+
+        const accept =
+            friendEl("button", "primary-button", "Accepteren");
+
+        accept.onclick =
+            () => respondFriendRequest(row.friendship_id, true);
+
+        const decline =
+            friendEl("button", "secondary-button", "Weigeren");
+
+        decline.onclick =
+            () => respondFriendRequest(row.friendship_id, false);
+
+        item.append(name, accept, decline);
+
+        list.appendChild(item);
+
+    });
+
+    outgoing.forEach(row => {
+
+        const item =
+            friendEl("div", "friend-request");
+
+        const name =
+            friendEl("div", "friend-request-name", row.display_name);
+
+        name.appendChild(
+            friendEl("small", null, "wacht op antwoord")
+        );
+
+        const withdraw =
+            friendEl("button", "friend-small-danger");
+
+        armDeleteButton(
+            withdraw,
+            () => removeFriendship(row.friendship_id),
+            "Intrekken"
+        );
+
+        item.append(name, withdraw);
+
+        list.appendChild(item);
+
+    });
+}
+
+
+function renderCheers() {
+
+    const panel =
+        document.getElementById("cheerPanel");
+
+    const list =
+        document.getElementById("cheerList");
+
+    list.innerHTML = "";
+
+    if (!receivedCheers.length) {
+
+        panel.style.display = "none";
+
+        return;
+    }
+
+    panel.style.display = "block";
+
+    receivedCheers.slice(0, 10).forEach(cheer => {
+
+        const option =
+            cheerOptions.find(o => o.kind === cheer.kind);
+
+        const item =
+            friendEl(
+                "div",
+                "cheer-item" +
+                (
+                    !cheer.seen || cheer.justSeen
+                        ? " new"
+                        : ""
+                )
+            );
+
+        const text =
+            friendEl("span");
+
+        text.appendChild(
+            friendEl("strong", null, friendNameById(cheer.from_user))
+        );
+
+        text.appendChild(
+            document.createTextNode(
+                ": " + (option ? option.label : cheer.kind)
+            )
+        );
+
+        item.append(
+            text,
+            friendEl("small", null, formatFriendTime(cheer.created_at))
+        );
+
+        list.appendChild(item);
+
+    });
+}
+
+
+function renderLeaderboard() {
+
+    const board =
+        document.getElementById("friendsLeaderboard");
+
+    board.innerHTML = "";
+
+    const currentWeekStart =
+        getWeekStart(getToday());
+
+    const entries = [];
+
+    if (friendProfile.share_study) {
+
+        entries.push({
+            name:friendProfile.display_name,
+            seconds:ownStudySecondsThisWeek(),
+            me:true
+        });
+
+    }
+
+    const friends =
+        friendRows.filter(row => row.direction === "friend");
+
+    let notSharing = 0;
+
+    friends.forEach(row => {
+
+        const stats =
+            friendStats[row.other_id];
+
+        if (!stats || !stats.payload || !stats.payload.study) {
+
+            notSharing++;
+
+            return;
+        }
+
+        /* Wie deze week de app nog niet open had, staat op 0. */
+
+        entries.push({
+            name:row.display_name,
+            seconds:
+                String(stats.week_start) === currentWeekStart
+                    ? Number(stats.payload.study.seconds) || 0
+                    : 0,
+            me:false
+        });
+
+    });
+
+    entries.sort(
+        (a, b) =>
+            b.seconds - a.seconds ||
+            a.name.localeCompare(b.name, "nl")
+    );
+
+    const top =
+        Math.max(
+            1,
+            ...entries.map(e => e.seconds)
+        );
+
+    let rank = 0;
+    let previous = null;
+
+    entries.forEach((entry, index) => {
+
+        if (entry.seconds !== previous) {
+            rank = index + 1;
+            previous = entry.seconds;
+        }
+
+        const row =
+            friendEl(
+                "div",
+                "leaderboard-row" +
+                (entry.me ? " me" : "") +
+                (rank === 1 && entry.seconds > 0 ? " first" : "")
+            );
+
+        const bar =
+            friendEl("div", "leaderboard-bar");
+
+        const fill =
+            friendEl("div");
+
+        fill.style.width =
+            Math.round((entry.seconds / top) * 100) + "%";
+
+        bar.appendChild(fill);
+
+        row.append(
+            friendEl("div", "leaderboard-rank", String(rank)),
+            friendEl("div", "leaderboard-name", entry.name),
+            friendEl("div", "leaderboard-time", formatDuration(entry.seconds, true)),
+            bar
+        );
+
+        board.appendChild(row);
+
+    });
+
+    const hints = [];
+
+    if (!friends.length) {
+        hints.push("Voeg een vriend toe om samen een ranglijst te maken.");
+    }
+
+    if (!friendProfile.share_study) {
+        hints.push("Zet 'Studietijd deze week' aan bij Wat deel je? om zelf mee te doen.");
+    }
+
+    if (notSharing > 0) {
+        hints.push(
+            notSharing === 1
+                ? "1 vriend deelt zijn studietijd niet."
+                : notSharing + " vrienden delen hun studietijd niet."
+        );
+    }
+
+    if (hints.length) {
+
+        const hint =
+            friendEl(
+                "div",
+                entries.length
+                    ? "friend-share-note"
+                    : "empty-state",
+                hints.join(" ")
+            );
+
+        board.appendChild(hint);
+
+    }
+}
+
+
+function renderFriendsList() {
+
+    const list =
+        document.getElementById("friendsList");
+
+    list.innerHTML = "";
+
+    const friends =
+        friendRows.filter(row => row.direction === "friend");
+
+    if (!friends.length) {
+
+        list.appendChild(
+            friendEl(
+                "div",
+                "empty-state",
+                "Nog geen vrienden. Stuur een verzoek met de code van een vriend, of geef jouw code aan iemand anders."
+            )
+        );
+
+        return;
+    }
+
+    const currentWeekStart =
+        getWeekStart(getToday());
+
+    friends.forEach(row => {
+
+        const stats =
+            friendStats[row.other_id] || null;
+
+        const payload =
+            stats && stats.payload
+                ? stats.payload
+                : {};
+
+        const thisWeek =
+            stats && String(stats.week_start) === currentWeekStart;
+
+        const card =
+            friendEl(
+                "div",
+                "friend-card" +
+                (openFriendCards.has(row.other_id) ? " open" : "")
+            );
+
+        /* Kop: naam en een korte samenvatting */
+
+        const head =
+            friendEl("button", "friend-card-head");
+
+        head.type = "button";
+
+        head.setAttribute(
+            "aria-expanded",
+            openFriendCards.has(row.other_id) ? "true" : "false"
+        );
+
+        const avatar =
+            friendEl(
+                "div",
+                "friend-avatar",
+                (row.display_name || "?").trim().charAt(0).toUpperCase()
+            );
+
+        const title =
+            friendEl("div", "friend-card-title");
+
+        title.appendChild(
+            friendEl("strong", null, row.display_name)
+        );
+
+        let subtitle;
+
+        if (!stats || !Object.keys(payload).length) {
+
+            subtitle = "Deelt nog niets";
+
+        } else if (payload.study) {
+
+            subtitle =
+                (
+                    thisWeek
+                        ? formatDuration(Number(payload.study.seconds) || 0, true)
+                        : "0u 00m"
+                ) +
+                " gestudeerd deze week";
+
+        } else {
+
+            subtitle =
+                "Bijgewerkt " + formatFriendTime(stats.updated_at);
+
+        }
+
+        title.appendChild(
+            friendEl("small", null, subtitle)
+        );
+
+        head.append(avatar, title);
+
+        head.insertAdjacentHTML(
+            "beforeend",
+            '<svg class="friend-chevron" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#chevron-right"></use></svg>'
+        );
+
+        head.onclick =
+            () => {
+
+                if (openFriendCards.has(row.other_id)) {
+                    openFriendCards.delete(row.other_id);
+                } else {
+                    openFriendCards.add(row.other_id);
+                }
+
+                card.classList.toggle("open");
+
+                head.setAttribute(
+                    "aria-expanded",
+                    card.classList.contains("open") ? "true" : "false"
+                );
+
+            };
+
+        card.appendChild(head);
+
+        /* Inhoud: wat deze vriend deelt */
+
+        const body =
+            friendEl("div", "friend-card-body");
+
+        if (!stats || !Object.keys(payload).length) {
+
+            body.appendChild(
+                friendEl(
+                    "div",
+                    "friend-share-note",
+                    row.display_name + " deelt op dit moment niets."
+                )
+            );
+
+        } else {
+
+            if (!thisWeek) {
+
+                body.appendChild(
+                    friendEl(
+                        "div",
+                        "friend-share-note",
+                        "Nog niet bijgewerkt deze week. Wat je ziet, is van een vorige week."
+                    )
+                );
+
+            }
+
+            if (payload.study) {
+                body.appendChild(renderFriendStudy(payload.study, thisWeek));
+            }
+
+            if (Array.isArray(payload.goals)) {
+                body.appendChild(renderFriendGoals(payload.goals));
+            }
+
+            if (payload.books) {
+                body.appendChild(renderFriendBooks(payload.books));
+            }
+
+            if (payload.tasks) {
+                body.appendChild(renderFriendTasks(payload.tasks));
+            }
+
+            body.appendChild(
+                friendEl(
+                    "div",
+                    "friend-share-note",
+                    "Laatst bijgewerkt " + formatFriendTime(stats.updated_at) + "."
+                )
+            );
+
+        }
+
+        /* Aanmoedigen */
+
+        const cheerSection =
+            friendEl("div", "friend-section");
+
+        cheerSection.appendChild(
+            friendEl("h4", null, "Aanmoedigen")
+        );
+
+        const cheerRow =
+            friendEl("div", "friend-cheer-row");
+
+        cheerOptions.forEach(option => {
+
+            const sent =
+                sentCheersToday.has(row.other_id + ":" + option.kind);
+
+            const button =
+                friendEl(
+                    "button",
+                    "friend-cheer" + (sent ? " sent" : ""),
+                    option.label
+                );
+
+            button.type = "button";
+
+            button.title =
+                sent
+                    ? "Vandaag al gestuurd"
+                    : "Stuur naar " + row.display_name;
+
+            button.onclick =
+                () => sendCheer(row.other_id, option.kind, button);
+
+            cheerRow.appendChild(button);
+
+        });
+
+        cheerSection.appendChild(cheerRow);
+
+        body.appendChild(cheerSection);
+
+        /* Ontvrienden */
+
+        const foot =
+            friendEl("div", "friend-card-foot");
+
+        const remove =
+            friendEl("button", "friend-small-danger");
+
+        armDeleteButton(
+            remove,
+            () => removeFriendship(row.friendship_id),
+            "Verwijderen als vriend"
+        );
+
+        foot.appendChild(remove);
+
+        body.appendChild(foot);
+
+        card.appendChild(body);
+
+        list.appendChild(card);
+
+    });
+}
+
+
+function renderFriendStudy(study, thisWeek) {
+
+    const section =
+        friendEl("div", "friend-section");
+
+    section.appendChild(
+        friendEl("h4", null, "Studietijd deze week")
+    );
+
+    const seconds =
+        thisWeek
+            ? Number(study.seconds) || 0
+            : 0;
+
+    const goalHours =
+        Number(study.goal_hours) || 0;
+
+    const goal =
+        friendEl("div", "friend-goal");
+
+    const top =
+        friendEl("div", "friend-goal-top");
+
+    top.append(
+        friendEl("span", null, formatDuration(seconds, true)),
+        friendEl(
+            "span",
+            null,
+            goalHours > 0
+                ? "weekdoel " + formatGoalHours(goalHours) + " uur"
+                : ""
+        )
+    );
+
+    goal.appendChild(top);
+
+    if (goalHours > 0) {
+
+        const bar =
+            friendEl("div", "friend-goal-bar");
+
+        const fill =
+            friendEl(
+                "div",
+                seconds / 3600 >= goalHours
+                    ? "reached"
+                    : ""
+            );
+
+        fill.style.width =
+            Math.min(100, Math.round((seconds / 3600 / goalHours) * 100)) + "%";
+
+        bar.appendChild(fill);
+
+        goal.appendChild(bar);
+
+    }
+
+    section.appendChild(goal);
+
+    return section;
+}
+
+
+function renderFriendGoals(goals) {
+
+    const section =
+        friendEl("div", "friend-section");
+
+    section.appendChild(
+        friendEl("h4", null, "Doelen deze week")
+    );
+
+    if (!goals.length) {
+
+        section.appendChild(
+            friendEl("div", "friend-stat-line", "Deelt nog geen doelen.")
+        );
+
+        return section;
+    }
+
+    goals.forEach(goal => {
+
+        const current =
+            Number(goal.current) || 0;
+
+        const target =
+            Number(goal.target) || 0;
+
+        const isMax =
+            goal.mode === "max";
+
+        const unit =
+            goal.type === "checkbox"
+                ? "dagen"
+                : (goal.unit || "");
+
+        const item =
+            friendEl("div", "friend-goal");
+
+        const top =
+            friendEl("div", "friend-goal-top");
+
+        top.append(
+            friendEl("span", null, goal.label),
+            friendEl(
+                "span",
+                null,
+                current +
+                (isMax ? " van hoogstens " : " / ") +
+                target +
+                (unit ? " " + unit : "")
+            )
+        );
+
+        const bar =
+            friendEl("div", "friend-goal-bar");
+
+        const over =
+            isMax && current > target;
+
+        const reached =
+            isMax
+                ? current <= target
+                : current >= target;
+
+        const fill =
+            friendEl(
+                "div",
+                over
+                    ? "over"
+                    : (!isMax && reached ? "reached" : "")
+            );
+
+        fill.style.width =
+            (
+                target > 0
+                    ? Math.min(100, Math.round((current / target) * 100))
+                    : (isMax ? (current > 0 ? 100 : 0) : 100)
+            ) + "%";
+
+        bar.appendChild(fill);
+
+        item.append(top, bar);
+
+        section.appendChild(item);
+
+    });
+
+    return section;
+}
+
+
+function renderFriendBooks(bookInfo) {
+
+    const section =
+        friendEl("div", "friend-section");
+
+    section.appendChild(
+        friendEl("h4", null, "Leeslijst")
+    );
+
+    const readCount =
+        Number(bookInfo.read_count) || 0;
+
+    section.appendChild(
+        friendEl(
+            "div",
+            "friend-stat-line",
+            readCount === 1
+                ? "1 boek gelezen"
+                : readCount + " boeken gelezen"
+        )
+    );
+
+    const addBooks =
+        (label, list) => {
+
+            if (!Array.isArray(list) || !list.length) {
+                return;
+            }
+
+            section.appendChild(
+                friendEl("div", "friend-share-note", label)
+            );
+
+            const wrap =
+                friendEl("div", "friend-books");
+
+            list.forEach(book => {
+
+                const item =
+                    friendEl("div", "friend-book");
+
+                item.appendChild(
+                    createBookCover(book.cover_id, book.title, false)
+                );
+
+                const text =
+                    friendEl("div", null, book.title);
+
+                if (book.author) {
+                    text.appendChild(
+                        friendEl("small", null, book.author)
+                    );
+                }
+
+                item.appendChild(text);
+
+                wrap.appendChild(item);
+
+            });
+
+            section.appendChild(wrap);
+        };
+
+    addBooks("Leest nu", bookInfo.reading);
+
+    addBooks("Laatst uitgelezen", bookInfo.read);
+
+    return section;
+}
+
+
+function renderFriendTasks(tasks) {
+
+    const section =
+        friendEl("div", "friend-section");
+
+    section.appendChild(
+        friendEl("h4", null, "Huiswerk en deadlines")
+    );
+
+    const line =
+        friendEl("div", "friend-stat-line");
+
+    const add =
+        (value, text) => {
+
+            if (line.childNodes.length) {
+                line.appendChild(document.createTextNode(" · "));
+            }
+
+            line.appendChild(
+                friendEl("strong", null, String(Number(value) || 0))
+            );
+
+            line.appendChild(
+                document.createTextNode(" " + text)
+            );
+        };
+
+    add(tasks.homework_open, "huiswerk open");
+
+    add(tasks.deadlines_open, "deadlines open");
+
+    if (Number(tasks.deadlines_soon) > 0) {
+        add(tasks.deadlines_soon, "binnen 7 dagen");
+    }
+
+    section.appendChild(line);
+
+    return section;
+}
+
+
+/* =========================================================
+   VRIENDEN — PROFIEL EN DELEN
+========================================================= */
+
+function setFriendStatus(id, text, kind) {
+
+    const element =
+        document.getElementById(id);
+
+    element.textContent = text || "";
+
+    element.className =
+        "friend-status" +
+        (kind ? " " + kind : "");
+}
+
+
+async function createFriendProfile() {
+
+    const input =
+        document.getElementById("friendsSetupName");
+
+    const name =
+        input.value.trim();
+
+    if (!name) {
+
+        setFriendStatus("friendsSetupStatus", "Vul een naam in.", "error");
+
+        input.focus();
+
+        return;
+    }
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("profiles")
+            .insert({
+                display_name:name.slice(0, 30)
+            });
+
+    if (error && error.code !== "23505") {
+
+        console.error(
+            "Vriendenprofiel maken:",
+            error
+        );
+
+        setFriendStatus("friendsSetupStatus", "Dat lukte niet. Probeer het opnieuw.", "error");
+
+        return;
+    }
+
+    setFriendStatus("friendsSetupStatus", "");
+
+    input.value = "";
+
+    await loadFriendsData();
+
+    renderFriendsPage();
+}
+
+
+async function saveFriendName() {
+
+    const input =
+        document.getElementById("friendsNameInput");
+
+    const name =
+        input.value.trim();
+
+    if (!name) {
+
+        setFriendStatus("friendsNameStatus", "Vul een naam in.", "error");
+
+        return;
+    }
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("profiles")
+            .update({
+                display_name:name.slice(0, 30)
+            })
+            .eq("user_id", friendsUserId);
+
+    if (error) {
+
+        console.error(
+            "Naam opslaan:",
+            error
+        );
+
+        setFriendStatus("friendsNameStatus", "De naam kon niet worden opgeslagen.", "error");
+
+        return;
+    }
+
+    friendProfile.display_name =
+        name.slice(0, 30);
+
+    setFriendStatus("friendsNameStatus", "Opgeslagen.", "ok");
+
+    renderLeaderboard();
+}
+
+
+async function toggleFriendShare(field, value) {
+
+    const checkbox =
+        document.getElementById(shareToggleIds[field]);
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("profiles")
+            .update({
+                [field]:value
+            })
+            .eq("user_id", friendsUserId);
+
+    if (error) {
+
+        console.error(
+            "Delen aanpassen:",
+            error
+        );
+
+        checkbox.checked = !value;
+
+        return;
+    }
+
+    friendProfile[field] = value;
+
+    renderShareGoalsNote();
+
+    /* Meteen bijwerken: wie iets uitzet, wil niet dat het nog
+       even zichtbaar blijft. */
+
+    clearTimeout(publishTimer);
+
+    await publishSharedStats();
+
+    renderLeaderboard();
+}
+
+
+async function copyFriendCode() {
+
+    const button =
+        document.getElementById("friendCodeCopyButton");
+
+    const code =
+        formatFriendCode(friendProfile.friend_code);
+
+    let copied = false;
+
+    try {
+
+        await navigator.clipboard.writeText(code);
+
+        copied = true;
+
+    } catch (error) {
+
+        /* Geen klembord: selecteer de code, dan kan de
+           gebruiker hem zelf kopiëren. */
+
+        const range =
+            document.createRange();
+
+        range.selectNodeContents(
+            document.getElementById("friendCodeValue")
+        );
+
+        const selection =
+            window.getSelection();
+
+        selection.removeAllRanges();
+
+        selection.addRange(range);
+
+    }
+
+    button.textContent =
+        copied
+            ? "Gekopieerd"
+            : "Geselecteerd";
+
+    clearTimeout(button.resetTimer);
+
+    button.resetTimer =
+        setTimeout(
+            () => {
+                button.textContent = "Kopiëren";
+            },
+            2000
+        );
+}
+
+
+async function shareFriendCode() {
+
+    try {
+
+        await navigator.share({
+            title:"Persoonlijk Dashboard",
+            text:
+                "Voeg me toe als vriend op Persoonlijk Dashboard met code " +
+                formatFriendCode(friendProfile.friend_code),
+            url:location.origin + location.pathname
+        });
+
+    } catch (error) {
+
+        if (error && error.name !== "AbortError") {
+            console.error("Delen:", error);
+        }
+
+    }
+}
+
+
+async function regenerateFriendCode() {
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient.rpc("regenerate_friend_code");
+
+    if (error || !data) {
+
+        console.error(
+            "Nieuwe vriendcode:",
+            error
+        );
+
+        setFriendStatus("friendRequestStatus", "Er kon geen nieuwe code gemaakt worden.", "error");
+
+        return;
+    }
+
+    friendProfile.friend_code = data;
+
+    renderFriendsPage();
+
+    setFriendStatus(
+        "friendRequestStatus",
+        "Je hebt een nieuwe code. De oude werkt niet meer, je vrienden blijven gewoon je vrienden.",
+        "ok"
+    );
+}
+
+
+/* =========================================================
+   VRIENDEN — VERZOEKEN
+========================================================= */
+
+const friendRequestMessages =
+    {
+        sent:["Verzoek verstuurd. Zodra het geaccepteerd is, zien jullie elkaar hier.", "ok"],
+        accepted:["Jullie zijn nu vrienden!", "ok"],
+        not_found:["Deze code bestaat niet. Controleer de letters en cijfers.", "error"],
+        self:["Dit is je eigen code.", "error"],
+        already_friends:["Jullie zijn al vrienden.", "error"],
+        already_pending:["Je hebt al een verzoek naar deze persoon gestuurd.", "error"],
+        too_many:["Je hebt al 10 verzoeken openstaan. Wacht tot er een paar beantwoord zijn.", "error"],
+        no_profile:["Kies eerst een naam.", "error"],
+        not_logged_in:["Je bent niet ingelogd.", "error"]
+    };
+
+
+async function sendFriendRequest() {
+
+    const input =
+        document.getElementById("friendCodeInput");
+
+    const code =
+        input.value.trim();
+
+    if (!code) {
+
+        setFriendStatus("friendRequestStatus", "Vul de code van je vriend in.", "error");
+
+        input.focus();
+
+        return;
+    }
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient.rpc(
+            "send_friend_request",
+            {
+                code:code
+            }
+        );
+
+    if (error) {
+
+        console.error(
+            "Vriendverzoek:",
+            error
+        );
+
+        setFriendStatus("friendRequestStatus", "Het verzoek kon niet verstuurd worden.", "error");
+
+        return;
+    }
+
+    const message =
+        friendRequestMessages[data] ||
+        ["Er ging iets mis.", "error"];
+
+    setFriendStatus("friendRequestStatus", message[0], message[1]);
+
+    if (data === "sent" || data === "accepted") {
+
+        input.value = "";
+
+        await loadFriendsData();
+
+        renderFriendsPage();
+
+    }
+}
+
+
+async function respondFriendRequest(requestId, accept) {
+
+    const {
+        error
+    } =
+        await supabaseClient.rpc(
+            "respond_friend_request",
+            {
+                request_id:requestId,
+                accept:accept
+            }
+        );
+
+    if (error) {
+
+        console.error(
+            "Verzoek beantwoorden:",
+            error
+        );
+
+        setFriendStatus("friendRequestStatus", "Dat lukte niet. Probeer het opnieuw.", "error");
+
+        return;
+    }
+
+    setFriendStatus(
+        "friendRequestStatus",
+        accept
+            ? "Jullie zijn nu vrienden!"
+            : "Verzoek geweigerd.",
+        accept
+            ? "ok"
+            : ""
+    );
+
+    await loadFriendsData();
+
+    renderFriendsPage();
+}
+
+
+async function removeFriendship(friendshipId) {
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("friendships")
+            .delete()
+            .eq("id", friendshipId);
+
+    if (error) {
+
+        console.error(
+            "Vriendschap verwijderen:",
+            error
+        );
+
+        setFriendStatus("friendRequestStatus", "Dat lukte niet. Probeer het opnieuw.", "error");
+
+        return;
+    }
+
+    await loadFriendsData();
+
+    renderFriendsPage();
+}
+
+
+/* =========================================================
+   VRIENDEN — AANMOEDIGEN
+========================================================= */
+
+async function sendCheer(friendId, kind, button) {
+
+    const key =
+        friendId + ":" + kind;
+
+    if (sentCheersToday.has(key)) {
+        return;
+    }
+
+    button.disabled = true;
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("encouragements")
+            .insert({
+                to_user:friendId,
+                kind:kind
+            });
+
+    button.disabled = false;
+
+    /* 23505: vandaag al gestuurd. Dan is het ook goed. */
+
+    if (error && error.code !== "23505") {
+
+        console.error(
+            "Aanmoedigen:",
+            error
+        );
+
+        button.title = "Versturen lukte niet";
+
+        return;
+    }
+
+    sentCheersToday.add(key);
+
+    button.classList.add("sent");
+
+    button.title = "Vandaag al gestuurd";
+}
+
+
+/* =========================================================
+   VRIENDEN — SAMENVATTING DELEN
+
+   Wordt vanzelf bijgewerkt als je iets verandert aan je
+   studietijd, doelen, boeken, huiswerk of deadlines. Een
+   korte wachttijd voorkomt dat elke klik apart opslaat.
+========================================================= */
+
+function schedulePublishSharedStats() {
+
+    if (!appDataLoaded || !friendProfile) {
+        return;
+    }
+
+    clearTimeout(publishTimer);
+
+    publishTimer =
+        setTimeout(
+            publishSharedStats,
+            1500
+        );
+}
+
+
+async function buildSharedGoals(weekStart) {
+
+    const shared =
+        trackerGoals
+            .filter(goal => goal.shareWithFriends)
+            .slice(0, 20);
+
+    if (!shared.length) {
+        return [];
+    }
+
+    const dates =
+        getWeekDates(weekStart);
+
+    let entries = trackerEntries;
+    let special = trackerWeekSpecial;
+
+    /* Staat de doelenpagina op een andere week, of is die nog
+       niet geopend, dan de huidige week zelf ophalen. */
+
+    const haveWeek =
+        trackerWeekStart === weekStart &&
+        dates.every(date => trackerEntries[date]);
+
+    if (!haveWeek) {
+
+        const [
+            entryResult,
+            weekResult
+        ] =
+            await Promise.all([
+                supabaseClient
+                    .from("tracker_entries")
+                    .select("*")
+                    .in("entry_date", dates),
+                supabaseClient
+                    .from("tracker_weeks")
+                    .select("*")
+                    .eq("week_start", weekStart)
+                    .maybeSingle()
+            ]);
+
+        if (entryResult.error) {
+            throw entryResult.error;
+        }
+
+        entries = {};
+
+        (entryResult.data || []).forEach(row => {
+            entries[row.entry_date] = row.data || {};
+        });
+
+        special =
+            weekResult.data
+                ? Boolean(weekResult.data.special)
+                : false;
+
+    }
+
+    return shared
+        .filter(
+            goal =>
+                !(special && goal.specialWeekBehavior === "skip")
+        )
+        .map(goal => {
+
+            const progress =
+                goalWeekProgress(
+                    goal,
+                    dates,
+                    date => entries[date] || {},
+                    special
+                );
+
+            return {
+                label:String(goal.label || "").slice(0, 60),
+                type:goal.type,
+                unit:goal.unit ? String(goal.unit).slice(0, 20) : null,
+                mode:goal.targetMode,
+                current:Math.round(progress.current * 100) / 100,
+                target:progress.target
+            };
+
+        });
+}
+
+
+async function buildSharedBooks() {
+
+    if (!booksLoaded) {
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+                .from("books")
+                .select("*")
+                .order("created_at", {
+                    ascending:false
+                });
+
+        if (error) {
+            throw error;
+        }
+
+        books = data || [];
+
+        booksLoaded = true;
+
+    }
+
+    const short =
+        book => ({
+            title:String(book.title || "").slice(0, 100),
+            author:book.author ? String(book.author).slice(0, 80) : null,
+            cover_id:
+                Number.isInteger(Number(book.cover_id)) && book.cover_id !== null
+                    ? Number(book.cover_id)
+                    : null
+        });
+
+    const read =
+        books
+            .filter(book => book.status === "gelezen")
+            .sort(
+                (a, b) =>
+                    String(b.finished_on || b.created_at || "")
+                        .localeCompare(String(a.finished_on || a.created_at || ""))
+            );
+
+    return {
+        reading:
+            books
+                .filter(book => book.status === "bezig")
+                .slice(0, 5)
+                .map(short),
+        read:
+            read
+                .slice(0, 3)
+                .map(short),
+        read_count:read.length
+    };
+}
+
+
+function buildSharedTasks() {
+
+    const openDeadlines =
+        deadlines.filter(item => !item.completed);
+
+    return {
+        homework_open:
+            huiswerk.filter(item => !item.completed).length,
+        deadlines_open:
+            openDeadlines.length,
+        deadlines_soon:
+            openDeadlines.filter(item => {
+
+                const days =
+                    getDaysUntil(item.deadline_date);
+
+                return days >= 0 && days <= 7;
+
+            }).length
+    };
+}
+
+
+async function publishSharedStats() {
+
+    if (!appDataLoaded || !friendsAvailable || !friendProfile || !friendsUserId) {
+        return;
+    }
+
+    if (publishRunning) {
+
+        publishAgain = true;
+
+        return;
+    }
+
+    publishRunning = true;
+
+    try {
+
+        const profile =
+            friendProfile;
+
+        const sharesSomething =
+            profile.share_study ||
+            profile.share_goals ||
+            profile.share_books ||
+            profile.share_tasks;
+
+        /* Niets meer delen: de samenvatting helemaal weghalen. */
+
+        if (!sharesSomething) {
+
+            if (lastPublishedKey !== "none") {
+
+                const {
+                    error
+                } =
+                    await supabaseClient
+                        .from("shared_stats")
+                        .delete()
+                        .eq("user_id", friendsUserId);
+
+                if (!error) {
+
+                    lastPublishedKey = "none";
+
+                    delete friendStats[friendsUserId];
+
+                }
+
+            }
+
+            return;
+        }
+
+        const weekStart =
+            getWeekStart(getToday());
+
+        const payload = {};
+
+        if (profile.share_study) {
+
+            payload.study = {
+                seconds:ownStudySecondsThisWeek(),
+                goal_hours:getStudyGoalHours()
+            };
+
+        }
+
+        /* Lukt een onderdeel niet, dan de rest toch delen. */
+
+        if (profile.share_goals) {
+
+            try {
+                payload.goals = await buildSharedGoals(weekStart);
+            } catch (error) {
+                console.error("Doelen delen:", error);
+            }
+
+        }
+
+        if (profile.share_books) {
+
+            try {
+                payload.books = await buildSharedBooks();
+            } catch (error) {
+                console.error("Leeslijst delen:", error);
+            }
+
+        }
+
+        if (profile.share_tasks) {
+            payload.tasks = buildSharedTasks();
+        }
+
+        const key =
+            weekStart + stableStringify(payload);
+
+        if (key === lastPublishedKey) {
+            return;
+        }
+
+        const row = {
+            user_id:friendsUserId,
+            week_start:weekStart,
+            payload:payload,
+            updated_at:new Date().toISOString()
+        };
+
+        const {
+            error
+        } =
+            await supabaseClient
+                .from("shared_stats")
+                .upsert(
+                    row,
+                    {
+                        onConflict:"user_id"
+                    }
+                );
+
+        if (error) {
+
+            console.error(
+                "Samenvatting delen:",
+                error
+            );
+
+            return;
+        }
+
+        lastPublishedKey = key;
+
+        friendStats[friendsUserId] = row;
+
+    } finally {
+
+        publishRunning = false;
+
+        if (publishAgain) {
+
+            publishAgain = false;
+
+            schedulePublishSharedStats();
+
+        }
+
+    }
 }
 
 
