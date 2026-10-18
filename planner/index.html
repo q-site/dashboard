@@ -1,0 +1,1425 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Planning toetsweek</title>
+<style>
+:root{
+  --navy:#1f3a5f; --teal:#2a9d8f; --light:#eaf2f8; --grey:#f4f6f8; --line:#c9d1da;
+  --bg:#ffffff; --fg:#1b2733; --muted:#5a6b7b; --card:#ffffff; --warn:#d98324; --bad:#c0392b;
+  --DU:#7c5cbf; --NL:#d9622b; --EC:#1f8f80; --NA:#3b78c4; --WI:#c0392b; --SK:#5b9a32; --EN:#b98306;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --navy:#8db3e0; --light:#1f2b38; --grey:#18222c; --line:#34414f;
+    --bg:#10171e; --fg:#e6edf3; --muted:#93a1b0; --card:#151e27;
+    --DU:#a58be0; --NL:#f08a56; --EC:#4cc2b2; --NA:#6fa3e6; --WI:#ee7b6e; --SK:#8cc65e; --EN:#e3b23c;
+  }
+}
+:root[data-theme="dark"]{
+  --navy:#8db3e0; --light:#1f2b38; --grey:#18222c; --line:#34414f;
+  --bg:#10171e; --fg:#e6edf3; --muted:#93a1b0; --card:#151e27;
+  --DU:#a58be0; --NL:#f08a56; --EC:#4cc2b2; --NA:#6fa3e6; --WI:#ee7b6e; --SK:#8cc65e; --EN:#e3b23c;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+header,main{max-width:1180px;margin:0 auto;padding:0 16px}
+header{padding-top:16px}
+h1{margin:0;font-size:26px;color:var(--navy);padding-bottom:6px;border-bottom:2px solid var(--teal)}
+.sub{color:var(--muted);margin:6px 0 12px;font-size:14px}
+button{font:inherit;cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:8px;padding:7px 12px}
+button:hover{background:var(--light)}
+.bar{display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between;align-items:center;margin:8px 0}
+.stats{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.stat{border:1px solid var(--line);border-radius:10px;padding:8px 12px;background:var(--card)}
+.stat b{display:block;font-size:20px;color:var(--navy)}
+.stat span{font-size:12px;color:var(--muted)}
+.prog{height:8px;background:var(--grey);border:1px solid var(--line);border-radius:6px;overflow:hidden;min-width:140px}
+.prog>i{display:block;height:100%;background:var(--teal);width:0}
+h2.sec{font-size:17px;color:var(--navy);margin:22px 0 8px}
+.legend{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px}
+.chip{display:block;text-align:left;border:1px solid var(--line);border-left:6px solid var(--c);border-radius:8px;padding:7px 10px;background:color-mix(in srgb,var(--c) 10%,var(--card));width:100%}
+.chip b{display:block}
+.chip small{color:var(--muted);display:block}
+.chip.off{opacity:.35}
+.chip.on{outline:2px solid var(--c)}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.cal .h{font-size:12px;font-weight:700;color:var(--muted);text-align:center;padding:2px 0}
+.cell{border:1px solid var(--line);border-radius:8px;padding:6px;background:var(--card);cursor:pointer;min-height:92px;text-align:left;display:flex;flex-direction:column;gap:3px}
+.cell:hover{background:var(--light)}
+.cell .d{font-weight:700;font-size:13px}
+.cell .t{font-size:11px;color:var(--muted)}
+.cell.today{outline:2px solid var(--teal)}
+.cell.empty{visibility:hidden}
+.dot{font-size:11px;border-left:4px solid var(--c);padding:1px 5px;border-radius:3px;background:color-mix(in srgb,var(--c) 14%,var(--card));white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dot.done{text-decoration:line-through;opacity:.6}
+.dot.dim{opacity:.2}
+.week{font-size:12px;color:var(--muted);margin:10px 0 4px;font-weight:600}
+.day{border:1px solid var(--line);border-radius:12px;background:var(--card);margin:12px 0;overflow:hidden;scroll-margin-top:12px}
+.day.today{border-color:var(--teal);box-shadow:0 0 0 2px color-mix(in srgb,var(--teal) 35%,transparent)}
+.day>header{padding:10px 14px;background:var(--navy);color:var(--bg);display:flex;flex-wrap:wrap;gap:6px 14px;align-items:baseline;max-width:none;margin:0}
+.day>header h3{margin:0;font-size:16px}
+.day>header .tags{font-size:12.5px;opacity:.9}
+.day>header .badge{margin-left:auto;font-size:12px;background:var(--teal);color:#fff;border-radius:999px;padding:1px 10px}
+.rows{padding:6px 10px 10px}
+.r{display:grid;grid-template-columns:118px 1fr;gap:10px;padding:6px 4px;border-bottom:1px dashed var(--line);align-items:start}
+.r:last-child{border-bottom:0}
+.r .tm{font-variant-numeric:tabular-nums;color:var(--muted);font-size:13px;padding-top:2px}
+.r .lb{font-size:14px}
+.r.fixed .lb{color:var(--muted)}
+.r.werk .lb,.r.school .lb,.r.wedstrijd .lb,.r.training .lb{color:var(--fg);font-weight:600}
+.r.eten .lb{color:var(--muted)}
+.blk{border:1px solid var(--line);border-left:6px solid var(--c);border-radius:8px;padding:8px 10px;background:color-mix(in srgb,var(--c) 11%,var(--card))}
+.blk.done{opacity:.65}
+.blk.done .nm{text-decoration:line-through}
+.blk .top{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.blk .top input[type=checkbox]{width:19px;height:19px;accent-color:var(--teal)}
+.blk .nm{font-weight:700}
+.blk .st{font-size:12px;color:var(--muted)}
+.blk .me{font-size:13.5px;margin:3px 0 5px 29px}
+.blk .wp{margin-left:29px}
+.blk input[type=text]{width:100%;font:inherit;font-size:13.5px;color:var(--fg);background:var(--card);border:1px solid var(--line);border-radius:6px;padding:5px 8px}
+.blk input[type=text]:focus{outline:2px solid var(--teal)}
+.blk.dim,.r.dim{opacity:.25}
+.note{font-size:13px;color:var(--muted);padding:2px 14px 10px}
+details{border:1px solid var(--line);border-radius:10px;background:var(--card);padding:8px 14px;margin:10px 0}
+summary{cursor:pointer;font-weight:600;color:var(--navy)}
+details ul{margin:8px 0 4px;padding-left:20px}
+details li{margin:4px 0}
+.small{font-size:12px;color:var(--muted)}
+.mobileonly{display:none}
+@media (max-width:720px){
+  .cal{grid-template-columns:repeat(2,1fr)}
+  .cal .h{display:none}
+  .cell.empty{display:none}
+  .r{grid-template-columns:1fr;gap:2px}
+}
+@media print{
+  button,.legend,.cal,.bar,.wp input{display:none!important}
+  .wp .pv{display:block!important}
+  body{background:#fff;color:#000}
+  .day{break-inside:avoid;margin:8px 0}
+  details{display:none}
+}
+.wp .pv{display:none}
+</style>
+</head>
+<body>
+<header>
+  <h1>Planning naar de toetsweek</h1>
+  <p class="sub" id="sub"></p>
+  <div class="bar">
+    <div class="stats">
+      <div class="stat"><b id="cd">-</b><span id="cdl">tot de toetsweek</span></div>
+      <div class="stat"><b id="done">0</b><span>leerblokken klaar van <span id="tot">0</span></span></div>
+      <div style="min-width:160px"><div class="prog"><i id="pbar"></i></div><div class="small" id="ptxt"></div></div>
+    </div>
+    <div>
+      <button id="bTheme">Thema</button>
+      <button id="bPrint">Print</button>
+      <button id="bReset">Wis voortgang</button>
+    </div>
+  </div>
+</header>
+<main>
+  <h2 class="sec">Vakken en toetsen</h2>
+  <div class="legend" id="legend"></div>
+  <p class="small">Klik op een vak om alleen die blokken te laten zien. Klik nog eens om terug te gaan.</p>
+
+  <h2 class="sec">Overzicht</h2>
+  <div id="cal"></div>
+
+  <h2 class="sec">Dag voor dag</h2>
+  <div id="days"></div>
+
+  <details>
+    <summary>Uitgangspunten en aannames</summary>
+    <ul>
+      <li>Een leerblok is 50 minuten, daarna 10 minuten pauze. Na werk of school reken ik 15 minuten reistijd en 30 minuten pauze voordat het eerste blok begint.</li>
+      <li>Tijdens werk en school staat er niets ingepland. Eten staat om 17:30 voor een half uur, dat mag schuiven.</li>
+      <li>Training is op maandag en woensdag van 19:00 tot 21:15. De reistijd van en naar de training heb ik geschat op 15 minuten, daar had je geen tijd voor opgegeven. Na de training staat geen leren.</li>
+      <li>Op vrije dagen begint het leren om 10:00 en eindigt het uiterlijk rond 16:20. Doordeweekse avonden eindigen uiterlijk om 21:00, de meeste blokken eerder.</li>
+      <li>De tijden van zaterdag 24 en 31 oktober gelden voor wedstrijd en werk samen.</li>
+      <li>Het schema loopt tot en met zondag 1 november. Voor Natuurkunde, Wiskunde, Scheikunde en Engels volgen daarna nog dagen in de toetsweek zelf. Die staan er nog niet in, omdat de toetstijden daarvoor ontbreken.</li>
+    </ul>
+  </details>
+  <details>
+    <summary>Hoe de verdeling werkt</summary>
+    <ul>
+      <li>Vakken met zwaarte Hoog krijgen 8 blokken, vakken met zwaarte Medium 4 blokken.</li>
+      <li>Elk vak komt verspreid over de twee weken terug, met een langere tussentijd bij Duits en Nederlands. Spreiding en jezelf testen (in plaats van herlezen) scoren het best in de review van Dunlosky e.a. (2013).</li>
+      <li>Op een dag staan steeds meerdere vakken door elkaar. Dat helpt vooral bij Wiskunde, Natuurkunde en Scheikunde, bij feitenkennis is het bewijs zwakker.</li>
+      <li>Vakken die als eerste getoetst worden (Duits, Nederlands, Economie) hebben hun laatste blok op zondag 1 november.</li>
+    </ul>
+    <p class="small">Bron: Dunlosky, Rawson, Marsh, Nathan &amp; Willingham (2013), Psychological Science in the Public Interest, 14(1), 4-58.</p>
+  </details>
+</main>
+
+<script>
+var PLAN = {
+ "subjects": {
+  "DU": {
+   "name": "Duits",
+   "toets": "2026-11-02",
+   "zw": "Medium",
+   "n": 4,
+   "kind": "taal"
+  },
+  "NL": {
+   "name": "Nederlands",
+   "toets": "2026-11-03",
+   "zw": "Medium",
+   "n": 4,
+   "kind": "taal"
+  },
+  "EC": {
+   "name": "Economie",
+   "toets": "2026-11-03",
+   "zw": "Hoog",
+   "n": 8,
+   "kind": "kennis"
+  },
+  "NA": {
+   "name": "Natuurkunde",
+   "toets": "2026-11-04",
+   "zw": "Hoog",
+   "n": 8,
+   "kind": "reken"
+  },
+  "WI": {
+   "name": "Wiskunde",
+   "toets": "2026-11-05",
+   "zw": "Hoog",
+   "n": 8,
+   "kind": "reken"
+  },
+  "SK": {
+   "name": "Scheikunde",
+   "toets": "2026-11-06",
+   "zw": "Hoog",
+   "n": 8,
+   "kind": "reken"
+  },
+  "EN": {
+   "name": "Engels",
+   "toets": "2026-11-06",
+   "zw": "Medium",
+   "n": 4,
+   "kind": "taal"
+  }
+ },
+ "days": [
+  {
+   "date": "2026-10-19",
+   "dow": "Maandag",
+   "label": "Maandag 19 okt",
+   "short": "19 okt",
+   "week": 1,
+   "tags": [
+    "Werk 08:30 tot 13:30",
+    "Training 19:00 tot 21:15"
+   ],
+   "items": [
+    {
+     "s": "08:30",
+     "e": "13:30",
+     "type": "werk",
+     "label": "Werk"
+    },
+    {
+     "s": "13:30",
+     "e": "14:15",
+     "type": "rust",
+     "label": "Reistijd (15 min) en pauze (30 min)"
+    },
+    {
+     "s": "14:15",
+     "e": "15:05",
+     "type": "leren",
+     "label": "Leren: Natuurkunde",
+     "subject": "NA",
+     "step": 1,
+     "of": 8,
+     "method": "Theorie doornemen en voorbeelden zelf natrekken",
+     "id": "2026-10-19-2"
+    },
+    {
+     "s": "15:15",
+     "e": "16:05",
+     "type": "leren",
+     "label": "Leren: Wiskunde",
+     "subject": "WI",
+     "step": 1,
+     "of": 8,
+     "method": "Theorie doornemen en voorbeelden zelf natrekken",
+     "id": "2026-10-19-3"
+    },
+    {
+     "s": "16:15",
+     "e": "17:05",
+     "type": "leren",
+     "label": "Leren: Economie",
+     "subject": "EC",
+     "step": 1,
+     "of": 8,
+     "method": "Stof doornemen, samenvatten in eigen woorden en kaartjes maken",
+     "id": "2026-10-19-4"
+    },
+    {
+     "s": "17:05",
+     "e": "17:30",
+     "type": "vrij",
+     "label": "Vrij"
+    },
+    {
+     "s": "17:30",
+     "e": "18:00",
+     "type": "eten",
+     "label": "Eten (ongeveer een half uur, mag schuiven)"
+    },
+    {
+     "s": "18:00",
+     "e": "18:45",
+     "type": "vrij",
+     "label": "Vrij"
+    },
+    {
+     "s": "18:45",
+     "e": "19:00",
+     "type": "reis",
+     "label": "Reistijd naar training (aanname 15 min)"
+    },
+    {
+     "s": "19:00",
+     "e": "21:15",
+     "type": "training",
+     "label": "Training"
+    },
+    {
+     "s": "21:15",
+     "e": "21:30",
+     "type": "reis",
+     "label": "Reistijd terug (aanname 15 min)"
+    }
+   ]
+  },
+  {
+   "date": "2026-10-20",
+   "dow": "Dinsdag",
+   "label": "Dinsdag 20 okt",
+   "short": "20 okt",
+   "week": 1,
+   "tags": [
+    "Werk 08:30 tot 16:40"
+   ],
+   "items": [
+    {
+     "s": "08:30",
+     "e": "16:40",
+     "type": "werk",
+     "label": "Werk"
+    },
+    {
+     "s": "16:40",
+     "e": "17:25",
+     "type": "rust",
+     "label": "Reistijd (15 min) en pauze (30 min)"
+    },
+    {
+     "s": "17:30",
+     "e": "18:00",
+     "type": "eten",
+     "label": "Eten (ongeveer een half uur, mag schuiven)"
+    },
+    {
+     "s": "18:00",
+     "e": "18:50",
+     "type": "leren",
+     "label": "Leren: Scheikunde",
+     "subject": "SK",
+     "step": 1,
+     "of": 8,
+     "method": "Theorie doornemen en voorbeelden zelf natrekken",
+     "id": "2026-10-20-3"
+    },
+    {
+     "s": "19:00",
+     "e": "19:50",
+     "type": "leren",
+     "label": "Leren: Engels",
+     "subject": "EN",
+     "step": 1,
+     "of": 4,
+     "method": "Stof doornemen, woordjes en begrippen op kaartjes zetten",
+     "id": "2026-10-20-4"
+    },
+    {
+     "s": "20:00",
+     "e": "20:50",
+     "type": "leren",
+     "label": "Leren: Nederlands",
+     "subject": "NL",
+     "step": 1,
+     "of": 4,
+     "method": "Stof doornemen, woordjes en begrippen op kaartjes zetten",
+     "id": "2026-10-20-5"
+    }
+   ]
+  },
+  {
+   "date": "2026-10-21",
+   "dow": "Woensdag",
+   "label": "Woensdag 21 okt",
+   "short": "21 okt",
+   "week": 1,
+   "tags": [
+    "Werk 08:30 tot 13:40",
+    "Training 19:00 tot 21:15"
+   ],
+   "items": [
+    {
+     "s": "08:30",
+     "e": "13:40",
+     "type": "werk",
+     "label": "Werk"
+    },
+    {
+     "s": "13:40",
+     "e": "14:25",
+     "type": "rust",
+     "label": "Reistijd (15 min) en pauze (30 min)"
+    },
+    {
+     "s": "14:25",
+     "e": "15:15",
+     "type": "leren",
+     "label": "Leren: Wiskunde",
+     "subject": "WI",
+     "step": 2,
+     "of": 8,
+     "method": "Opgaven maken per onderwerp, daarna formules en regels uit het hoofd",
+     "id": "2026-10-21-2"
+    },
+    {
+     "s": "15:25",
+     "e": "16:15",
+     "type": "leren",
+     "label": "Leren: Economie",
+     "subject": "EC",
+     "step": 2,
+     "of": 8,
+     "method": "Kaartjes en vragen: zelftest, daarna aanvullen",
+     "id": "2026-10-21-3"
+    },
+    {
+     "s": "16:25",
+     "e": "17:15",
+     "type": "leren",
+     "label": "Leren: Natuurkunde",
+     "subject": "NA",
+     "step": 2,
+     "of": 8,
+     "method": "Opgaven maken per onderwerp, daarna formules en regels uit het hoofd",
+     "id": "2026-10-21-4"
+    },
+    {
+     "s": "17:15",
+     "e": "17:30",
+     "type": "vrij",
+     "label": "Vrij"
+    },
+    {
+     "s": "17:30",
+     "e": "18:00",
+     "type": "eten",
+     "label": "Eten (ongeveer een half uur, mag schuiven)"
+    },
+    {
+     "s": "18:00",
+     "e": "18:45",
+     "type": "vrij",
+     "label": "Vrij"
+    },
+    {
+     "s": "18:45",
+     "e": "19:00",
+     "type": "reis",
+     "label": "Reistijd naar training (aanname 15 min)"
+    },
+    {
+     "s": "19:00",
+     "e": "21:15",
+     "type": "training",
+     "label": "Training"
+    },
+    {
+     "s": "21:15",
+     "e": "21:30",
+     "type": "reis",
+     "label": "Reistijd terug (aanname 15 min)"
+    }
+   ]
+  },
+  {
+   "date": "2026-10-22",
+   "dow": "Donderdag",
+   "label": "Donderdag 22 okt",
+   "short": "22 okt",
+   "week": 1,
+   "tags": [
+    "Werk 08:30 tot 13:05"
+   ],
+   "items": [
+    {
+     "s": "08:30",
+     "e": "13:05",
+     "type": "werk",
+     "label": "Werk"
+    },
+    {
+     "s": "13:05",
+     "e": "13:50",
+     "type": "rust",
+     "label": "Reistijd (15 min) en pauze (30 min)"
+    },
+    {
+     "s": "13:50",
+     "e": "14:40",
+     "type": "leren",
+     "label": "Leren: Natuurkunde",
+     "subject": "NA",
+     "step": 3,
+     "of": 8,
+     "method": "Zelftest: formules en begrippen opschrijven zonder boek",
+     "id": "2026-10-22-2"
+    },
+    {
+     "s": "14:50",
+     "e": "15:40",
+     "type": "leren",
+     "label": "Leren: Duits",
+     "subject": "DU",
+     "step": 1,
+     "of": 4,
+     "method": "Stof doornemen, woordjes en begrippen op kaartjes zetten",
+     "id": "2026-10-22-3"
+    },
+    {
+     "s": "15:50",
+     "e": "16:40",
+     "type": "leren",
+     "label": "Leren: Scheikunde",
+     "subject": "SK",
+     "step": 2,
+     "of": 8,
+     "method": "Opgaven maken per onderwerp, daarna formules en regels uit het hoofd",
+     "id": "2026-10-22-4"
+    },
+    {
+     "s": "16:40",
+     "e": "17:30",
+     "type": "vrij",
+     "label": "Vrij"
+    },
+    {
+     "s": "17:30",
+     "e": "18:00",
+     "type": "eten",
+     "label": "Eten (ongeveer een half uur, mag schuiven)"
+    }
+   ]
+  },
+  {
+   "date": "2026-10-23",
+   "dow": "Vrijdag",
+   "label": "Vrijdag 23 okt",
+   "short": "23 okt",
+   "week": 1,
+   "tags": [
+    "Werk 08:30 tot 16:05"
+   ],
+   "items": [
+    {
+     "s": "08:30",
+     "e": "16:05",
+     "type": "werk",
+     "label": "Werk"
+    },
+    {
+     "s": "16:05",
+     "e": "16:50",
+     "type": "rust",
+     "label": "Reistijd (15 min) en pauze (30 min)"
+    },
+    {
+     "s": "16:50",
+     "e": "17:30",
+     "type": "vrij",
+     "label": "Vrij"
+    },
+    {
+     "s": "17:30",
+     "e": "18:00",
+     "type": "eten",
+     "label": "Eten (ongeveer een half uur, mag schuiven)"
+    },
+    {
+     "s": "18:00",
+     "e": "18:50",
+     "type": "leren",
+     "label": "Leren: Economie",
+     "subject": "EC",
+     "step": 3,
+     "of": 8,
+     "method": "Zelftest uit het hoofd, fouten markeren",
+     "id": "2026-10-23-4"
+    },
+    {
+     "s": "19:00",
+     "e": "19:50",
+     "type": "leren",
+     "label": "Leren: Wiskunde",
+     "subject": "WI",
+     "step": 3,
+     "of": 8,
+     "method": "Zelftest: formules en begrippen opschrijven zonder boek",
+     "id": "2026-10-23-5"
+    },
+    {
+     "s": "20:00",
+     "e": "20:50",
+     "type": "leren",
+     "label": "Leren: Engels",
+     "subject": "EN",
+     "step": 2,
+     "of": 4,
+     "method": "Zelftest uit het hoofd (woordjes, regels, begrippen)",
+     "id": "2026-10-23-6"
+    }
+   ]
+  },
+  {
+   "date": "2026-10-24",
+   "dow": "Zaterdag",
+   "label": "Zaterdag 24 okt",
+   "short": "24 okt",
+   "week": 1,
+   "tags": [
+    "Wedstrijd en werk 08:30 tot 13:40"
+   ],
+   "items": [
+    {
+     "s": "08:30",
+     "e": "13:40",
+     "type": "wedstrijd",
+     "label": "Wedstrijd en werk"
+    },
+    {
+     "s": "13:40",
+     "e": "14:25",
+     "type": "rust",
+     "label": "Reistijd (15 min) en pauze (30 min)"
+    },
+    {
+     "s": "14:25",
+     "e": "15:15",
+     "type": "leren",
+     "label": "Leren: Scheikunde",
+     "subject": "SK",
+     "step": 3,
+     "of": 8,
+     "method": "Zelftest: formules en begrippen opschrijven zonder boek",
+     "id": "2026-10-24-2"
+    },
+    {
+     "s": "15:25",
+     "e": "16:15",
+     "type": "leren",
+     "label": "Leren: Nederlands",
+     "subject": "NL",
+     "step": 2,
+     "of": 4,
+     "method": "Zelftest uit het hoofd (woordjes, regels, begrippen)",
+     "id": "2026-10-24-3"
+    },
+    {
+     "s": "16:25",
+     "e": "17:15",
+     "type": "leren",
+     "label": "Leren: Natuurkunde",
+     "subject": "NA",
+     "step": 4,
+     "of": 8,
+     "method": "Oefenopgaven, onderwerpen door elkaar",
+     "id": "2026-10-24-4"
+    },
+    {
+     "s": "17:15",
+     "e": "17:30",
+     "type": "vrij",
+     "label": "Vrij"
+    },
+    {
+     "s": "17:30",
+     "e": "18:00",
+     "type": "eten",
+     "label": "Eten (ongeveer een half uur, mag schuiven)"
+    }
+   ]
+  },
+  {
+   "date": "2026-10-25",
+   "dow": "Zondag",
+   "label": "Zondag 25 okt",
+   "short": "25 okt",
+   "week": 1,
+   "tags": [
+    "Vrije dag"
+   ],
+   "items": [
+    {
+     "s": "10:00",
+     "e": "10:50",
+     "type": "leren",
+     "label": "Leren: Duits",
+     "subject": "DU",
+     "step": 2,
+     "of": 4,
+     "method": "Zelftest uit het hoofd (woordjes, regels, begrippen)",
+     "id": "2026-10-25-0"
+    },
+    {
+     "s": "11:00",
+     "e": "11:50",
+     "type": "leren",
+     "label": "Leren: Wiskunde",
+     "subject": "WI",
+     "step": 4,
+     "of": 8,
+     "method": "Oefenopgaven, onderwerpen door elkaar",
+     "id": "2026-10-25-1"
+    },
+    {
+     "s": "11:50",
+     "e": "13:30",
+     "type": "vrij",
+     "label": "Lunch en pauze"
+    },
+    {
+     "s": "13:30",
+     "e": "14:20",
+     "type": "leren",
+     "label": "Leren: Natuurkunde",
+     "subject": "NA",
+     "step": 5,
+     "of": 8,
+     "method": "Fouten van eerdere opgaven opnieuw maken",
+     "id": "2026-10-25-3"
+    },
+    {
+     "s": "14:30",
+     "e": "15:20",
+     "type": "leren",
+     "label": "Leren: Economie",
+     "subject": "EC",
+     "step": 4,
+     "of": 8,
+     "method": "Oefenvragen, onderwerpen door elkaar",
+     "id": "2026-10-25-4"
+    },
+    {
+     "s": "15:30",
+     "e": "16:20",
+     "type": "leren",
+     "label": "Leren: Scheikunde",
+     "subject": "SK",
+     "step": 4,
+     "of": 8,
+     "method": "Oefenopgaven, onderwerpen door elkaar",
+     "id": "2026-10-25-5"
+    },
+    {
+     "s": "16:20",
+     "e": "17:30",
+     "type": "vrij",
+     "label": "Vrij"
+    },
+    {
+     "s": "17:30",
+     "e": "18:00",
+     "type": "eten",
+     "label": "Eten (ongeveer een half uur, mag schuiven)"
+    }
+   ],
+   "note": "In de nacht van zaterdag op zondag gaat de klok een uur terug (wintertijd)."
+  },
+  {
+   "date": "2026-10-26",
+   "dow": "Maandag",
+   "label": "Maandag 26 okt",
+   "short": "26 okt",
+   "week": 2,
+   "tags": [
+    "School 10:05 tot 16:15",
+    "Training 19:00 tot 21:15"
+   ],
+   "items": [
+    {
+     "s": "10:05",
+     "e": "16:15",
+     "type": "school",
+     "label": "School"
+    },
+    {
+     "s": "16:15",
+     "e": "17:00",
+     "type": "rust",
+     "label": "Reistijd (15 min) en pauze (30 min)"
+    },
+    {
+     "s": "17:00",
+     "e": "17:30",
+     "type": "optioneel",
+     "label": "Optioneel: 30 min kaartjes herhalen (Duits of Engels)",
+     "id": "2026-10-26-2"
+    },
+    {
+     "s": "17:30",
+     "e": "18:00",
+     "type": "eten",
+     "label": "Eten (ongeveer een half uur, mag schuiven)"
+    },
+    {
+     "s": "18:00",
+     "e": "18:45",
+     "type": "vrij",
+     "label": "Vrij"
+    },
+    {
+     "s": "18:45",
+     "e": "19:00",
+     "type": "reis",
+     "label": "Reistijd naar training (aanname 15 min)"
+    },
+    {
+     "s": "19:00",
+     "e": "21:15",
+     "type": "training",
+     "label": "Training"
+    },
+    {
+     "s": "21:15",
+     "e": "21:30",
+     "type": "reis",
+     "label": "Reistijd terug (aanname 15 min)"
+    }
+   ],
+   "note": "Na school en training is het een lange dag. Het optionele blok mag je zonder schuldgevoel overslaan."
+  },
+  {
+   "date": "2026-10-27",
+   "dow": "Dinsdag",
+   "label": "Dinsdag 27 okt",
+   "short": "27 okt",
+   "week": 2,
+   "tags": [
+    "School 08:45 tot 13:20"
+   ],
+   "items": [
+    {
+     "s": "08:45",
+     "e": "13:20",
+     "type": "school",
+     "label": "School"
+    },
+    {
+     "s": "13:20",
+     "e": "14:05",
+     "type": "rust",
+     "label": "Reistijd (15 min) en pauze (30 min)"
+    },
+    {
+     "s": "14:05",
+     "e": "14:55",
+     "type": "leren",
+     "label": "Leren: Wiskunde",
+     "subject": "WI",
+     "step": 5,
+     "of": 8,
+     "method": "Fouten van eerdere opgaven opnieuw maken",
+     "id": "2026-10-27-2"
+    },
+    {
+     "s": "15:05",
+     "e": "15:55",
+     "type": "leren",
+     "label": "Leren: Economie",
+     "subject": "EC",
+     "step": 5,
+     "of": 8,
+     "method": "Gemarkeerde fouten opnieuw testen",
+     "id": "2026-10-27-3"
+    },
+    {
+     "s": "16:05",
+     "e": "16:55",
+     "type": "leren",
+     "label": "Leren: Scheikunde",
+     "subject": "SK",
+     "step": 5,
+     "of": 8,
+     "method": "Fouten van eerdere opgaven opnieuw maken",
+     "id": "2026-10-27-4"
+    },
+    {
+     "s": "16:55",
+     "e": "17:30",
+     "type": "vrij",
+     "label": "Vrij"
+    },
+    {
+     "s": "17:30",
+     "e": "18:00",
+     "type": "eten",
+     "label": "Eten (ongeveer een half uur, mag schuiven)"
+    }
+   ]
+  },
+  {
+   "date": "2026-10-28",
+   "dow": "Woensdag",
+   "label": "Woensdag 28 okt",
+   "short": "28 okt",
+   "week": 2,
+   "tags": [
+    "School 08:45 tot 13:20",
+    "Training 19:00 tot 21:15"
+   ],
+   "items": [
+    {
+     "s": "08:45",
+     "e": "13:20",
+     "type": "school",
+     "label": "School"
+    },
+    {
+     "s": "13:20",
+     "e": "14:05",
+     "type": "rust",
+     "label": "Reistijd (15 min) en pauze (30 min)"
+    },
+    {
+     "s": "14:05",
+     "e": "14:55",
+     "type": "leren",
+     "label": "Leren: Natuurkunde",
+     "subject": "NA",
+     "step": 6,
+     "of": 8,
+     "method": "Oude toets of gemixte opgaven",
+     "id": "2026-10-28-2"
+    },
+    {
+     "s": "15:05",
+     "e": "15:55",
+     "type": "leren",
+     "label": "Leren: Engels",
+     "subject": "EN",
+     "step": 3,
+     "of": 4,
+     "method": "Oefenopgaven of oude toets maken",
+     "id": "2026-10-28-3"
+    },
+    {
+     "s": "16:05",
+     "e": "16:55",
+     "type": "leren",
+     "label": "Leren: Scheikunde",
+     "subject": "SK",
+     "step": 6,
+     "of": 8,
+     "method": "Oude toets of gemixte opgaven",
+     "id": "2026-10-28-4"
+    },
+    {
+     "s": "16:55",
+     "e": "17:30",
+     "type": "vrij",
+     "label": "Vrij"
+    },
+    {
+     "s": "17:30",
+     "e": "18:00",
+     "type": "eten",
+     "label": "Eten (ongeveer een half uur, mag schuiven)"
+    },
+    {
+     "s": "18:00",
+     "e": "18:45",
+     "type": "vrij",
+     "label": "Vrij"
+    },
+    {
+     "s": "18:45",
+     "e": "19:00",
+     "type": "reis",
+     "label": "Reistijd naar training (aanname 15 min)"
+    },
+    {
+     "s": "19:00",
+     "e": "21:15",
+     "type": "training",
+     "label": "Training"
+    },
+    {
+     "s": "21:15",
+     "e": "21:30",
+     "type": "reis",
+     "label": "Reistijd terug (aanname 15 min)"
+    }
+   ]
+  },
+  {
+   "date": "2026-10-29",
+   "dow": "Donderdag",
+   "label": "Donderdag 29 okt",
+   "short": "29 okt",
+   "week": 2,
+   "tags": [
+    "School 08:45 tot 12:30"
+   ],
+   "items": [
+    {
+     "s": "08:45",
+     "e": "12:30",
+     "type": "school",
+     "label": "School"
+    },
+    {
+     "s": "12:30",
+     "e": "13:15",
+     "type": "rust",
+     "label": "Reistijd (15 min) en pauze (30 min)"
+    },
+    {
+     "s": "13:15",
+     "e": "14:05",
+     "type": "leren",
+     "label": "Leren: Economie",
+     "subject": "EC",
+     "step": 6,
+     "of": 8,
+     "method": "Oude toets of gemixte oefenvragen",
+     "id": "2026-10-29-2"
+    },
+    {
+     "s": "14:15",
+     "e": "15:05",
+     "type": "leren",
+     "label": "Leren: Wiskunde",
+     "subject": "WI",
+     "step": 6,
+     "of": 8,
+     "method": "Oude toets of gemixte opgaven",
+     "id": "2026-10-29-3"
+    },
+    {
+     "s": "15:15",
+     "e": "16:05",
+     "type": "leren",
+     "label": "Leren: Nederlands",
+     "subject": "NL",
+     "step": 3,
+     "of": 4,
+     "method": "Oefenopgaven of oude toets maken",
+     "id": "2026-10-29-4"
+    },
+    {
+     "s": "16:15",
+     "e": "17:05",
+     "type": "leren",
+     "label": "Leren: Duits",
+     "subject": "DU",
+     "step": 3,
+     "of": 4,
+     "method": "Oefenopgaven of oude toets maken",
+     "id": "2026-10-29-5"
+    },
+    {
+     "s": "17:05",
+     "e": "17:30",
+     "type": "vrij",
+     "label": "Vrij"
+    },
+    {
+     "s": "17:30",
+     "e": "18:00",
+     "type": "eten",
+     "label": "Eten (ongeveer een half uur, mag schuiven)"
+    }
+   ]
+  },
+  {
+   "date": "2026-10-30",
+   "dow": "Vrijdag",
+   "label": "Vrijdag 30 okt",
+   "short": "30 okt",
+   "week": 2,
+   "tags": [
+    "School 08:45 tot 13:20"
+   ],
+   "items": [
+    {
+     "s": "08:45",
+     "e": "13:20",
+     "type": "school",
+     "label": "School"
+    },
+    {
+     "s": "13:20",
+     "e": "14:05",
+     "type": "rust",
+     "label": "Reistijd (15 min) en pauze (30 min)"
+    },
+    {
+     "s": "14:05",
+     "e": "14:55",
+     "type": "leren",
+     "label": "Leren: Natuurkunde",
+     "subject": "NA",
+     "step": 7,
+     "of": 8,
+     "method": "Oefentoets onder toetscondities (tijd, geen boek)",
+     "id": "2026-10-30-2"
+    },
+    {
+     "s": "15:05",
+     "e": "15:55",
+     "type": "leren",
+     "label": "Leren: Scheikunde",
+     "subject": "SK",
+     "step": 7,
+     "of": 8,
+     "method": "Oefentoets onder toetscondities (tijd, geen boek)",
+     "id": "2026-10-30-3"
+    },
+    {
+     "s": "16:05",
+     "e": "16:55",
+     "type": "leren",
+     "label": "Leren: Wiskunde",
+     "subject": "WI",
+     "step": 7,
+     "of": 8,
+     "method": "Oefentoets onder toetscondities (tijd, geen boek)",
+     "id": "2026-10-30-4"
+    },
+    {
+     "s": "16:55",
+     "e": "17:30",
+     "type": "vrij",
+     "label": "Vrij"
+    },
+    {
+     "s": "17:30",
+     "e": "18:00",
+     "type": "eten",
+     "label": "Eten (ongeveer een half uur, mag schuiven)"
+    },
+    {
+     "s": "18:00",
+     "e": "18:50",
+     "type": "leren",
+     "label": "Leren: Economie",
+     "subject": "EC",
+     "step": 7,
+     "of": 8,
+     "method": "Oefentoets onder toetscondities (tijd, geen boek)",
+     "id": "2026-10-30-7"
+    }
+   ]
+  },
+  {
+   "date": "2026-10-31",
+   "dow": "Zaterdag",
+   "label": "Zaterdag 31 okt",
+   "short": "31 okt",
+   "week": 2,
+   "tags": [
+    "Wedstrijd en werk 08:30 tot 17:00"
+   ],
+   "items": [
+    {
+     "s": "08:30",
+     "e": "17:00",
+     "type": "wedstrijd",
+     "label": "Wedstrijd en werk"
+    },
+    {
+     "s": "17:00",
+     "e": "17:30",
+     "type": "rust",
+     "label": "Reistijd (15 min) en pauze"
+    },
+    {
+     "s": "17:30",
+     "e": "18:00",
+     "type": "eten",
+     "label": "Eten (ongeveer een half uur, mag schuiven)"
+    },
+    {
+     "s": "18:00",
+     "e": "18:30",
+     "type": "vrij",
+     "label": "Pauze na het eten"
+    },
+    {
+     "s": "18:30",
+     "e": "19:20",
+     "type": "leren",
+     "label": "Leren: Natuurkunde",
+     "subject": "NA",
+     "step": 8,
+     "of": 8,
+     "method": "Fouten herhalen en laatste zelftest",
+     "id": "2026-10-31-4"
+    },
+    {
+     "s": "19:30",
+     "e": "20:20",
+     "type": "leren",
+     "label": "Leren: Engels",
+     "subject": "EN",
+     "step": 4,
+     "of": 4,
+     "method": "Fouten herhalen en laatste zelftest",
+     "id": "2026-10-31-5"
+    }
+   ]
+  },
+  {
+   "date": "2026-11-01",
+   "dow": "Zondag",
+   "label": "Zondag 1 nov",
+   "short": "1 nov",
+   "week": 2,
+   "tags": [
+    "Vrije dag, morgen begint de toetsweek"
+   ],
+   "items": [
+    {
+     "s": "10:00",
+     "e": "10:50",
+     "type": "leren",
+     "label": "Leren: Nederlands",
+     "subject": "NL",
+     "step": 4,
+     "of": 4,
+     "method": "Fouten herhalen en laatste zelftest",
+     "id": "2026-11-01-0"
+    },
+    {
+     "s": "11:00",
+     "e": "11:50",
+     "type": "leren",
+     "label": "Leren: Scheikunde",
+     "subject": "SK",
+     "step": 8,
+     "of": 8,
+     "method": "Fouten herhalen en laatste zelftest",
+     "id": "2026-11-01-1"
+    },
+    {
+     "s": "11:50",
+     "e": "13:30",
+     "type": "vrij",
+     "label": "Lunch en pauze"
+    },
+    {
+     "s": "13:30",
+     "e": "14:20",
+     "type": "leren",
+     "label": "Leren: Wiskunde",
+     "subject": "WI",
+     "step": 8,
+     "of": 8,
+     "method": "Fouten herhalen en laatste zelftest",
+     "id": "2026-11-01-3"
+    },
+    {
+     "s": "14:30",
+     "e": "15:20",
+     "type": "leren",
+     "label": "Leren: Economie",
+     "subject": "EC",
+     "step": 8,
+     "of": 8,
+     "method": "Fouten herhalen en laatste zelftest",
+     "id": "2026-11-01-4"
+    },
+    {
+     "s": "15:30",
+     "e": "16:20",
+     "type": "leren",
+     "label": "Leren: Duits",
+     "subject": "DU",
+     "step": 4,
+     "of": 4,
+     "method": "Fouten herhalen en laatste zelftest",
+     "id": "2026-11-01-5"
+    },
+    {
+     "s": "16:20",
+     "e": "17:30",
+     "type": "vrij",
+     "label": "Vrij"
+    },
+    {
+     "s": "17:30",
+     "e": "18:00",
+     "type": "eten",
+     "label": "Eten (ongeveer een half uur, mag schuiven)"
+    }
+   ],
+   "note": "Geen nieuwe stof meer. Alleen zelftesten, fouten herhalen en op tijd naar bed."
+  }
+ ],
+ "toetsweek": "2026-11-02"
+};
+(function(){
+"use strict";
+var KEY="planning.toetsweek.v1";
+var S={done:{},what:{},theme:""};
+var canStore=true;
+var filter=null;
+function $(s,r){return (r||document).querySelector(s)}
+function el(t,a,c){var e=document.createElement(t);if(a)for(var k in a){if(k==="class")e.className=a[k];else if(k==="text")e.textContent=a[k];else e.setAttribute(k,a[k])}(c||[]).forEach(function(x){e.appendChild(x)});return e}
+function load(){try{var r=localStorage.getItem(KEY);if(r){var o=JSON.parse(r);S.done=o.done||{};S.what=o.what||{};S.theme=o.theme||""}}catch(e){canStore=false}}
+var st;function save(){clearTimeout(st);st=setTimeout(function(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){canStore=false}},150)}
+function pd(s){var p=s.split("-");return new Date(+p[0],+p[1]-1,+p[2])}
+function iso(d){function p(n){return n<10?"0"+n:""+n}return d.getFullYear()+"-"+p(d.getMonth()+1)+"-"+p(d.getDate())}
+var MON=["jan","feb","mrt","apr","mei","jun","jul","aug","sep","okt","nov","dec"];
+function shortD(s){var d=pd(s);return d.getDate()+" "+MON[d.getMonth()]}
+
+var subj=PLAN.subjects, days=PLAN.days;
+var blocks=[];days.forEach(function(d){d.items.forEach(function(it){if(it.type==="leren")blocks.push(it)})});
+
+function setStyle(n,k){n.style.setProperty("--c","var(--"+k+")")}
+
+function stats(){
+  var n=blocks.filter(function(b){return S.done[b.id]}).length;
+  $("#done").textContent=n;$("#tot").textContent=blocks.length;
+  var pct=Math.round(100*n/blocks.length);$("#pbar").style.width=pct+"%";$("#ptxt").textContent=pct+"% van de leerblokken klaar";
+  var left=Math.round((pd(PLAN.toetsweek)-pd(iso(new Date())))/864e5);
+  if(left>0){$("#cd").textContent=left;$("#cdl").textContent=left===1?"dag tot de toetsweek":"dagen tot de toetsweek"}
+  else if(left===0){$("#cd").textContent="Vandaag";$("#cdl").textContent="begint de toetsweek"}
+  else{$("#cd").textContent="Bezig";$("#cdl").textContent="de toetsweek is begonnen"}
+  Object.keys(subj).forEach(function(k){
+    var all=blocks.filter(function(b){return b.subject===k}),d=all.filter(function(b){return S.done[b.id]}).length;
+    var e=document.getElementById("pc-"+k);if(e)e.textContent=d+" van "+all.length+" blokken klaar"
+  });
+  days.forEach(function(d){
+    var all=d.items.filter(function(i){return i.type==="leren"}),dn=all.filter(function(i){return S.done[i.id]}).length;
+    var e=document.getElementById("bd-"+d.date);if(e)e.textContent=all.length?(dn+" van "+all.length+" klaar"):"";
+  });
+}
+
+function renderLegend(){
+  var h=$("#legend");h.innerHTML="";
+  Object.keys(subj).forEach(function(k){
+    var s=subj[k],b=el("button",{class:"chip",type:"button"});setStyle(b,k);b.dataset.k=k;
+    b.appendChild(el("b",{text:s.name}));
+    b.appendChild(el("small",{text:"Toets "+shortD(s.toets)+" · "+s.zw+" · "+s.n+" blokken"}));
+    var p=el("small",{id:"pc-"+k});b.appendChild(p);
+    b.onclick=function(){filter=filter===k?null:k;applyFilter()};
+    h.appendChild(b);
+  });
+}
+function applyFilter(){
+  document.querySelectorAll(".chip").forEach(function(c){c.classList.toggle("on",filter===c.dataset.k);c.classList.toggle("off",!!filter&&filter!==c.dataset.k)});
+  document.querySelectorAll("[data-s]").forEach(function(n){n.classList.toggle("dim",!!filter&&n.dataset.s!==filter)});
+  document.querySelectorAll(".r[data-fixed]").forEach(function(n){n.classList.toggle("dim",!!filter)});
+}
+
+function renderCal(){
+  var c=$("#cal");c.innerHTML="";
+  var today=iso(new Date());
+  [1,2].forEach(function(w){
+    c.appendChild(el("div",{class:"week",text:w===1?"Week 1: vakantie, je werkt in de ochtend en middag":"Week 2: schoolweek"}));
+    var g=el("div",{class:"cal"});
+    ["ma","di","wo","do","vr","za","zo"].forEach(function(x){g.appendChild(el("div",{class:"h",text:x}))});
+    days.filter(function(d){return d.week===w}).forEach(function(d){
+      var cell=el("button",{class:"cell"+(d.date===today?" today":""),type:"button"});
+      cell.appendChild(el("div",{class:"d",text:d.label}));
+      cell.appendChild(el("div",{class:"t",text:d.tags.join(", ")}));
+      d.items.filter(function(i){return i.type==="leren"}).forEach(function(i){
+        var s=subj[i.subject],dot=el("div",{class:"dot"+(S.done[i.id]?" done":""),text:i.s+" "+s.name});setStyle(dot,i.subject);dot.dataset.s=i.subject;dot.dataset.id=i.id;cell.appendChild(dot);
+      });
+      cell.onclick=function(){var t=document.getElementById("day-"+d.date);if(t)t.scrollIntoView({behavior:"smooth",block:"start"})};
+      g.appendChild(cell);
+    });
+    c.appendChild(g);
+  });
+}
+
+function renderDays(){
+  var host=$("#days");host.innerHTML="";
+  var today=iso(new Date());
+  days.forEach(function(d){
+    var card=el("section",{class:"day"+(d.date===today?" today":""),id:"day-"+d.date});
+    var hd=el("header",{},[el("h3",{text:d.label}),el("span",{class:"tags",text:d.tags.join(" · ")}),el("span",{class:"badge",id:"bd-"+d.date})]);
+    card.appendChild(hd);
+    var rows=el("div",{class:"rows"});
+    d.items.forEach(function(it){
+      var r=el("div",{class:"r "+it.type+(it.type!=="leren"&&it.type!=="optioneel"?" fixed":"")});
+      if(it.type!=="leren")r.dataset.fixed="1";
+      r.appendChild(el("div",{class:"tm",text:it.s+" tot "+it.e}));
+      if(it.type==="leren"){
+        r.dataset.s=it.subject;
+        var s=subj[it.subject],b=el("div",{class:"blk"+(S.done[it.id]?" done":"")});setStyle(b,it.subject);b.dataset.s=it.subject;
+        var cb=el("input",{type:"checkbox","aria-label":"Klaar"});cb.checked=!!S.done[it.id];
+        cb.onchange=function(){S.done[it.id]=cb.checked;b.classList.toggle("done",cb.checked);save();stats();renderCal();applyFilter()};
+        b.appendChild(el("div",{class:"top"},[cb,el("span",{class:"nm",text:s.name}),el("span",{class:"st",text:"blok "+it.step+" van "+it.of+" · 50 min, daarna 10 min pauze"})]));
+        b.appendChild(el("div",{class:"me",text:it.method}));
+        var inp=el("input",{type:"text",placeholder:"Wat precies? Bijvoorbeeld hoofdstuk 3, opgave 1 t/m 12","aria-label":"Wat precies"});
+        inp.value=S.what[it.id]||"";
+        var pv=el("div",{class:"pv",text:S.what[it.id]||""});
+        inp.oninput=function(){S.what[it.id]=inp.value;pv.textContent=inp.value;save()};
+        b.appendChild(el("div",{class:"wp"},[inp,pv]));
+        r.appendChild(b);
+      }else if(it.type==="optioneel"){
+        var b2=el("div",{class:"blk"+(S.done[it.id]?" done":"")});b2.style.setProperty("--c","var(--muted)");
+        var cb2=el("input",{type:"checkbox","aria-label":"Klaar"});cb2.checked=!!S.done[it.id];
+        cb2.onchange=function(){S.done[it.id]=cb2.checked;b2.classList.toggle("done",cb2.checked);save()};
+        b2.appendChild(el("div",{class:"top"},[cb2,el("span",{class:"nm",text:it.label})]));
+        r.appendChild(b2);
+      }else{
+        r.appendChild(el("div",{class:"lb",text:it.label}));
+      }
+      rows.appendChild(r);
+    });
+    card.appendChild(rows);
+    if(d.note)card.appendChild(el("div",{class:"note",text:d.note}));
+    host.appendChild(card);
+  });
+}
+
+$("#bPrint").onclick=function(){window.print()};
+$("#bTheme").onclick=function(){
+  var cur=document.documentElement.getAttribute("data-theme");
+  var dark=cur?cur==="dark":window.matchMedia("(prefers-color-scheme: dark)").matches;
+  S.theme=dark?"light":"dark";document.documentElement.setAttribute("data-theme",S.theme);save();
+};
+$("#bReset").onclick=function(){
+  if(confirm("Alle afvinkingen en notities wissen?")){S.done={};S.what={};save();renderCal();renderDays();stats();applyFilter()}
+};
+
+load();
+if(S.theme)document.documentElement.setAttribute("data-theme",S.theme);
+$("#sub").textContent="Maandag 19 oktober tot en met zondag 1 november. De toetsweek begint maandag 2 november.";
+renderLegend();renderCal();renderDays();stats();applyFilter();
+})();
+</script>
+</body>
+</html>
