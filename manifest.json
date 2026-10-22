@@ -1,0 +1,26 @@
+{
+    "name": "Persoonlijk Dashboard",
+    "short_name": "Dashboard",
+    "description": "Je notities, huiswerk, deadlines, cijfers en planning op één plek.",
+    "lang": "nl",
+    "start_url": "./",
+    "scope": "./",
+    "display": "standalone",
+    "orientation": "any",
+    "background_color": "#F4F4EF",
+    "theme_color": "#5C6B2A",
+    "icons": [
+        {
+            "src": "./favicon.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "./favicon.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable"
+        }
+    ]
+}
