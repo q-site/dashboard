@@ -6,7 +6,7 @@
  * rechtstreeks naar Supabase.
  */
 
-const CACHE = 'dashboard-v1.2';
+const CACHE = 'dashboard-v1.4';
 
 const SHELL = [
     './',
