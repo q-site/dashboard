@@ -354,12 +354,14 @@ h3 {
     0%,
     100% {
         box-shadow:
-            0 0 0 2px var(--olive),
+            0 0 0 3px var(--olive),
+            0 0 0 6px color-mix(in srgb, var(--olive) 35%, transparent),
             0 0 0 9999px rgba(10, 12, 8, 0.62);
     }
     50% {
         box-shadow:
-            0 0 0 6px color-mix(in srgb, var(--olive) 45%, transparent),
+            0 0 0 3px var(--olive),
+            0 0 0 12px color-mix(in srgb, var(--olive) 20%, transparent),
             0 0 0 9999px rgba(10, 12, 8, 0.62);
     }
 }
@@ -370,7 +372,7 @@ h3 {
         stroke-opacity: 1;
     }
     50% {
-        stroke-opacity: 0.25;
+        stroke-opacity: 0.45;
     }
 }
 
@@ -1099,6 +1101,357 @@ textarea.input {
     min-width: 200px;
 }
 
+.time-pair > *,
+.dialog .two > *,
+.field {
+    min-width: 0;
+}
+
+.link-chip.editing .ellipsis {
+    max-width: 160px;
+    margin-right: 4px;
+}
+
+.dialog.wide {
+    max-width: 920px;
+}
+/* ===== STIJLEN =====
+ * Een stijl ligt bovenop licht/donker en de accentkleur.
+ * Gekozen via data-style op <html>. "standaard" heeft geen regels.
+ */
+
+/* ===== STIJL: GLAS ===== */
+[data-style="glas"] {
+    --radius: 18px;
+    --radius-btn: 10px;
+    --glass: rgba(255, 255, 255, 0.52);
+    --glass-strong: rgba(255, 255, 255, 0.72);
+    --border: rgba(255, 255, 255, 0.75);
+    --shadow: 0 20px 50px -24px rgba(30, 30, 60, 0.35);
+}
+
+[data-style="glas"][data-theme="dark"] {
+    --glass: rgba(28, 30, 40, 0.48);
+    --glass-strong: rgba(28, 30, 40, 0.7);
+    --border: rgba(255, 255, 255, 0.1);
+    --shadow: 0 20px 50px -20px rgba(0, 0, 0, 0.7);
+}
+
+[data-style="glas"] body {
+    background:
+        radial-gradient(42vw 42vw at 8% 12%, color-mix(in srgb, var(--olive) 55%, transparent), transparent 70%),
+        radial-gradient(38vw 38vw at 92% 18%, rgba(120, 160, 255, 0.45), transparent 70%),
+        radial-gradient(46vw 46vw at 70% 95%, rgba(255, 150, 190, 0.38), transparent 70%),
+        radial-gradient(40vw 40vw at 20% 90%, rgba(255, 210, 120, 0.35), transparent 70%),
+        #EEF0F6;
+    background-attachment: fixed;
+}
+
+[data-style="glas"][data-theme="dark"] body {
+    background:
+        radial-gradient(42vw 42vw at 8% 12%, color-mix(in srgb, var(--olive) 40%, transparent), transparent 70%),
+        radial-gradient(38vw 38vw at 92% 18%, rgba(70, 90, 220, 0.4), transparent 70%),
+        radial-gradient(46vw 46vw at 70% 95%, rgba(200, 60, 140, 0.3), transparent 70%),
+        #0C0D14;
+    background-attachment: fixed;
+}
+
+[data-style="glas"] .card,
+[data-style="glas"] .seg,
+[data-style="glas"] .input {
+    background: var(--glass);
+    border-color: var(--border);
+    -webkit-backdrop-filter: blur(22px) saturate(1.6);
+    backdrop-filter: blur(22px) saturate(1.6);
+    box-shadow: var(--shadow), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+[data-style="glas"] .topbar {
+    background: var(--glass-strong);
+    border-bottom-color: var(--border);
+}
+
+[data-style="glas"] .btn:not(.primary) {
+    background: var(--glass);
+    border-color: var(--border);
+}
+
+/* ===== STIJL: PAPIER ===== */
+[data-style="papier"] {
+    --white: #FFFDF8;
+    --light: #F2ECDF;
+    --border: #E0D6C2;
+    --anthracite: #2A241C;
+    --muted: #776C5C;
+    --radius: 6px;
+    --radius-btn: 5px;
+    --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
+    --shadow: 0 1px 0 #E0D6C2, 0 10px 24px -18px rgba(70, 50, 20, 0.45);
+}
+
+[data-style="papier"][data-theme="dark"] {
+    --white: #221E18;
+    --light: #18150F;
+    --border: #3A332A;
+    --anthracite: #EDE5D6;
+    --muted: #A99D88;
+    --shadow: 0 10px 24px -16px rgba(0, 0, 0, 0.7);
+}
+
+[data-style="papier"] body {
+    background-color: var(--light);
+    background-image: radial-gradient(color-mix(in srgb, var(--anthracite) 14%, transparent) 1px, transparent 1.2px);
+    background-size: 22px 22px;
+}
+
+[data-style="papier"] .card {
+    box-shadow: var(--shadow);
+}
+
+[data-style="papier"] h1,
+[data-style="papier"] h2,
+[data-style="papier"] .disp {
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+}
+
+[data-style="papier"] .hero h1 {
+    font-style: italic;
+}
+
+/* ===== STIJL: MIDDERNACHT ===== */
+/* Altijd donker, met een zachte gloed in de accentkleur. */
+[data-style="middernacht"] {
+    --white: #11162A;
+    --light: #080B16;
+    --border: #1E2540;
+    --anthracite: #E8EBFA;
+    --muted: #8D93B5;
+    --accent-text: #0A0D18;
+    --badge-bg: color-mix(in srgb, var(--olive) 16%, #11162A);
+    --badge-border: color-mix(in srgb, var(--olive) 35%, #11162A);
+    --success-bg: #10251C;
+    --error-bg: #2A1420;
+    --warning-bg: #2A2114;
+    --radius: 14px;
+    --shadow: 0 0 0 1px #1E2540, 0 18px 40px -20px rgba(0, 0, 0, 0.9);
+    color-scheme: dark;
+}
+
+[data-style="middernacht"],
+[data-style="middernacht"][data-accent] {
+    --olive: #8FA7FF;
+    --olive-dark: #B6C6FF;
+}
+
+[data-style="middernacht"][data-accent="olijf"] { --olive: #B7D36A; --olive-dark: #CFE494; }
+[data-style="middernacht"][data-accent="terracotta"] { --olive: #FF9C73; --olive-dark: #FFBA9C; }
+[data-style="middernacht"][data-accent="paars"] { --olive: #C3A2FF; --olive-dark: #D8C4FF; }
+[data-style="middernacht"][data-accent="teal"] { --olive: #5FE0D4; --olive-dark: #96EDE5; }
+[data-style="middernacht"][data-accent="bordeaux"] { --olive: #FF7FA2; --olive-dark: #FFA7BF; }
+
+[data-style="middernacht"] body {
+    background:
+        radial-gradient(70vw 40vw at 50% -10%, color-mix(in srgb, var(--olive) 22%, transparent), transparent 70%),
+        var(--light);
+    background-attachment: fixed;
+    color: var(--anthracite);
+}
+
+[data-style="middernacht"] .btn.primary {
+    box-shadow: 0 0 22px -4px color-mix(in srgb, var(--olive) 70%, transparent);
+}
+
+[data-style="middernacht"] .card:hover {
+    border-color: color-mix(in srgb, var(--olive) 45%, var(--border));
+}
+
+/* ===== STIJL: BLOKKEN (BRUTALIST) ===== */
+[data-style="blokken"] {
+    --white: #FFFFFF;
+    --light: #FFF4D6;
+    --border: #16181B;
+    --anthracite: #16181B;
+    --muted: #4A4D52;
+    --radius: 4px;
+    --radius-btn: 4px;
+    --font-display: 'Space Grotesk', 'Geist', system-ui, sans-serif;
+    --shadow: 5px 5px 0 #16181B;
+}
+
+[data-style="blokken"][data-theme="dark"] {
+    --white: #1B1D21;
+    --light: #0F1012;
+    --border: #F2F0E6;
+    --anthracite: #F2F0E6;
+    --muted: #BDBAB0;
+    --shadow: 5px 5px 0 #F2F0E6;
+}
+
+[data-style="blokken"] .card {
+    border-width: 2px;
+    box-shadow: var(--shadow);
+}
+
+[data-style="blokken"] .card:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 7px 7px 0 var(--border);
+}
+
+[data-style="blokken"] .btn {
+    border-width: 2px;
+    border-color: var(--border);
+    box-shadow: 3px 3px 0 var(--border);
+    font-weight: 700;
+}
+
+[data-style="blokken"] .btn:active {
+    transform: translate(3px, 3px);
+    box-shadow: none;
+}
+
+[data-style="blokken"] h1,
+[data-style="blokken"] h2,
+[data-style="blokken"] .disp {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+[data-style="blokken"] .topbar {
+    border-bottom-width: 2px;
+}
+
+/* ===== STIJL: ZACHT ===== */
+[data-style="zacht"] {
+    --white: #FFFFFF;
+    --light: color-mix(in srgb, var(--olive) 14%, #F7F6FB);
+    --border: transparent;
+    --radius: 24px;
+    --radius-btn: 999px;
+    --shadow: 0 18px 40px -22px color-mix(in srgb, var(--olive) 45%, rgba(0, 0, 0, 0.3));
+}
+
+[data-style="zacht"][data-theme="dark"] {
+    --white: #1C1D24;
+    --light: color-mix(in srgb, var(--olive) 7%, #121318);
+    --shadow: 0 18px 40px -20px rgba(0, 0, 0, 0.8);
+}
+
+[data-style="zacht"] .card {
+    box-shadow: var(--shadow);
+}
+
+/* Elke tegel een eigen zachte pasteltint. */
+[data-style="zacht"] .card:nth-child(4n + 1) { background: color-mix(in srgb, var(--olive) 7%, var(--white)); }
+[data-style="zacht"] .card:nth-child(4n + 2) { background: color-mix(in srgb, #F2A07B 12%, var(--white)); }
+[data-style="zacht"] .card:nth-child(4n + 3) { background: color-mix(in srgb, #8FB4F0 13%, var(--white)); }
+[data-style="zacht"] .card:nth-child(4n + 4) { background: color-mix(in srgb, #C8A8EE 13%, var(--white)); }
+
+[data-style="zacht"] h1,
+[data-style="zacht"] h2 {
+    letter-spacing: -0.015em;
+}
+
+[data-style="zacht"] .input {
+    border-color: color-mix(in srgb, var(--anthracite) 12%, transparent);
+    border-radius: 14px;
+}
+
+[data-style="zacht"] .topbar {
+    border-bottom-color: transparent;
+}
+
+[data-style="zacht"] .btn:not(.primary) {
+    border-color: color-mix(in srgb, var(--anthracite) 12%, transparent);
+}
+
+/* ===== STIJL: MINIMAAL ===== */
+[data-style="minimaal"] {
+    --light: #FFFFFF;
+    --white: #FFFFFF;
+    --border: #E6E6E6;
+    --muted: #7A7A7A;
+    --radius: 0px;
+    --radius-btn: 0px;
+    --shadow: none;
+}
+
+[data-style="minimaal"][data-theme="dark"] {
+    --light: #0E0E0E;
+    --white: #0E0E0E;
+    --border: #262626;
+    --muted: #8A8A8A;
+}
+
+[data-style="minimaal"] .card {
+    border-width: 1px 0 0 0;
+    padding-left: 0;
+    padding-right: 0;
+    background: transparent;
+}
+
+[data-style="minimaal"] .card:hover {
+    box-shadow: none;
+    transform: none;
+}
+
+[data-style="minimaal"] h2 {
+    font-size: 12px !important;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+[data-style="minimaal"] .topbar {
+    background: var(--white);
+}
+
+/* ===== STIJL: HOOG CONTRAST ===== */
+/* Voor wie slecht ziet of in fel licht werkt: zwart op wit, dikke randen
+ * en een duidelijke focusrand. */
+[data-style="contrast"] {
+    --white: #FFFFFF;
+    --light: #FFFFFF;
+    --border: #000000;
+    --anthracite: #000000;
+    --muted: #2B2B2B;
+    --badge-bg: #FFFFFF;
+    --badge-border: #000000;
+    --radius: 8px;
+    --shadow: none;
+}
+
+[data-style="contrast"][data-theme="dark"] {
+    --white: #000000;
+    --light: #000000;
+    --border: #FFFFFF;
+    --anthracite: #FFFFFF;
+    --muted: #E0E0E0;
+    --badge-bg: #000000;
+    --badge-border: #FFFFFF;
+}
+
+[data-style="contrast"] .card {
+    border-width: 2px;
+}
+
+[data-style="contrast"] .btn {
+    border-width: 2px;
+    border-color: var(--anthracite);
+    font-weight: 700;
+}
+
+[data-style="contrast"] :focus-visible {
+    outline: 3px solid var(--olive) !important;
+    outline-offset: 3px;
+}
+
+[data-style="contrast"] body {
+    font-size: 105%;
+}
+
 /* ===== BEHEER: TOPBALK ===== */
 .adm-top {
     position: sticky;
@@ -1183,7 +1536,16 @@ textarea.input {
 
 .adm-tabs {
     max-width: 100%;
-    overflow-x: auto;
+}
+
+/* Op een telefoon twee rijen van twee, zodat elk tabblad zichtbaar is. */
+@media (max-width: 560px) {
+    .adm-tabs {
+        display: grid;
+        grid-auto-flow: row;
+        grid-template-columns: 1fr 1fr;
+        width: 100%;
+    }
 }
 
 .adm-grid {
@@ -1411,7 +1773,7 @@ textarea.input {
 
 <svg width="0" height="0" style="position: absolute" aria-hidden="true">
 <defs>
-<symbol id="i-logo" viewBox="0 0 24 24"><path d="M6 7h12M6 12h7M6 17h10"/></symbol>
+<symbol id="i-logo" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="7" height="9" rx="2" fill="currentColor"/><rect x="14" y="3.5" width="6.5" height="4.5" rx="1.8"/><rect x="3.5" y="16" width="7" height="4.5" rx="1.8"/><rect x="14" y="11.5" width="6.5" height="9" rx="2"/></symbol>
 <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></symbol>
 <symbol id="i-agenda" viewBox="0 0 24 24"><path d="M6 4h12a3 3 0 0 1 3 3v11a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3zM3 9h18M8 2v4M16 2v4"/></symbol>
 <symbol id="i-planner" viewBox="0 0 24 24"><path d="M4 6h9M4 12h6M4 18h9M14 15a4 4 0 1 0 8 0a4 4 0 1 0-8 0M18 13.5V15l1 1"/></symbol>
@@ -1507,14 +1869,32 @@ const SUPABASE_KEY = 'sb_publishable_QsUGcDPnMFMIPFFqmX0TvA_uzcxSi9q';
 
 
 /* ===== SUPABASE ===== */
+// Alleen het begin van het adres telt (https://xxxx.supabase.co).
+// Wie per ongeluk de "API URL" met /rest/v1/ erachter plakt, krijgt
+// anders "Invalid path specified in request URL" bij het inloggen.
+function supabaseOrigin(raw) {
+    try {
+        const url = new URL(String(raw).trim());
+        const project = url.pathname.match(/\/project\/([a-z0-9]+)/);
+
+        // Adres van het dashboard geplakt: maak er het projectadres van.
+        if (url.hostname.endsWith('supabase.com') && project) {
+            return 'https://' + project[1] + '.supabase.co';
+        }
+
+        return url.origin;
+    } catch (err) {
+        return String(raw).trim();
+    }
+}
 const isConfigured =
     !SUPABASE_URL.includes('JOUW-PROJECT') &&
     !SUPABASE_KEY.includes('JOUW_SLEUTEL');
 
 const db = isConfigured && window.supabase
     ? window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY,
+        supabaseOrigin(SUPABASE_URL),
+        SUPABASE_KEY.trim(),
         {
             auth: {
                 persistSession: true,
@@ -1753,10 +2133,16 @@ function updateBody(text) {
 
 /* ===== THEMA VAN HET ACCOUNT ===== */
 async function applyTheme() {
-    const { data } = await db.from('user_settings').select('theme, accent').maybeSingle();
+    // Alles ophalen: ontbreekt de kolom style nog (update-1.3.sql niet
+    // gedraaid), dan gaat het toch goed.
+    const { data } = await db.from('user_settings').select('*').maybeSingle();
 
     if (data) {
-        document.documentElement.dataset.theme = data.theme === 'dark' ? 'dark' : 'light';
+        const styles = ['standaard', 'glas', 'papier', 'middernacht', 'blokken', 'zacht', 'minimaal', 'contrast'];
+        const style = styles.includes(data.style) ? data.style : 'standaard';
+
+        document.documentElement.dataset.style = style;
+        document.documentElement.dataset.theme = style === 'middernacht' || data.theme === 'dark' ? 'dark' : 'light';
         document.documentElement.dataset.accent = data.accent || 'olijf';
     }
 }
